@@ -1,3 +1,4 @@
+import 'package:carah_app/ui/Articles/articles_overview.dart';
 import 'package:carah_app/ui/home/home_items.dart';
 import 'package:flutter/material.dart';
 
@@ -9,41 +10,50 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home Page'),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(15),
-        children:
-          homeItemsList.map((element) {
+        appBar: AppBar(
+          title: const Text('Home Page'),
+        ),
+        body: ListView(
+          padding: const EdgeInsets.all(15),
+          children: homeItemsList.map((element) {
             return Card(
-              margin: const EdgeInsets.symmetric(vertical: 10),
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 5),
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Column(
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                child: InkWell(
+                  onTap: () { //ToDo: implement proper navigation
+                    if (element.title == 'Tokoloho Articles') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ArticlesOverview()),
+                      );
+                    }
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 5),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(element.title, style: Theme.of(context).textTheme.titleSmall),
-                          Text(element.description)
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(element.title,
+                                  style:
+                                      Theme.of(context).textTheme.titleSmall),
+                              Text(element.description)
+                            ],
+                          ),
+                          Icon(element.icon)
                         ],
                       ),
-                      Icon(element.icon)
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            );
-          }).toList()
-        ,
-      ),
-      bottomNavigationBar: const BottomNavbar()
-    );
+                ));
+          }).toList(),
+        ),
+        bottomNavigationBar: const BottomNavbar());
   }
 }
