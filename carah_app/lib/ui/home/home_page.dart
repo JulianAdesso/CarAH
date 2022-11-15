@@ -1,3 +1,4 @@
+import 'package:carah_app/ui/Articles/articles_categories.dart';
 import 'package:carah_app/ui/Articles/articles_overview.dart';
 import 'package:carah_app/ui/home/home_items.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,7 @@ class HomePage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const ArticlesOverview()),
+                            builder: (context) => const ArticlesCategories()),
                       );
                     }
                   },
