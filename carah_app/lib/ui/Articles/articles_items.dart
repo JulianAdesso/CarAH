@@ -7,9 +7,9 @@ class ListArticlesItem {
 }
 
 List <ListArticlesItem> articlesItemsList = [
-  ListArticlesItem(title: 'Content', saved: false, downloaded: false),
-  ListArticlesItem(title: 'Content', saved: false, downloaded: false),
-  ListArticlesItem(title: 'Content', saved: false, downloaded: false),
+  ListArticlesItem(title: 'Test1', saved: false, downloaded: false),
+  ListArticlesItem(title: 'Test12', saved: false, downloaded: false),
+  ListArticlesItem(title: 'Test123', saved: false, downloaded: false),
   ListArticlesItem(title: 'Content', saved: false, downloaded: false),
   ListArticlesItem(title: 'Content', saved: false, downloaded: false),
   ListArticlesItem(title: 'Content', saved: false, downloaded: false),
