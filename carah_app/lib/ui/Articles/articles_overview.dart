@@ -1,7 +1,7 @@
-import 'package:carah_app/ui/Articles/articles_content.dart';
 import 'package:carah_app/ui/Articles/articles_items.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:carah_app/ui/bottom_navbar.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ArticlesOverview extends StatefulWidget {
   const ArticlesOverview({super.key});
@@ -51,6 +51,9 @@ class _ArticlesOverview extends State<ArticlesOverview> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: BackButton(
+          onPressed: () => context.pop(),
+        ),
         title: const Text('Articles Overview'),
         actions: [
           IconButton(
@@ -108,11 +111,7 @@ class _ArticlesOverview extends State<ArticlesOverview> {
                       },
                     ),
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const ArticlesContent()),
-                      );
+                      context.push('/articles/$i');
                     },
                   );
                 },
@@ -121,6 +120,7 @@ class _ArticlesOverview extends State<ArticlesOverview> {
           ],
         ),
       ),
+      bottomNavigationBar: BottomNavbar(currIndex: 0),
     );
   }
 }

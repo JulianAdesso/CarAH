@@ -1,7 +1,6 @@
-import 'package:carah_app/ui/Articles/articles_categories.dart';
-import 'package:carah_app/ui/Articles/articles_overview.dart';
-import 'package:carah_app/ui/home/home_items.dart';
+import 'package:carah_app/ui/home/navigation_items.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../bottom_navbar.dart';
 
@@ -17,18 +16,10 @@ class HomePage extends StatelessWidget {
         body: ListView(
           padding: const EdgeInsets.all(15),
           children: homeItemsList.map((element) {
-            return Card(
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                child: InkWell(
-                  onTap: () { //ToDo: implement proper navigation
-                    if (element.title == 'Tokoloho Articles') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const ArticlesCategories()),
-                      );
-                    }
-                  },
+            return GestureDetector(
+              onTap: () => element.routerLink != null ? context.push(element.routerLink!) : null,
+              child: Card(
+                  margin: const EdgeInsets.symmetric(vertical: 10),
                   child: Container(
                     margin: const EdgeInsets.symmetric(horizontal: 5),
                     child: Padding(
@@ -44,17 +35,17 @@ class HomePage extends StatelessWidget {
                               Text(element.title,
                                   style:
                                       Theme.of(context).textTheme.titleSmall),
-                              Text(element.description)
+                              Text(element.description!)
                             ],
                           ),
                           Icon(element.icon)
                         ],
                       ),
                     ),
-                  ),
-                ));
+                  )),
+            );
           }).toList(),
         ),
-        bottomNavigationBar: const BottomNavbar());
+        bottomNavigationBar: BottomNavbar(currIndex: 0));
   }
 }
