@@ -14,6 +14,7 @@ class _ArticlesOverview extends State<ArticlesOverview> {
   TextEditingController editingController = TextEditingController();
 
   var shownArticles = <ListArticlesItem>[];
+  bool showSearchWidget = false;
 
   @override
   void initState() {
@@ -54,7 +55,14 @@ class _ArticlesOverview extends State<ArticlesOverview> {
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
-            onPressed: () {}, //ToDo: Search bar dis/appears onPressed()
+            onPressed: () {
+              setState(() {
+                showSearchWidget = !showSearchWidget;
+                shownArticles.clear();
+                shownArticles.addAll(articlesItemsList);
+                editingController.text = "";
+              });
+            },
             tooltip: 'search',
           ),
         ],
@@ -62,21 +70,23 @@ class _ArticlesOverview extends State<ArticlesOverview> {
       body: Container(
         child: Column(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                onChanged: (value) {
-                  filterSearchResults(value);
-                },
-                controller: editingController,
-                decoration: const InputDecoration(
-                    labelText: "Search",
-                    hintText: "Search",
-                    prefixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(25.0)))),
+            if (showSearchWidget)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  onChanged: (value) {
+                    filterSearchResults(value);
+                  },
+                  controller: editingController,
+                  decoration: const InputDecoration(
+                      labelText: "Search",
+                      hintText: "Search",
+                      prefixIcon: Icon(Icons.search),
+                      border: OutlineInputBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(25.0)))),
+                ),
               ),
-            ),
             Expanded(
               child: ListView.builder(
                 // to here.
