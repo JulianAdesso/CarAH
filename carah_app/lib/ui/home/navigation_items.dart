@@ -13,7 +13,7 @@ class ListItem {
 }
 
 final List<ListItem> homeItemsList  = [
-  ListItem(title: 'Tokoloho Articles', description: 'Lipsum', icon: Icons.description_outlined, routerLink: '/articles'),
+  ListItem(title: 'Tokoloho Articles', description: 'Lipsum', icon: Icons.description_outlined, routerLink: '/articles_categories'),
   ListItem(title: 'FAQ', description: 'Frequently Asked Questions', icon: Icons.forum_outlined, routerLink: '/faq'),
   ListItem(title: 'Tokoloho Guides', description: 'Basic Information about HIV/AIDS & TB', icon: Icons.shortcut_outlined, routerLink: '/guides'),
   ListItem(title: 'Events', description: 'Lipsum', icon: Icons.calendar_today_outlined, routerLink: '/events'),

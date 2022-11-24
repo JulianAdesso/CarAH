@@ -1,7 +1,7 @@
 import 'package:carah_app/ui/Articles/articles_Category_items.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-import 'articles_items.dart';
 import 'articles_overview.dart';
 
 class ArticlesCategories extends StatelessWidget{
@@ -13,6 +13,9 @@ class ArticlesCategories extends StatelessWidget{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: BackButton(
+          onPressed: () => context.pop(),
+        ),
         title: const Text('Articles Categories'),
       ),
       body: ListView.builder(
@@ -31,11 +34,7 @@ class ArticlesCategories extends StatelessWidget{
               categoryItemList[i].caption.toString()
             ),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const ArticlesOverview()),
-              );
+              context.push('/articles');
             },
           );
         },
