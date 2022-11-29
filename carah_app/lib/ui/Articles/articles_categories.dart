@@ -1,10 +1,10 @@
-import 'package:carah_app/ui/Articles/articles_Category_items.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
-import 'articles_overview.dart';
+import '../../providers/category_provider.dart';
 
-class ArticlesCategories extends StatelessWidget{
+class ArticlesCategories extends StatelessWidget {
   const ArticlesCategories({super.key});
 
   get onTap => null;
@@ -18,29 +18,23 @@ class ArticlesCategories extends StatelessWidget{
         ),
         title: const Text('Articles Categories'),
       ),
-      body: ListView.builder(
-        // to here.
-        padding: const EdgeInsets.all(0.0),
-        itemCount: categoryItemList.length,
-        itemBuilder: (context, i) {
-          return ListTile(
-            leading: Icon(
-              categoryItemList[i].icon
-            ),
-            title: Text(
-              categoryItemList[i].title.toString(),
-            ),
-            subtitle: Text(
-              categoryItemList[i].caption.toString()
-            ),
-            onTap: () {
-              context.push('/articles');
-            },
-          );
+      body: Consumer<CategoryProvider>(
+        builder: (context, provider, child) {
+          provider.fetchAllCategories();
+          return ListView(
+                  children: provider.categories.isNotEmpty? provider.categories.map((item) {
+                return ListTile(
+                  title: Text(
+                    item.name,
+                  ),
+                  subtitle: Text(item.description ?? ""),
+                  onTap: () {
+                    context.push('/articles/${item.uuid}');
+                  },
+                );
+              }).toList() : []);
         },
       ),
     );
   }
-
-
 }

@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 
 class ListItem {
 
+  String? uuid;
   String title;
   String? description;
   IconData icon;
   String? routerLink;
 
-  ListItem({required this.title, this.description, required this.icon, this.routerLink});
+  ListItem({this.uuid, required this.title, this.description, required this.icon, this.routerLink});
 
 
 }

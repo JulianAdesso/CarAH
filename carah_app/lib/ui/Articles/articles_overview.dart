@@ -1,10 +1,13 @@
-import 'package:carah_app/ui/Articles/articles_items.dart';
+import 'package:carah_app/model/list_article_item.dart';
+import 'package:carah_app/providers/articles_provider.dart';
 import 'package:carah_app/ui/bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class ArticlesOverview extends StatefulWidget {
-  const ArticlesOverview({super.key});
+  String id;
+  ArticlesOverview({super.key, required this.id});
 
   @override
   _ArticlesOverview createState() => _ArticlesOverview();
@@ -13,18 +16,18 @@ class ArticlesOverview extends StatefulWidget {
 class _ArticlesOverview extends State<ArticlesOverview> {
   TextEditingController editingController = TextEditingController();
 
-  var shownArticles = <ListArticlesItem>[];
   bool showSearchWidget = false;
+  List<ListArticlesItem> shownArticles = [];
+
 
   @override
   void initState() {
-    shownArticles.addAll(articlesItemsList);
     super.initState();
   }
 
   void filterSearchResults(String query) {
+    ArticlesProvider articleProvider = Provider.of<ArticlesProvider>(context);
     List<ListArticlesItem> dummySearchList = <ListArticlesItem>[];
-    dummySearchList.addAll(articlesItemsList);
     if (query.isNotEmpty) {
       //Show all titles that contain query
       List<ListArticlesItem> dummyListData = <ListArticlesItem>[];
@@ -42,13 +45,16 @@ class _ArticlesOverview extends State<ArticlesOverview> {
       //Show all titles
       setState(() {
         shownArticles.clear();
-        shownArticles.addAll(articlesItemsList);
+        shownArticles.addAll(articleProvider.articles);
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    ArticlesProvider articleProvider = Provider.of<ArticlesProvider>(context);
+    articleProvider.fetchDataByCategory(widget.id);
+    shownArticles = articleProvider.articles;
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
@@ -62,7 +68,7 @@ class _ArticlesOverview extends State<ArticlesOverview> {
               setState(() {
                 showSearchWidget = !showSearchWidget;
                 shownArticles.clear();
-                shownArticles.addAll(articlesItemsList);
+                shownArticles.addAll(articleProvider.articles);
                 editingController.text = "";
               });
             },
@@ -70,55 +76,53 @@ class _ArticlesOverview extends State<ArticlesOverview> {
           ),
         ],
       ),
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            if (showSearchWidget)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  onChanged: (value) {
-                    filterSearchResults(value);
-                  },
-                  controller: editingController,
-                  decoration: const InputDecoration(
-                      labelText: "Search",
-                      hintText: "Search",
-                      prefixIcon: Icon(Icons.search),
-                      border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(25.0)))),
-                ),
-              ),
-            Expanded(
-              child: ListView.builder(
-                // to here.
-                padding: const EdgeInsets.all(0.0),
-                itemCount: shownArticles.length,
-                itemBuilder: (context, i) {
-                  return ListTile(
-                    title: Text(
-                      shownArticles[i].title.toString(),
-                    ),
-                    trailing: IconButton(
-                      icon: Icon(shownArticles[i].saved
-                          ? Icons.favorite
-                          : Icons.favorite_border),
-                      onPressed: () => {
-                        setState(() {
-                          shownArticles[i].saved = !shownArticles[i].saved;
-                        })
-                      },
-                    ),
-                    onTap: () {
-                      context.push('/articles/$i');
-                    },
-                  );
+      body: Column(
+        children: <Widget>[
+          if (showSearchWidget)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                onChanged: (value) {
+                  filterSearchResults(value);
                 },
+                controller: editingController,
+                decoration: const InputDecoration(
+                    labelText: "Search",
+                    hintText: "Search",
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                        borderRadius:
+                            BorderRadius.all(Radius.circular(25.0)))),
               ),
             ),
-          ],
-        ),
+          Expanded(
+            child: ListView.builder(
+              // to here.
+              padding: const EdgeInsets.all(0.0),
+              itemCount: shownArticles.length,
+              itemBuilder: (context, i) {
+                return ListTile(
+                  title: Text(
+                    shownArticles[i].title.toString(),
+                  ),
+                  trailing: IconButton(
+                    icon: Icon(shownArticles[i].saved
+                        ? Icons.favorite
+                        : Icons.favorite_border),
+                    onPressed: () => {
+                      setState(() {
+                        shownArticles[i].saved = !shownArticles[i].saved;
+                      })
+                    },
+                  ),
+                  onTap: () {
+                    context.push('/article/${shownArticles[i].articleId}');
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: BottomNavbar(currIndex: 0),
     );
