@@ -1,10 +1,21 @@
-import 'package:carah_app/providers/articles_provider.dart';
+import 'package:carah_app/model/article.dart';
+import 'package:carah_app/model/category.dart';
+
+import 'package:carah_app/model/list_article_item.dart';import 'package:carah_app/providers/articles_provider.dart';
 import 'package:carah_app/providers/category_provider.dart';
 import 'package:carah_app/shared/router.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+
+void main() async {
+
+  await Hive.initFlutter();
+  Hive.registerAdapter(CategoryAdapter());
+  Hive.registerAdapter(ArticleAdapter());
+  Hive.registerAdapter(ListArticlesItemAdapter());
+  await Hive.openBox('myBox');
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(
