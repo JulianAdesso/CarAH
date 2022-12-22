@@ -23,13 +23,14 @@ class ArticleAdapter extends TypeAdapter<Article> {
       category: fields[3] as String,
     )
       ..downloaded = fields[4] as bool
-      ..saved = fields[5] as bool;
+      ..saved = fields[5] as bool
+      ..imageId = (fields[6] as List?)?.cast<String>();
   }
 
   @override
   void write(BinaryWriter writer, Article obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.uuid)
       ..writeByte(1)
@@ -41,7 +42,9 @@ class ArticleAdapter extends TypeAdapter<Article> {
       ..writeByte(4)
       ..write(obj.downloaded)
       ..writeByte(5)
-      ..write(obj.saved);
+      ..write(obj.saved)
+      ..writeByte(6)
+      ..write(obj.imageId);
   }
 
   @override

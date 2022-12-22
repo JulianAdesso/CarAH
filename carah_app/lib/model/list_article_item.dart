@@ -1,3 +1,4 @@
+
 import 'package:hive_flutter/hive_flutter.dart';
 
 part 'list_article_item.g.dart';
@@ -17,7 +18,7 @@ class ListArticlesItem {
 
   ListArticlesItem.fromJson(Map<String, dynamic> json)
       : articleId = json['uuid'],
-        title = json['fields']['Display_Name'],
+        title = json['fields']['Display_Name'] ?? "",
         saved = false,
         downloaded = false;
 }

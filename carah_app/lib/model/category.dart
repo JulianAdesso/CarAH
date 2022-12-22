@@ -14,8 +14,8 @@ class Category{
   Category({required this.uuid, required this.name, this.description});
 
   Category.fromJson(Map<String, dynamic> json) :
-    uuid = json['uuid'],
-    name = json['fields']['Name'],
-    description = json['fields']['Description'];
+    uuid = json['uuid'] ?? json['uuid'],
+    name = json['fields']['Name'] ?? json['fields']['Name'],
+    description = json['fields']['Description'] ?? json['fields']['Description'];
 
 }
