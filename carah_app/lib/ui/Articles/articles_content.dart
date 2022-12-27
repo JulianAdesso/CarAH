@@ -6,8 +6,6 @@ import 'package:provider/provider.dart';
 
 import '../../providers/articles_provider.dart';
 
-import 'package:galleryimage/galleryimage.dart'; //TODO Implement image galery
-
 class ArticlesContent extends StatefulWidget {
 
   final String id;
@@ -27,8 +25,6 @@ class _ArticlesContent extends State<ArticlesContent> {
     return Consumer<ArticlesProvider>(
         builder: (context, provider, child)
     {
-      provider.getImageByUUID(provider.currentArticle!.imageId!.first);
-      provider.getImagesByUUID(provider.currentArticle!.imageId!);
       return Scaffold(
         appBar: AppBar(
           leading: BackButton(
@@ -68,8 +64,8 @@ class _ArticlesContent extends State<ArticlesContent> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              provider.image != null ? Image.memory(provider.image!) //TODO: Use images instead of image
-                  : Text("Keine Daten zu der ID"),
+              InkWell( onTap: (){context.push('/article/${widget.id}/gallery');}, child: provider.image != null ? Image.memory(provider.image!)
+                  : Text("Keine Daten zu der ID")),
               provider.currentArticle != null ? Html(data: provider.currentArticle!.content)
                   : Text("Keine Daten zu der ID")
             ],
