@@ -18,7 +18,7 @@ class ArticlesProvider extends ChangeNotifier {
 
   List<ListArticlesItem> get articles => _articles;
 
-  List<Uint8List?> images = [];
+  List<Image> images = [];
   Uint8List? image;
 
   final _offlineBox = Hive.box('myBox');
@@ -63,6 +63,8 @@ class ArticlesProvider extends ChangeNotifier {
     } else {
       currentArticle = _offlineBox.get(id);
     }
+    getImageByUUID(currentArticle!.imageId!.first);
+    getImagesByUUID(currentArticle!.imageId!);
     notifyListeners();
   }
 
@@ -87,8 +89,8 @@ class ArticlesProvider extends ChangeNotifier {
 
   getImagesByUUID(List<String> ids) async {
     var connectivityResult = await (Connectivity().checkConnectivity());
-    List<Uint8List?> tmpImages = [];
-    ids.forEach((id)  async {
+    List<Image> tmpImages = [];
+    for (var id in ids)  {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
         var message = await http.get(
@@ -97,13 +99,13 @@ class ArticlesProvider extends ChangeNotifier {
             headers: {
               "Content-Type": "application/json",
             });
-        tmpImages.add(message.bodyBytes);
+        tmpImages.add(Image.memory(message.bodyBytes));
         _offlineBox.put(id, message.bodyBytes);
         images = tmpImages;
       } else {
         tmpImages.add(_offlineBox.get(id));
         images = tmpImages;
       }
-    });
+    }
   }
 }
