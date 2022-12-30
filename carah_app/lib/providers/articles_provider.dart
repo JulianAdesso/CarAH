@@ -13,11 +13,11 @@ class ArticlesProvider extends ChangeNotifier {
   List<ListArticlesItem> _articles = [];
 
   Article? currentArticle;
+  String? lastArticleID;
 
   List<ListArticlesItem> get articles => _articles;
 
   List<Image> images = [];
-  Image? image;
 
   final _offlineBox = Hive.box('myBox');
   final _baseURL = 'http://h2992008.stratoserver.net:8080/api/v2/CarAH';
@@ -46,47 +46,29 @@ class ArticlesProvider extends ChangeNotifier {
   }
 
   getArticleByUUID(String id) async {
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.mobile ||
-        connectivityResult == ConnectivityResult.wifi) {
-      var articlesFromCMS = await http.get(
-          Uri.parse(
-              '$_baseURL/nodes/$id'),
-          headers: {
-            "Content-Type": "application/json",
-          });
-      currentArticle = Article.fromJson(
-          jsonDecode(utf8.decoder.convert(articlesFromCMS.bodyBytes)));
-      _offlineBox.put(id, currentArticle);
-    } else {
-      currentArticle = _offlineBox.get(id);
-    }
-    if(currentArticle!.imageId != null) {
-      getImageByUUID(currentArticle!.imageId!.first);
-      getImagesByUUID(currentArticle!.imageId!);
-    } else {
-      images = [];
-      image = null;
-    }
-    notifyListeners();
-  }
-
-  getImageByUUID(String id) async {
-    id = id.replaceAll('{uuid: ', '');
-    id = id.replaceAll('}', '');
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.mobile ||
-        connectivityResult == ConnectivityResult.wifi) {
-      var message = await http.get(
-          Uri.parse(
-              '$_baseURL/nodes/$id/binary/image'),
-          headers: {
-            "Content-Type": "application/json",
-          });
-      image = Image.memory(message.bodyBytes);
-      _offlineBox.put(id, message.bodyBytes);
-    } else {
-      image = Image.memory(_offlineBox.get(id));
+    if(id != currentArticle?.uuid) {
+      var connectivityResult = await (Connectivity().checkConnectivity());
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        var articlesFromCMS = await http.get(
+            Uri.parse(
+                '$_baseURL/nodes/$id'),
+            headers: {
+              "Content-Type": "application/json",
+            });
+        currentArticle = Article.fromJson(
+            jsonDecode(utf8.decoder.convert(articlesFromCMS.bodyBytes)));
+        _offlineBox.put(id, currentArticle);
+      } else {
+        currentArticle = _offlineBox.get(id);
+      }
+      if(currentArticle!.imageId != null) {
+        getImagesByUUID(currentArticle!.imageId!);
+      } else {
+        images = [];
+      }
+      notifyListeners();
+      lastArticleID = currentArticle?.uuid;
     }
   }
 
@@ -97,7 +79,7 @@ class ArticlesProvider extends ChangeNotifier {
       id = id.replaceAll('{uuid: ', '');
       id = id.replaceAll('}', '');
       if (connectivityResult == ConnectivityResult.mobile ||
-          connectivityResult == ConnectivityResult.wifi) {
+          connectivityResult == ConnectivityResult.wifi && !_offlineBox.containsKey(id)) {
         var message = await http.get(
             Uri.parse(
                 '$_baseURL/nodes/$id/binary/image'),
@@ -106,7 +88,6 @@ class ArticlesProvider extends ChangeNotifier {
             });
         tmpImages.add(Image.memory(message.bodyBytes));
         _offlineBox.put(id, message.bodyBytes);
-        image = Image.memory(message.bodyBytes);
         images = tmpImages;
       } else {
         tmpImages.add(Image.memory(_offlineBox.get(id)));

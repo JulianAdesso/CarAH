@@ -66,7 +66,7 @@ class _ArticlesContent extends State<ArticlesContent> {
             children: [
               InkWell(
                   onTap: (){context.push('/article/${widget.id}/gallery');},
-                  child: provider.image != null ? provider.image!
+                  child: provider.images! != null && !provider.images!.isEmpty ? provider.images!.first!
                   : SizedBox.shrink()),
               provider.currentArticle != null ? Html(data: provider.currentArticle!.content)
                   : Text("Keine Daten zu der ID")
