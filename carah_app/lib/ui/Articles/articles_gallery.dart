@@ -18,6 +18,7 @@ class ArticlesGallery extends StatefulWidget {
   _ArticlesGallery createState() => _ArticlesGallery();
   }
 
+  int shownPictureNumber = 1;
 
 class _ArticlesGallery extends State<ArticlesGallery> {
   @override
@@ -28,79 +29,33 @@ class _ArticlesGallery extends State<ArticlesGallery> {
         builder: (context, provider, child) {
           return Scaffold(
             appBar: AppBar(
-              leading: BackButton(
-                onPressed: () => context.pop(),
+              centerTitle: true,
+              backgroundColor: Colors.black ,
+              leading: IconButton(
+                icon: Icon(Icons.close, color: Colors.white),
+                onPressed: () => Navigator.of(context).pop(),
               ),
-              title: Text(
-                  provider.currentArticle != null ? provider.currentArticle!
-                      .title : ''),
-              actions: [
-                IconButton(
-                  icon: Icon(provider.currentArticle != null &&
-                      provider.currentArticle!.downloaded
-                      ? Icons.cloud_download
-                      : Icons.cloud_download_outlined),
-                  onPressed: () {
-                    setState(() {
-                      if (provider.currentArticle != null) {
-                        provider.currentArticle!.downloaded =
-                        !provider.currentArticle!.downloaded;
-                      }
-                    });
-                  },
-                ),
-                IconButton(
-                  icon: Icon(
-                      provider.currentArticle != null &&
-                          provider.currentArticle!.saved
-                          ? Icons.favorite
-                          : Icons.favorite_border),
-                  onPressed: () {
-                    setState(() {
-                      if (provider.currentArticle != null) {
-                        provider.currentArticle!.saved =
-                        !provider.currentArticle!.saved;
-                      }
-                    });
-                  },
-                ),
-              ],
+              title: Text( shownPictureNumber.toString() + " from " + provider.images.length.toString()),
             ),
             body:
             PhotoViewGallery.builder(
               scrollPhysics: const BouncingScrollPhysics(),
               builder: (BuildContext context, int index) {
-                List<Image> tmpList = [];
-                for (var i = 0; i < 5; i++) {
-                  tmpList.add(Image.memory(provider.image!));
-                }
+                shownPictureNumber = index + 1;
                 return PhotoViewGalleryPageOptions(
-                    imageProvider: (tmpList[index].image),
-                    //imageProvider: (provider.images[index].image), //TODO Use images instead
-                    //Image.memory(provider.images[index]!).memory(provider.image!).image),
-                  initialScale: PhotoViewComputedScale.contained * 0.8,
+                imageProvider: (provider.images[index].image),
+                  initialScale: PhotoViewComputedScale.contained * 1,
                 );
               },
-              //itemCount: provider.images.length,
-              itemCount: 5,
+              itemCount: provider.images.length,
               loadingBuilder: (context, event) => Center(
                 child: Container(
                   width: 20.0,
                   height: 20.0,
-
                 ),
               ),
             )
           );
-
-
-
-            /**PhotoView(imageProvider: (Image
-                .memory(provider.image!)
-                .image)),
-            bottomNavigationBar: BottomNavbar(currIndex: 0),
-          );
-                **/
         });
   }
 }

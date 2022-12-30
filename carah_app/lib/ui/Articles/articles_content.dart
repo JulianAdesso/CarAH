@@ -64,8 +64,10 @@ class _ArticlesContent extends State<ArticlesContent> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              InkWell( onTap: (){context.push('/article/${widget.id}/gallery');}, child: provider.image != null ? Image.memory(provider.image!)
-                  : Text("Keine Daten zu der ID")),
+              InkWell(
+                  onTap: (){context.push('/article/${widget.id}/gallery');},
+                  child: provider.image != null ? provider.image!
+                  : SizedBox.shrink()),
               provider.currentArticle != null ? Html(data: provider.currentArticle!.content)
                   : Text("Keine Daten zu der ID")
             ],

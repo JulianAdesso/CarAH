@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:carah_app/model/list_article_item.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/widgets.dart';
@@ -19,7 +17,7 @@ class ArticlesProvider extends ChangeNotifier {
   List<ListArticlesItem> get articles => _articles;
 
   List<Image> images = [];
-  Uint8List? image;
+  Image? image;
 
   final _offlineBox = Hive.box('myBox');
   final _baseURL = 'http://h2992008.stratoserver.net:8080/api/v2/CarAH';
@@ -63,8 +61,13 @@ class ArticlesProvider extends ChangeNotifier {
     } else {
       currentArticle = _offlineBox.get(id);
     }
-    getImageByUUID(currentArticle!.imageId!.first);
-    getImagesByUUID(currentArticle!.imageId!);
+    if(currentArticle!.imageId != null) {
+      getImageByUUID(currentArticle!.imageId!.first);
+      getImagesByUUID(currentArticle!.imageId!);
+    } else {
+      images = [];
+      image = null;
+    }
     notifyListeners();
   }
 
@@ -80,10 +83,10 @@ class ArticlesProvider extends ChangeNotifier {
           headers: {
             "Content-Type": "application/json",
           });
-      image = message.bodyBytes;
-      _offlineBox.put(id, image);
+      image = Image.memory(message.bodyBytes);
+      _offlineBox.put(id, message.bodyBytes);
     } else {
-      image = _offlineBox.get(id);
+      image = Image.memory(_offlineBox.get(id));
     }
   }
 
@@ -91,6 +94,8 @@ class ArticlesProvider extends ChangeNotifier {
     var connectivityResult = await (Connectivity().checkConnectivity());
     List<Image> tmpImages = [];
     for (var id in ids)  {
+      id = id.replaceAll('{uuid: ', '');
+      id = id.replaceAll('}', '');
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
         var message = await http.get(
@@ -101,9 +106,10 @@ class ArticlesProvider extends ChangeNotifier {
             });
         tmpImages.add(Image.memory(message.bodyBytes));
         _offlineBox.put(id, message.bodyBytes);
+        image = Image.memory(message.bodyBytes);
         images = tmpImages;
       } else {
-        tmpImages.add(_offlineBox.get(id));
+        tmpImages.add(Image.memory(_offlineBox.get(id)));
         images = tmpImages;
       }
     }
