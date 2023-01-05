@@ -3,6 +3,7 @@ import 'package:carah_app/model/category.dart';
 
 import 'package:carah_app/model/list_article_item.dart';import 'package:carah_app/providers/articles_provider.dart';
 import 'package:carah_app/providers/category_provider.dart';
+import 'package:carah_app/providers/faq_category_provider.dart';
 import 'package:carah_app/shared/router.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -13,6 +14,7 @@ void main() async {
 
   await Hive.initFlutter();
   Hive.registerAdapter(CategoryAdapter());
+  //Hive.registerAdapter(FAQCategoryAdapter());
   Hive.registerAdapter(ArticleAdapter());
   Hive.registerAdapter(ListArticlesItemAdapter());
   await Hive.openBox('myBox');
@@ -21,7 +23,8 @@ void main() async {
       ChangeNotifierProvider(
         create: (context) => ArticlesProvider(),
       ),
-      ChangeNotifierProvider(create: (context) => CategoryProvider())
+      ChangeNotifierProvider(create: (context) => CategoryProvider()),
+      ChangeNotifierProvider(create: (context) => FAQCategoryProvider()),
     ],
     child: const MyApp(),
   ));

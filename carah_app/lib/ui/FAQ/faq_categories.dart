@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/category_provider.dart';
+import '../../providers/faq_category_provider.dart';
 
-class ArticlesCategories extends StatelessWidget {
-  const ArticlesCategories({super.key});
+class FAQCategories extends StatelessWidget {
+  const FAQCategories({super.key});
 
   get onTap => null;
 
@@ -16,13 +16,13 @@ class ArticlesCategories extends StatelessWidget {
         leading: BackButton(
           onPressed: () => context.pop(),
         ),
-        title: const Text('Articles Categories'),
+        title: const Text('FAQ'),
       ),
-      body: Consumer<CategoryProvider>(
+      body: Consumer<FAQCategoryProvider>(
         builder: (context, provider, child) {
           provider.fetchAllCategories();
           return ListView(
-                  children: provider.categories.isNotEmpty? provider.categories.map((item) {
+              children: provider.categories.isNotEmpty? provider.categories.map((item) {
                 return Container(
                   decoration: const BoxDecoration(
                     border: Border(bottom: BorderSide(width: 1.0, color: Colors.grey)),
@@ -33,7 +33,7 @@ class ArticlesCategories extends StatelessWidget {
                     ),
                     subtitle: Text(item.description ?? ""),
                     onTap: () {
-                      context.push('/articles/${item.uuid}');
+                      context.push('/faq/${item.uuid}');
                     },
                   ),
                 );

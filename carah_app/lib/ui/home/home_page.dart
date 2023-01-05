@@ -11,7 +11,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Home Page'),
+          title: const Text('Tokoloho Heath Outreach'),
         ),
         body: ListView(
           padding: const EdgeInsets.all(15),

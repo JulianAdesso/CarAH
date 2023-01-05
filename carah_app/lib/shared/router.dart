@@ -5,6 +5,8 @@ import 'package:carah_app/ui/Articles/articles_overview.dart';
 import 'package:carah_app/ui/home/home_page.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:carah_app/ui/FAQ/faq_categories.dart';
+
 final router = GoRouter(
   routes: [
     GoRoute(path: '/',
@@ -16,7 +18,9 @@ final router = GoRouter(
     GoRoute(path: '/article/:id',
     builder: (context, state) => ArticlesContent(id: state.params['id']!)),
     GoRoute(path: '/article/:id/gallery',
-        builder: (context, state) => ArticlesGallery(id: state.params['id']!))
+        builder: (context, state) => ArticlesGallery(id: state.params['id']!)),
+    GoRoute(path: '/faq_categories',
+        builder: (context, state) => const FAQCategories()),
 
   ],
 );
