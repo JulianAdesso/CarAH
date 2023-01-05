@@ -19,11 +19,11 @@ class HomePage extends StatelessWidget {
             return GestureDetector(
               onTap: () => element.routerLink != null ? context.push(element.routerLink!) : null,
               child: Card(
-                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  margin: const EdgeInsets.symmetric(vertical: 10.0),
                   child: Container(
                     margin: const EdgeInsets.symmetric(horizontal: 5),
                     child: Padding(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -32,13 +32,19 @@ class HomePage extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(element.title,
-                                  style:
-                                      Theme.of(context).textTheme.titleSmall),
-                              Text(element.description!)
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 15.0),
+                                child: Text(element.title,
+                                    style:
+                                        Theme.of(context).textTheme.titleLarge,
+                                ),
+                              ),
+                              Text(element.description!,
+                              style: Theme.of(context).textTheme.bodyMedium,)
                             ],
                           ),
-                          Icon(element.icon)
+                          Icon(element.icon,
+                          size: 50.0,)
                         ],
                       ),
                     ),

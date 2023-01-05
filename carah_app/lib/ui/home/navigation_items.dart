@@ -14,10 +14,10 @@ class ListItem {
 }
 
 final List<ListItem> homeItemsList  = [
-  ListItem(title: 'Tokoloho Articles', description: 'Lipsum', icon: Icons.description_outlined, routerLink: '/articles_categories'),
+  ListItem(title: 'Tokoloho Articles', description: 'Lipsum', icon: Icons.article_outlined, routerLink: '/articles_categories'),
   ListItem(title: 'FAQ', description: 'Frequently Asked Questions', icon: Icons.forum_outlined, routerLink: '/faq_categories'),
-  ListItem(title: 'Tokoloho Guides', description: 'Basic Information about HIV/AIDS & TB', icon: Icons.shortcut_outlined, routerLink: '/guides'),
-  ListItem(title: 'Events', description: 'Lipsum', icon: Icons.calendar_today_outlined, routerLink: '/events'),
+  ListItem(title: 'Tokoloho Guides', description: 'Basic Information about HIV/AIDS & TB', icon: Icons.directions_outlined, routerLink: '/guides'),
+  ListItem(title: 'Events', description: 'Lipsum', icon: Icons.event_outlined, routerLink: '/events'),
   ListItem(title: 'Medicine pick up dates', description: 'Lipsum', icon: Icons.medication_outlined, routerLink: '/pick_up_dates')
 ];
 

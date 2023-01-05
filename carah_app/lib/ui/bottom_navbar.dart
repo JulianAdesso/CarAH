@@ -13,7 +13,7 @@ class BottomNavbar extends StatelessWidget {
       type: BottomNavigationBarType.fixed,
       items: bottomNavbarItems
           .map((element) => BottomNavigationBarItem(
-              icon: Icon(element.icon), label: element.title))
+              icon: Icon(element.icon, size: 40.0), label: element.title))
           .toList(),
       currentIndex: currIndex,
       onTap: (index) => index != currIndex ? context.push(bottomNavbarItems[index].routerLink!) : null,
