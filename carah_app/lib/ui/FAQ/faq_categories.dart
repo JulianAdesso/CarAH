@@ -23,18 +23,42 @@ class FAQCategories extends StatelessWidget {
           provider.fetchAllCategories();
           return ListView(
               children: provider.categories.isNotEmpty? provider.categories.map((item) {
-                return Container(
-                  decoration: const BoxDecoration(
-                    border: Border(bottom: BorderSide(width: 1.0, color: Colors.grey)),
-                  ),
-                  child: ListTile(
-                    title: Text(
-                      item.name,
+                return GestureDetector(
+                  onTap: () {
+                    context.push('/faq/${item.uuid}');
+                  },
+                  child: Card(
+                    margin: const EdgeInsets.all(15),
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 5),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 15.0),
+                                    child: Text(item.name,
+                                      style:
+                                      Theme.of(context).textTheme.titleLarge,
+                                    ),
+                                  ),
+                                  Text(item.description ?? "",
+                                    style: Theme.of(context).textTheme.bodyMedium,)
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    subtitle: Text(item.description ?? ""),
-                    onTap: () {
-                      context.push('/faq/${item.uuid}');
-                    },
                   ),
                 );
               }).toList() : []);

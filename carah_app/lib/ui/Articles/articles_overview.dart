@@ -101,23 +101,29 @@ class _ArticlesOverview extends State<ArticlesOverview> {
               padding: const EdgeInsets.all(0.0),
               itemCount: shownArticles.length,
               itemBuilder: (context, i) {
-                return ListTile(
-                  title: Text(
-                    shownArticles[i].title.toString(),
+                return Container(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  decoration: const BoxDecoration(
+                    border: Border(bottom: BorderSide(width: 1.0, color: Colors.grey)),
                   ),
-                  trailing: IconButton(
-                    icon: Icon(shownArticles[i].saved
-                        ? Icons.favorite
-                        : Icons.favorite_border),
-                    onPressed: () => {
-                      setState(() {
-                        shownArticles[i].saved = !shownArticles[i].saved;
-                      })
+                  child: ListTile(
+                    title: Text(
+                      shownArticles[i].title.toString(),
+                    ),
+                    trailing: IconButton(
+                      icon: Icon(shownArticles[i].saved
+                          ? Icons.favorite
+                          : Icons.favorite_border),
+                      onPressed: () => {
+                        setState(() {
+                          shownArticles[i].saved = !shownArticles[i].saved;
+                        })
+                      },
+                    ),
+                    onTap: () {
+                      context.push('/article/${shownArticles[i].articleId}');
                     },
                   ),
-                  onTap: () {
-                    context.push('/article/${shownArticles[i].articleId}');
-                  },
                 );
               },
             ),

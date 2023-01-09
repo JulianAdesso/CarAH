@@ -1,7 +1,8 @@
 import 'package:carah_app/model/article.dart';
 import 'package:carah_app/model/category.dart';
 
-import 'package:carah_app/model/list_article_item.dart';import 'package:carah_app/providers/articles_provider.dart';
+import 'package:carah_app/model/list_article_item.dart';
+import 'package:carah_app/providers/FAQ_provider.dart';import 'package:carah_app/providers/articles_provider.dart';
 import 'package:carah_app/providers/category_provider.dart';
 import 'package:carah_app/providers/faq_category_provider.dart';
 import 'package:carah_app/shared/router.dart';
@@ -25,6 +26,7 @@ void main() async {
       ),
       ChangeNotifierProvider(create: (context) => CategoryProvider()),
       ChangeNotifierProvider(create: (context) => FAQCategoryProvider()),
+      ChangeNotifierProvider(create: (context) => QuestionsProvider()),
     ],
     child: const MyApp(),
   ));
