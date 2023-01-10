@@ -25,7 +25,7 @@ class FAQCategories extends StatelessWidget {
               children: provider.categories.isNotEmpty? provider.categories.map((item) {
                 return GestureDetector(
                   onTap: () {
-                    context.push('/faq/${item.uuid}');
+                    context.push('/faqs/${item.uuid}');
                   },
                   child: Card(
                     margin: const EdgeInsets.all(15),

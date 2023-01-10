@@ -25,7 +25,7 @@ final router = GoRouter(
         builder: (context, state) => ArticlesGallery(id: state.params['id']!)),
     GoRoute(path: '/faq_categories',
         builder: (context, state) => const FAQCategories()),
-    GoRoute(path: '/faq/:id',
+    GoRoute(path: '/faqs/:id',
         builder: (context, state) => FAQQuestions(id: state.params['id']!)),
     GoRoute(path: '/faq/:id',
         builder: (context, state) => FAQContent(id: state.params['id']!)),

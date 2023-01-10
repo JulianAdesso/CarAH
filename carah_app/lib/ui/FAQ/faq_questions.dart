@@ -112,7 +112,7 @@ class _FAQQuestions extends State<FAQQuestions> {
                       shownQuestions[i].title.toString(),
                     ),
                     onTap: () {
-                      context.push('/article/${shownQuestions[i].questionId}');
+                      context.push('/faq/${shownQuestions[i].questionId}');
                     },
                   ),
                 );
