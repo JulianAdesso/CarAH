@@ -61,7 +61,7 @@ class _FAQQuestions extends State<FAQQuestions> {
         leading: BackButton(
           onPressed: () => context.pop(),
         ),
-        title: const Text('Articles Overview'),
+        title: const Text('Questions'),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),

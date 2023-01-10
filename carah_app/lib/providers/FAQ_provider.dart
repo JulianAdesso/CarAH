@@ -12,7 +12,7 @@ class QuestionsProvider extends ChangeNotifier {
 
   List<ListFAQItem> _questions= [];
 
-  Question? currentArticle;
+  Question? currentQuestion;
   String? lastArticleID;
 
   List<ListFAQItem> get questions=> _questions;
@@ -45,30 +45,30 @@ class QuestionsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  getArticleByUUID(String id) async {
-    if(id != currentArticle?.uuid) {
+  getQuestionByUUID(String id) async {
+    if(id != currentQuestion?.uuid) {
       var connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var articlesFromCMS = await http.get(
+        var questionsFromCMS = await http.get(
             Uri.parse(
                 '$_baseURL/nodes/$id'),
             headers: {
               "Content-Type": "application/json",
             });
-        currentArticle = Question.fromJson(
-            jsonDecode(utf8.decoder.convert(articlesFromCMS.bodyBytes)));
-        _offlineBox.put(id, currentArticle);
+        currentQuestion = Question.fromJson(
+            jsonDecode(utf8.decoder.convert(questionsFromCMS.bodyBytes)));
+        _offlineBox.put(id, currentQuestion);
       } else {
-        currentArticle = _offlineBox.get(id);
+        currentQuestion = _offlineBox.get(id);
       }
-      if(currentArticle!.imageId != null) {
-        getImagesByUUID(currentArticle!.imageId!);
+      if(currentQuestion!.imageId != null) {
+        getImagesByUUID(currentQuestion!.imageId!);
       } else {
         images = [];
       }
       notifyListeners();
-      lastArticleID = currentArticle?.uuid;
+      lastArticleID = currentQuestion?.uuid;
     }
   }
 
