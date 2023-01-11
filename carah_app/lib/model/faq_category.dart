@@ -1,14 +1,14 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
-//part 'faq_category.g.dart';
+part 'faq_category.g.dart';
 
-//@HiveType(typeId: 0)
+@HiveType(typeId: 3)
 class FAQCategory{
-  //@HiveField(0)
+  @HiveField(0)
   String uuid;
-  //@HiveField(1)
+  @HiveField(1)
   String name;
-  //@HiveField(2)
+  @HiveField(2)
   String? description;
 
   FAQCategory({required this.uuid, required this.name, this.description});

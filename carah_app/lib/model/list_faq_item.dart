@@ -1,17 +1,17 @@
 
 import 'package:hive_flutter/hive_flutter.dart';
 
-//part 'list_faq_item.g.dart';
+part 'list_faq_item.g.dart';
 
-//@HiveType(typeId: 2)
+@HiveType(typeId: 5)
 class ListFAQItem {
-  //@HiveField(0)
+  @HiveField(0)
   String questionId;
-  //@HiveField(1)
+  @HiveField(1)
   String title;
-  //@HiveField(2)
+  @HiveField(2)
   bool saved;
-  //@HiveField(3)
+  @HiveField(3)
   bool downloaded;
 
   ListFAQItem({required this.questionId, required this.title, this.saved = false, this.downloaded = false});
