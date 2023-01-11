@@ -40,7 +40,7 @@ class QuestionsProvider extends ChangeNotifier {
       _questions.removeWhere((element) => element.title == ""); //The "Article Images" Folder has been loaded without title
       _offlineBox.put("questions", _questions);
     } else {
-      _questions = _offlineBox.get("faqs").cast<ListFAQItem>();
+      _questions = _offlineBox.get("questions").cast<ListFAQItem>();
     }
     notifyListeners();
   }
