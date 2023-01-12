@@ -6,16 +6,19 @@ import 'package:carah_app/providers/FAQ_provider.dart';import 'package:carah_app
 import 'package:carah_app/providers/category_provider.dart';
 import 'package:carah_app/providers/faq_category_provider.dart';
 import 'package:carah_app/shared/router.dart';
+import 'package:carah_app/ui/color_schemes.g.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+
+import 'model/faq_category.dart';
 
 
 void main() async {
 
   await Hive.initFlutter();
   Hive.registerAdapter(CategoryAdapter());
-  //Hive.registerAdapter(FAQCategoryAdapter());
+  Hive.registerAdapter(FAQCategoryAdapter());
   Hive.registerAdapter(ArticleAdapter());
   Hive.registerAdapter(ListArticlesItemAdapter());
   await Hive.openBox('myBox');
@@ -43,6 +46,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
+          useMaterial3: true, colorScheme: lightColorScheme,
           // This is the theme of your application.
           //
           // Try running your application with "flutter run". You'll see the
@@ -53,6 +57,9 @@ class MyApp extends StatelessWidget {
           // Notice that the counter didn't reset back to zero; the application
           // is not restarted.
           primarySwatch: Colors.blue,
-        ));
+        ),
+      darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+      themeMode: ThemeMode.light,
+    );
   }
 }

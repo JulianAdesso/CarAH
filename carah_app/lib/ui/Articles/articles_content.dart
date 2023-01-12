@@ -30,6 +30,7 @@ class _ArticlesContent extends State<ArticlesContent> {
           leading: BackButton(
             onPressed: () => context.pop(),
           ),
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
           title: Text(provider.currentArticle != null ? provider.currentArticle!.title : ''),
           actions: [
             IconButton(
