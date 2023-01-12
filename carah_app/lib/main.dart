@@ -1,8 +1,11 @@
 import 'package:carah_app/model/article.dart';
 import 'package:carah_app/model/category.dart';
+import 'package:carah_app/model/faq_category.dart';
 
 import 'package:carah_app/model/list_article_item.dart';
-import 'package:carah_app/providers/FAQ_provider.dart';import 'package:carah_app/providers/articles_provider.dart';
+import 'package:carah_app/model/list_faq_item.dart';
+import 'package:carah_app/providers/FAQ_provider.dart';
+import 'package:carah_app/providers/articles_provider.dart';
 import 'package:carah_app/providers/category_provider.dart';
 import 'package:carah_app/providers/faq_category_provider.dart';
 import 'package:carah_app/shared/router.dart';
@@ -11,7 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
-import 'model/faq_category.dart';
+
 
 
 void main() async {
@@ -21,6 +24,9 @@ void main() async {
   Hive.registerAdapter(FAQCategoryAdapter());
   Hive.registerAdapter(ArticleAdapter());
   Hive.registerAdapter(ListArticlesItemAdapter());
+  Hive.registerAdapter(FAQCategoryAdapter());
+  Hive.registerAdapter(QuestionAdapter());
+  Hive.registerAdapter(ListFAQItemAdapter());
   await Hive.openBox('myBox');
   runApp(MultiProvider(
     providers: [
@@ -46,7 +52,6 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
-          useMaterial3: true, colorScheme: lightColorScheme,
           // This is the theme of your application.
           //
           // Try running your application with "flutter run". You'll see the
@@ -57,9 +62,6 @@ class MyApp extends StatelessWidget {
           // Notice that the counter didn't reset back to zero; the application
           // is not restarted.
           primarySwatch: Colors.blue,
-        ),
-      darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
-      themeMode: ThemeMode.light,
-    );
+        ));
   }
 }
