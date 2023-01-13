@@ -9,17 +9,19 @@ import 'package:carah_app/providers/articles_provider.dart';
 import 'package:carah_app/providers/category_provider.dart';
 import 'package:carah_app/providers/faq_category_provider.dart';
 import 'package:carah_app/shared/router.dart';
+import 'package:carah_app/ui/color_schemes.g.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
-import 'model/faq_question.dart';
+
 
 
 void main() async {
 
   await Hive.initFlutter();
   Hive.registerAdapter(CategoryAdapter());
+  Hive.registerAdapter(FAQCategoryAdapter());
   Hive.registerAdapter(ArticleAdapter());
   Hive.registerAdapter(ListArticlesItemAdapter());
   Hive.registerAdapter(FAQCategoryAdapter());

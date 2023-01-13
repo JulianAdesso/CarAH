@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/faq_category_provider.dart';
+import '../bottom_navbar.dart';
 
 class FAQCategories extends StatelessWidget {
   const FAQCategories({super.key});
@@ -17,6 +18,7 @@ class FAQCategories extends StatelessWidget {
           onPressed: () => context.pop(),
         ),
         title: const Text('FAQ'),
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       ),
       body: Consumer<FAQCategoryProvider>(
         builder: (context, provider, child) {
@@ -60,10 +62,12 @@ class FAQCategories extends StatelessWidget {
                       ),
                     ),
                   ),
+
                 );
               }).toList() : []);
         },
       ),
+      bottomNavigationBar: BottomNavbar(currIndex: 0),
     );
   }
 }

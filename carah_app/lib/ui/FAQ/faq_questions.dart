@@ -58,6 +58,7 @@ class _FAQQuestions extends State<FAQQuestions> {
     shownQuestions= questionsProvider.questions;
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         leading: BackButton(
           onPressed: () => context.pop(),
         ),

@@ -21,6 +21,7 @@ class _FAQContent extends State<FAQContent> {
     return Consumer<QuestionsProvider>(builder: (context, provider, child) {
       return Scaffold(
         appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
           leading: BackButton(
             onPressed: () => context.pop(),
           ),

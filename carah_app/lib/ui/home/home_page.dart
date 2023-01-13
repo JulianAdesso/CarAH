@@ -11,7 +11,8 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Tokoloho Heath Outreach'),
+          title: const Text('Tokoloho Health Outreach'),
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         ),
         body: ListView(
           padding: const EdgeInsets.all(15),
@@ -25,26 +26,30 @@ class HomePage extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 15.0),
-                                child: Text(element.title,
-                                    style:
-                                        Theme.of(context).textTheme.titleLarge,
-                                ),
-                              ),
-                              Text(element.description!,
-                              style: Theme.of(context).textTheme.bodyMedium,)
-                            ],
-                          ),
                           Icon(element.icon,
-                          size: 50.0,)
+                            size: 50.0,),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 20.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 15.0),
+                                  child: Text(element.title,
+                                      style:
+                                          Theme.of(context).textTheme.titleLarge,
+                                  ),
+                                ),
+                                Text(element.description!,
+                                style: Theme.of(context).textTheme.bodyMedium,)
+                              ],
+                            ),
+                          ),
+
                         ],
                       ),
                     ),

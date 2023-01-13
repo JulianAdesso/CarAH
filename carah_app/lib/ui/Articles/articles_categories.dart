@@ -17,6 +17,7 @@ class ArticlesCategories extends StatelessWidget {
         leading: BackButton(
           onPressed: () => context.pop(),
         ),
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         title: const Text('Articles Categories'),
       ),
       body: Consumer<CategoryProvider>(
