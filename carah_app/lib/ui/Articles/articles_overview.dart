@@ -1,9 +1,10 @@
-import 'package:carah_app/model/list_article_item.dart';
 import 'package:carah_app/providers/articles_provider.dart';
 import 'package:carah_app/ui/bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+
+import '../../model/article.dart';
 
 class ArticlesOverview extends StatefulWidget {
   String id;
@@ -17,7 +18,7 @@ class _ArticlesOverview extends State<ArticlesOverview> {
   TextEditingController editingController = TextEditingController();
 
   bool showSearchWidget = false;
-  List<ListArticlesItem> shownArticles = [];
+  List<Article> shownArticles = [];
 
 
   @override
@@ -27,10 +28,10 @@ class _ArticlesOverview extends State<ArticlesOverview> {
 
   void filterSearchResults(String query) {
     ArticlesProvider articleProvider = Provider.of<ArticlesProvider>(context);
-    List<ListArticlesItem> dummySearchList = <ListArticlesItem>[];
+    List<Article> dummySearchList = <Article>[];
     if (query.isNotEmpty) {
       //Show all titles that contain query
-      List<ListArticlesItem> dummyListData = <ListArticlesItem>[];
+      List<Article> dummyListData = <Article>[];
       dummySearchList.forEach((item) {
         if (item.title.contains(query)) {
           dummyListData.add(item);
@@ -122,7 +123,7 @@ class _ArticlesOverview extends State<ArticlesOverview> {
                       },
                     ),
                     onTap: () {
-                      context.push('/article/${shownArticles[i].articleId}');
+                      context.push('/article/${shownArticles[i].uuid}');
                     },
                   ),
                 );

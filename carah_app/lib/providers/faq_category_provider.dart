@@ -1,13 +1,11 @@
 import 'dart:convert';
 
+import 'package:carah_app/model/faq_question.dart';
 import 'package:flutter/widgets.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-
 import '../model/faq_category.dart';
 import 'package:http/http.dart' as http;
 import 'package:connectivity/connectivity.dart';
 
-import '../model/list_faq_item.dart';
 
 class FAQCategoryProvider extends ChangeNotifier{
 
@@ -16,9 +14,9 @@ class FAQCategoryProvider extends ChangeNotifier{
 
   List<FAQCategory> get categories => _categories;
 
-  List<ListFAQItem> _questions = [];
+  List<Question> _questions = [];
 
-  List<ListFAQItem> get questions => _questions;
+  List<Question> get questions => _questions;
   //final _offlineBox = Hive.box('myBox');
   final _baseURL = 'http://h2992008.stratoserver.net:8080/api/v2/CarAH';
   final _baseUUID = 'b46628c6bc284debbd2ab8c76888a850';

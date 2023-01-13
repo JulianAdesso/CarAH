@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:carah_app/model/list_faq_item.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
@@ -10,12 +9,12 @@ import '../model/faq_question.dart';
 
 class QuestionsProvider extends ChangeNotifier {
 
-  List<ListFAQItem> _questions= [];
+  List<Question> _questions= [];
 
   Question? currentQuestion;
   String? lastArticleID;
 
-  List<ListFAQItem> get questions=> _questions;
+  List<Question> get questions=> _questions;
 
   List<Image> images = [];
 
@@ -34,13 +33,13 @@ class QuestionsProvider extends ChangeNotifier {
           });
       _questions =
           jsonDecode(utf8.decoder.convert(questionsFromCMS.bodyBytes))['data']
-              .map<ListFAQItem>((element) {
-            return ListFAQItem.fromJson(element);
+              .map<Question>((element) {
+            return Question.fromJson(element);
           }).toList();
       _questions.removeWhere((element) => element.title == ""); //The "Article Images" Folder has been loaded without title
       _offlineBox.put("questions", _questions);
     } else {
-      _questions = _offlineBox.get("questions").cast<ListFAQItem>();
+      _questions = _offlineBox.get("questions").cast<Question>();
     }
     notifyListeners();
   }
