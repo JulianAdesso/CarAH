@@ -23,9 +23,9 @@ class Article{
   Article({required this.uuid, required this.title, required this.content, required this.category});
 
   Article.fromJson(Map<String, dynamic> json)
-      : uuid = json['uuid'] ?? json['uuid'],
-        title = json['fields']['Display_Name'] ?? json['fields']['Display_Name'],
-        content = json['fields']['Html_Text'] ?? json['fields']['Html_Text'],
-        category = json['parentNode']['displayName'] ?? json['parentNode']['displayName'],
+      : uuid = json['uuid'] ?? "",
+        title = json['fields']['Display_Name'] ?? "",
+        content = json['fields']['Html_Text'] ?? "",
+        category = json['parentNode']['displayName'] ?? "",
         imageId = (json['fields']['images'] as List?)?.map((item) => item.toString())?.toList();
 }

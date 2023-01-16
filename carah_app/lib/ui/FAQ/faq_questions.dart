@@ -1,9 +1,9 @@
+import 'package:carah_app/model/faq_question.dart';
 import 'package:carah_app/ui/bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../model/list_faq_item.dart';
 import '../../providers/FAQ_provider.dart';
 
 class FAQQuestions extends StatefulWidget {
@@ -18,7 +18,7 @@ class _FAQQuestions extends State<FAQQuestions> {
   TextEditingController editingController = TextEditingController();
 
   bool showSearchWidget = false;
-  List<ListFAQItem> shownQuestions = [];
+  List<Question> shownQuestions = [];
 
 
   @override
@@ -28,10 +28,10 @@ class _FAQQuestions extends State<FAQQuestions> {
 
   void filterSearchResults(String query) {
     QuestionsProvider articleProvider = Provider.of<QuestionsProvider>(context);
-    List<ListFAQItem> dummySearchList = <ListFAQItem>[];
+    List<Question> dummySearchList = <Question>[];
     if (query.isNotEmpty) {
       //Show all titles that contain query
-      List<ListFAQItem> dummyListData = <ListFAQItem>[];
+      List<Question> dummyListData = <Question>[];
       dummySearchList.forEach((item) {
         if (item.title.contains(query)) {
           dummyListData.add(item);
@@ -113,7 +113,7 @@ class _FAQQuestions extends State<FAQQuestions> {
                       shownQuestions[i].title.toString(),
                     ),
                     onTap: () {
-                      context.push('/faq/${shownQuestions[i].questionId}');
+                      context.push('/faq/${shownQuestions[i].uuid}');
                     },
                   ),
                 );
