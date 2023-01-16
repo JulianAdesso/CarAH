@@ -25,20 +25,20 @@ class _FAQContent extends State<FAQContent> {
           leading: BackButton(
             onPressed: () => context.pop(),
           ),
-          title: Text('Answer'),
+          title: const Text('Answer'),
         ),
         body: SingleChildScrollView(
             child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Card(
                 elevation: 0,
                 shape: const RoundedRectangleBorder(
                   side: BorderSide(
                     color: Colors.black12,
                   ),
-                  borderRadius: const BorderRadius.all(Radius.circular(12)),
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
                 child: SizedBox(
                   height: 100,
@@ -52,9 +52,9 @@ class _FAQContent extends State<FAQContent> {
             ),
             provider.currentQuestion != null
                 ? Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Html(data: provider.currentQuestion!.content))
-                : Text("Keine Daten zu der ID")
+                : const Text("Keine Daten zu der ID")
           ],
         )),
         bottomNavigationBar: BottomNavbar(currIndex: 0),

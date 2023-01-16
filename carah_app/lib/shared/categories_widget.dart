@@ -1,12 +1,23 @@
+import 'dart:core';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/faq_category_provider.dart';
-import '../bottom_navbar.dart';
+import '../../providers/category_provider.dart';
+import '../ui/bottom_navbar.dart';
 
-class FAQCategories extends StatelessWidget {
-  const FAQCategories({super.key});
+class CategoriesWidget extends StatelessWidget {
+
+  final String path;
+
+  final String type;
+
+  final String title;
+
+  final String categoryUUID;
+
+  const CategoriesWidget({super.key, required this.path, required this.type, required this.title, required this.categoryUUID});
 
   get onTap => null;
 
@@ -17,17 +28,17 @@ class FAQCategories extends StatelessWidget {
         leading: BackButton(
           onPressed: () => context.pop(),
         ),
-        title: const Text('FAQ'),
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        title: Text(title),
       ),
-      body: Consumer<FAQCategoryProvider>(
+      body: Consumer<CategoryProvider>(
         builder: (context, provider, child) {
-          provider.fetchAllCategories();
+          provider.fetchAllCategories(categoryUUID, type);
           return ListView(
               children: provider.categories.isNotEmpty? provider.categories.map((item) {
                 return GestureDetector(
                   onTap: () {
-                    context.push('/faqs/${item.uuid}');
+                    context.push('/$path/${item.uuid}');
                   },
                   child: Card(
                     margin: const EdgeInsets.all(15),
@@ -62,9 +73,10 @@ class FAQCategories extends StatelessWidget {
                       ),
                     ),
                   ),
-
                 );
               }).toList() : []);
+
+
         },
       ),
       bottomNavigationBar: BottomNavbar(currIndex: 0),

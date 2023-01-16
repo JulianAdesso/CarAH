@@ -1,11 +1,9 @@
-import 'package:carah_app/ui/Articles/articles_categories.dart';
+import 'package:carah_app/shared/categories_widget.dart';
 import 'package:carah_app/ui/Articles/articles_content.dart';
 import 'package:carah_app/ui/Articles/articles_gallery.dart';
 import 'package:carah_app/ui/Articles/articles_overview.dart';
 import 'package:carah_app/ui/home/home_page.dart';
 import 'package:go_router/go_router.dart';
-
-import 'package:carah_app/ui/FAQ/faq_categories.dart';
 
 import '../ui/FAQ/faq_content.dart';
 import '../ui/FAQ/faq_gallery.dart';
@@ -16,7 +14,7 @@ final router = GoRouter(
     GoRoute(path: '/',
     builder: (context, state) => const HomePage()),
     GoRoute(path: '/articles_categories',
-        builder: (context, state) => const ArticlesCategories()),
+        builder: (context, state) => const CategoriesWidget(path: 'articles', type: 'articles_category',title: 'Articles', categoryUUID: '0a8e66b695f5410cac44b1a9531a7a2b')),
     GoRoute(path: '/articles/:id',
     builder: (context, state) => ArticlesOverview(id: state.params['id']!)),
     GoRoute(path: '/article/:id',
@@ -24,7 +22,7 @@ final router = GoRouter(
     GoRoute(path: '/article/:id/gallery',
         builder: (context, state) => ArticlesGallery(id: state.params['id']!)),
     GoRoute(path: '/faq_categories',
-        builder: (context, state) => const FAQCategories()),
+        builder: (context, state) => const CategoriesWidget(path: 'faqs', type: 'faq_category', title: 'FAQ', categoryUUID: 'b46628c6bc284debbd2ab8c76888a850')),
     GoRoute(path: '/faqs/:id',
         builder: (context, state) => FAQQuestions(id: state.params['id']!)),
     GoRoute(path: '/faq/:id',
