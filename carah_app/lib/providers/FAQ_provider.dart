@@ -6,21 +6,19 @@ import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 
 import '../model/faq_question.dart';
+import 'content_provider.dart';
 
-class QuestionsProvider extends ChangeNotifier {
-
-  List<Question> _questions= [];
+class QuestionsProvider extends ContentProvider<Question> {
 
   Question? currentQuestion;
   String? lastArticleID;
-
-  List<Question> get questions=> _questions;
 
   List<Image> images = [];
 
   final _offlineBox = Hive.box('myBox');
   final _baseURL = 'http://h2992008.stratoserver.net:8080/api/v2/CarAH';
 
+  @override
   fetchDataByCategory(String id) async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile ||
@@ -31,15 +29,15 @@ class QuestionsProvider extends ChangeNotifier {
           headers: {
             "Content-Type": "application/json",
           });
-      _questions =
+      items =
           jsonDecode(utf8.decoder.convert(questionsFromCMS.bodyBytes))['data']
               .map<Question>((element) {
             return Question.fromJson(element);
           }).toList();
-      _questions.removeWhere((element) => element.title == ""); //The "Article Images" Folder has been loaded without title
-      _offlineBox.put("questions", _questions);
+      items.removeWhere((element) => element.title == ""); //The "Article Images" Folder has been loaded without title
+      _offlineBox.put("questions", items);
     } else {
-      _questions = _offlineBox.get("questions").cast<Question>();
+      items = _offlineBox.get("questions").cast<Question>();
     }
     notifyListeners();
   }

@@ -22,15 +22,17 @@ class QuestionAdapter extends TypeAdapter<Question> {
       content: fields[2] as String,
       category: fields[3] as String,
     )
+      ..imageId = (fields[6] as List?)?.cast<String>()
       ..downloaded = fields[4] as bool
-      ..saved = fields[5] as bool
-      ..imageId = (fields[6] as List?)?.cast<String>();
+      ..saved = fields[5] as bool;
   }
 
   @override
   void write(BinaryWriter writer, Question obj) {
     writer
       ..writeByte(7)
+      ..writeByte(6)
+      ..write(obj.imageId)
       ..writeByte(0)
       ..write(obj.uuid)
       ..writeByte(1)
@@ -42,9 +44,7 @@ class QuestionAdapter extends TypeAdapter<Question> {
       ..writeByte(4)
       ..write(obj.downloaded)
       ..writeByte(5)
-      ..write(obj.saved)
-      ..writeByte(6)
-      ..write(obj.imageId);
+      ..write(obj.saved);
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:carah_app/providers/content_provider.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
@@ -7,20 +8,17 @@ import 'package:http/http.dart' as http;
 
 import '../model/article.dart';
 
-class ArticlesProvider extends ChangeNotifier {
-
-  List<Article> _articles = [];
+class ArticlesProvider extends ContentProvider<Article>{
 
   Article? currentArticle;
   String? lastArticleID;
-
-  List<Article> get articles => _articles;
 
   List<Image> images = [];
 
   final _offlineBox = Hive.box('myBox');
   final _baseURL = 'http://h2992008.stratoserver.net:8080/api/v2/CarAH';
 
+  @override
   fetchDataByCategory(String id) async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile ||
@@ -31,15 +29,15 @@ class ArticlesProvider extends ChangeNotifier {
           headers: {
             "Content-Type": "application/json",
           });
-      _articles =
+      items =
           jsonDecode(utf8.decoder.convert(articlesFromCMS.bodyBytes))['data']
               .map<Article>((element) {
             return Article.fromJson(element);
           }).toList();
-      _articles.removeWhere((element) => element.title == ""); //The "Article Images" Folder has been loaded without title
-      _offlineBox.put("articles", _articles);
+      items.removeWhere((element) => element.title == ""); //The "Article Images" Folder has been loaded without title
+      _offlineBox.put("articles", items);
     } else {
-      _articles = _offlineBox.get("articles").cast<Article>();
+      items = _offlineBox.get("articles").cast<Article>();
     }
     notifyListeners();
   }

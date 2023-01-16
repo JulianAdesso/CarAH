@@ -3,6 +3,7 @@ import 'package:carah_app/model/category.dart';
 import 'package:carah_app/providers/articles_provider.dart';
 import 'package:carah_app/providers/category_provider.dart';
 import 'package:carah_app/providers/FAQ_provider.dart';
+import 'package:carah_app/providers/content_provider.dart';
 import 'package:carah_app/shared/router.dart';
 import 'package:carah_app/ui/color_schemes.g.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,7 @@ void main() async {
       ),
       ChangeNotifierProvider(create: (context) => CategoryProvider()),
       ChangeNotifierProvider(create: (context) => QuestionsProvider()),
+      ChangeNotifierProvider(create: (context) => ContentProvider())
     ],
     child: const MyApp(),
   ));
