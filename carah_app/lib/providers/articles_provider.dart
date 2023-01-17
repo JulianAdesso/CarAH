@@ -82,6 +82,10 @@ class ArticlesProvider extends ContentProvider<Article> {
       } else {
         currentArticle!.saved = false;
       }
+      var savedArticles = _offlineBox.get('articles') ?? [];
+        if (savedArticles.any((element) => element.uuid == currentArticle!.uuid)) {
+          currentArticle!.downloaded = true;
+        }
       notifyListeners();
     }
   }
