@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../providers/articles_provider.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
-
-
-import '../bottom_navbar.dart';
 
 class FAQGallery extends StatefulWidget {
 
@@ -43,7 +39,7 @@ class _FAQGallery extends State<FAQGallery> {
                 builder: (BuildContext context, int index) {
                   shownPictureNumber = index + 1;
                   return PhotoViewGalleryPageOptions(
-                    imageProvider: (provider.images[index].image),
+                    imageProvider: (provider.showingImages[index].image),
                     initialScale: PhotoViewComputedScale.contained * 1,
                   );
                 },

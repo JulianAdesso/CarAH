@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:carah_app/ui/bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -7,10 +8,10 @@ import 'package:provider/provider.dart';
 import '../../providers/articles_provider.dart';
 
 class ArticlesContent extends StatefulWidget {
-
   final String id;
+  final String categoryUUID;
 
-  const ArticlesContent({super.key, required this.id});
+  const ArticlesContent({super.key, required this.id, required this.categoryUUID});
 
   @override
   _ArticlesContent createState() => _ArticlesContent();
@@ -19,43 +20,68 @@ class ArticlesContent extends StatefulWidget {
 class _ArticlesContent extends State<ArticlesContent> {
 
   @override
+  void initState() {
+   super.initState();
+   Provider.of<ArticlesProvider>(context, listen: false).getArticleByUUID(widget.id);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    Provider.of<ArticlesProvider>(context)
-        .getArticleByUUID(widget.id);
-    return Consumer<ArticlesProvider>(
-        builder: (context, provider, child)
-    {
+    var snackBar = Flushbar(
+      message:
+          "The article was successfully downloaded and is now available in offline mode",
+      duration: const Duration(seconds: 3),
+      forwardAnimationCurve: Curves.decelerate,
+      reverseAnimationCurve: Curves.decelerate,
+      flushbarPosition: FlushbarPosition.TOP,
+      margin: const EdgeInsets.fromLTRB(8, 60, 8, 8),
+      borderRadius: BorderRadius.circular(8),
+      backgroundColor: Theme.of(context).dialogBackgroundColor,
+      borderColor: Colors.grey,
+      messageColor:
+          Theme.of(context).dialogTheme.contentTextStyle?.color ?? Colors.black,
+    );
+
+
+    return Consumer<ArticlesProvider>(builder: (context, provider, child) {
       return Scaffold(
         appBar: AppBar(
           leading: BackButton(
             onPressed: () => context.pop(),
           ),
           backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-          title: Text(provider.currentArticle != null ? provider.currentArticle!.title : ''),
+          title: Text(provider.currentArticle != null
+              ? provider.currentArticle!.title
+              : ''),
           actions: [
             IconButton(
-              icon: Icon(provider.currentArticle != null &&
-                  provider.currentArticle!.downloaded
-                  ? Icons.cloud_download
-                  : Icons.cloud_download_outlined),
-              onPressed: () {
-                setState(() {
-                  if (provider.currentArticle != null) {
-                    provider.currentArticle!.downloaded =
-                    !provider.currentArticle!.downloaded;
+                icon: Icon(provider.currentArticle != null &&
+                        provider.currentArticle!.downloaded
+                    ? Icons.cloud_download
+                    : Icons.cloud_download_outlined),
+                onPressed: () async {
+                  if (provider.currentArticle != null &&
+                      !provider.currentArticle!.downloaded) {
+                    setState(() {
+                      provider.currentArticle!.downloaded =
+                          !provider.currentArticle!.downloaded;
+                    });
+                    if (await provider
+                        .downloadArticle(provider.currentArticle!, widget.categoryUUID)) {
+                      snackBar.show(context);
+                    }
                   }
-                });
-              },
-            ),
+                }),
             IconButton(
-              icon: Icon(
-                  provider.currentArticle != null && provider.currentArticle!.saved
-                      ? Icons.favorite
-                      : Icons.favorite_border),
+              icon: Icon(provider.currentArticle != null &&
+                      provider.currentArticle!.saved
+                  ? Icons.favorite
+                  : Icons.favorite_border),
               onPressed: () {
                 setState(() {
                   if (provider.currentArticle != null) {
-                    provider.currentArticle!.saved = !provider.currentArticle!.saved;
+                    provider.currentArticle!.saved =
+                        !provider.currentArticle!.saved;
                   }
                 });
               },
@@ -63,18 +89,22 @@ class _ArticlesContent extends State<ArticlesContent> {
           ],
         ),
         body: SingleChildScrollView(
-          child: Column(
-            children: [
-              InkWell(
-                  onTap: (){context.push('/article/${widget.id}/gallery');},
-                  child: provider.images! != null && !provider.images!.isEmpty ? provider.images!.first!
-                  : SizedBox.shrink()),
-              provider.currentArticle != null ? Html(data: provider.currentArticle!.content)
-                  : Text("Keine Daten zu der ID")
-            ],
-          )
-        ),
+            child: Column(
+          children: [
+            GestureDetector(
+                onTap: () {
+                  context.push('/article/${widget.id}/gallery');
+                },
+                child: provider.showingImages.isNotEmpty
+                    ? provider.showingImages.first
+                    : const SizedBox.shrink()),
+            provider.currentArticle != null
+                ? Html(data: provider.currentArticle!.content)
+                : const Text("Keine Daten zu der ID")
+          ],
+        )),
         bottomNavigationBar: BottomNavbar(currIndex: 0),
       );
     });
-}}
+  }
+}

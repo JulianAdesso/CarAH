@@ -126,7 +126,11 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider> extends S
                       },
                     ),
                     onTap: () {
-                      context.push('/${widget.path}/${shownItems[i].uuid}');
+                      if(widget.path=="article"){
+                        context.push('/${widget.path}/${widget.id}/${shownItems[i].uuid}');
+                      } else {
+                        context.push('/${widget.path}/${shownItems[i].uuid}');
+                      }
                     },
                   ),
                 );

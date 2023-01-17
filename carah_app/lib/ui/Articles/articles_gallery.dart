@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../providers/articles_provider.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
-
-
-import '../bottom_navbar.dart';
 
 class ArticlesGallery extends StatefulWidget {
 
@@ -32,10 +28,10 @@ class _ArticlesGallery extends State<ArticlesGallery> {
               centerTitle: true,
               backgroundColor: Colors.black ,
               leading: IconButton(
-                icon: Icon(Icons.close, color: Colors.white),
+                icon: const Icon(Icons.close, color: Colors.white),
                 onPressed: () => Navigator.of(context).pop(),
               ),
-              title: Text( shownPictureNumber.toString() + " from " + provider.images.length.toString()),
+              title: Text( "$shownPictureNumber from ${provider.images.length}"),
             ),
             body:
             PhotoViewGallery.builder(
@@ -43,13 +39,13 @@ class _ArticlesGallery extends State<ArticlesGallery> {
               builder: (BuildContext context, int index) {
                 shownPictureNumber = index + 1;
                 return PhotoViewGalleryPageOptions(
-                imageProvider: (provider.images[index].image),
+                imageProvider: (provider.showingImages[index].image),
                   initialScale: PhotoViewComputedScale.contained * 1,
                 );
               },
               itemCount: provider.images.length,
-              loadingBuilder: (context, event) => Center(
-                child: Container(
+              loadingBuilder: (context, event) => const Center(
+                child: SizedBox(
                   width: 20.0,
                   height: 20.0,
                 ),

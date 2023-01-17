@@ -39,6 +39,8 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   galleryimage: 1.2.0
+  another_flushbar: ^1.12.29
+  photo_view: ^0.14.0
 
 
   # The following adds the Cupertino Icons font to your application.

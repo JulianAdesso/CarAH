@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:carah_app/providers/content_provider.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/widgets.dart';
@@ -7,89 +8,109 @@ import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 
 import '../model/article.dart';
+import 'category_provider.dart';
 
-class ArticlesProvider extends ContentProvider<Article>{
+class ArticlesProvider extends ContentProvider<Article> {
+  CategoryProvider categoryProvider;
 
   Article? currentArticle;
-  String? lastArticleID;
 
-  List<Image> images = [];
+  Map<String, Uint8List> images = {};
+
+  List<Image> showingImages = [];
 
   final _offlineBox = Hive.box('myBox');
   final _baseURL = 'http://h2992008.stratoserver.net:8080/api/v2/CarAH';
+
+  ArticlesProvider({required this.categoryProvider});
+
+  ArticlesProvider update(CategoryProvider categoryProvider) {
+    this.categoryProvider = categoryProvider;
+    return this;
+  }
 
   @override
   fetchDataByCategory(String id) async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi) {
-      var articlesFromCMS = await http.get(
-          Uri.parse(
-              '$_baseURL/nodes/$id/children'),
-          headers: {
-            "Content-Type": "application/json",
-          });
+      var articlesFromCMS =
+          await http.get(Uri.parse('$_baseURL/nodes/$id/children'), headers: {
+        "Content-Type": "application/json",
+      });
       items =
           jsonDecode(utf8.decoder.convert(articlesFromCMS.bodyBytes))['data']
               .map<Article>((element) {
-            return Article.fromJson(element);
-          }).toList();
-      items.removeWhere((element) => element.title == ""); //The "Article Images" Folder has been loaded without title
-      _offlineBox.put("articles", items);
+        return Article.fromJson(element);
+      }).toList();
+      items.removeWhere((element) =>
+          element.title ==
+          ""); //The "Article Images" Folder has been loaded without title
     } else {
       items = _offlineBox.get("articles").cast<Article>();
     }
     notifyListeners();
   }
 
-  getArticleByUUID(String id) async {
-    if(id != currentArticle?.uuid) {
+  Future<void> getArticleByUUID(String id) async {
+    if (id != currentArticle?.uuid) {
       var connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var articlesFromCMS = await http.get(
-            Uri.parse(
-                '$_baseURL/nodes/$id'),
-            headers: {
-              "Content-Type": "application/json",
-            });
+        var articlesFromCMS =
+            await http.get(Uri.parse('$_baseURL/nodes/$id'), headers: {
+          "Content-Type": "application/json",
+        });
         currentArticle = Article.fromJson(
             jsonDecode(utf8.decoder.convert(articlesFromCMS.bodyBytes)));
-        _offlineBox.put(id, currentArticle);
       } else {
-        currentArticle = _offlineBox.get(id);
+        currentArticle = _offlineBox.get("articles").cast<Article>().where((element) => element.uuid == id).toList().first;
       }
-      if(currentArticle!.imageId != null) {
+      if (currentArticle!.imageId != null) {
         getImagesByUUID(currentArticle!.imageId!);
       } else {
-        images = [];
+        images = {};
       }
       notifyListeners();
-      lastArticleID = currentArticle?.uuid;
     }
   }
 
   getImagesByUUID(List<String> ids) async {
     var connectivityResult = await (Connectivity().checkConnectivity());
-    List<Image> tmpImages = [];
-    for (var id in ids)  {
+    Map<String, Uint8List> tmpImages = {};
+    for (var id in ids) {
       id = id.replaceAll('{uuid: ', '');
       id = id.replaceAll('}', '');
       if (connectivityResult == ConnectivityResult.mobile ||
-          connectivityResult == ConnectivityResult.wifi && !_offlineBox.containsKey(id)) {
-        var message = await http.get(
-            Uri.parse(
-                '$_baseURL/nodes/$id/binary/image'),
-            headers: {
-              "Content-Type": "application/json",
-            });
-        tmpImages.add(Image.memory(message.bodyBytes));
-        _offlineBox.put(id, message.bodyBytes);
+          connectivityResult == ConnectivityResult.wifi &&
+              !_offlineBox.containsKey(id)) {
+        var message = await http
+            .get(Uri.parse('$_baseURL/nodes/$id/binary/image'), headers: {
+          "Content-Type": "application/json",
+        });
+        tmpImages.putIfAbsent(id, () => message.bodyBytes);
         images = tmpImages;
+        showingImages.add(Image.memory(message.bodyBytes));
       } else {
-        tmpImages.add(Image.memory(_offlineBox.get(id)));
+        tmpImages.putIfAbsent(id, () => _offlineBox.get(id));
         images = tmpImages;
+        showingImages.add(Image.memory(_offlineBox.get(id)));
       }
     }
+    notifyListeners();
+  }
+
+  Future<bool> downloadArticle(Article article, String categoryUUID) async {
+    List<Article>? articles =  await _offlineBox.get("articles")?.cast<Article>();
+    articles ??= [];
+    if (!articles.any((element) => element.uuid == article.uuid)) {
+      await categoryProvider.downloadCategory(categoryUUID);
+      images.forEach((key, val) {
+        _offlineBox.put(key, val);
+      });
+      articles.add(article);
+      await _offlineBox.put("articles", articles);
+    }
+    return true;
   }
 }
