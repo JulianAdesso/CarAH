@@ -21,15 +21,18 @@ class _ArticlesContent extends State<ArticlesContent> {
 
   @override
   void initState() {
-   super.initState();
-   Provider.of<ArticlesProvider>(context, listen: false).getArticleByUUID(widget.id);
+    Provider.of<ArticlesProvider>(context, listen: false)
+        .getArticleByUUID(widget.id);
+    super.initState();
   }
+
+  setFavorite() {}
 
   @override
   Widget build(BuildContext context) {
     var snackBar = Flushbar(
       message:
-          "The article was successfully downloaded and is now available in offline mode",
+      "The article was successfully downloaded and is now available in offline mode",
       duration: const Duration(seconds: 3),
       forwardAnimationCurve: Curves.decelerate,
       reverseAnimationCurve: Curves.decelerate,
@@ -39,10 +42,8 @@ class _ArticlesContent extends State<ArticlesContent> {
       backgroundColor: Theme.of(context).dialogBackgroundColor,
       borderColor: Colors.grey,
       messageColor:
-          Theme.of(context).dialogTheme.contentTextStyle?.color ?? Colors.black,
+      Theme.of(context).dialogTheme.contentTextStyle?.color ?? Colors.black,
     );
-
-
     return Consumer<ArticlesProvider>(builder: (context, provider, child) {
       return Scaffold(
         appBar: AppBar(
@@ -52,17 +53,18 @@ class _ArticlesContent extends State<ArticlesContent> {
           backgroundColor: Theme.of(context).colorScheme.primaryContainer,
           title: Text(provider.currentArticle != null
               ? provider.currentArticle!.title
-              : ''),
+              : '',
+          ),
           actions: [
             IconButton(
                 icon: Icon(provider.currentArticle != null &&
                         provider.currentArticle!.downloaded
                     ? Icons.cloud_download
-                    : Icons.cloud_download_outlined),
+                    : Icons.cloud_download_outlined,),
                 onPressed: () async {
                   if (provider.currentArticle != null &&
                       !provider.currentArticle!.downloaded) {
-                    setState(() {
+                        setState(() {
                       provider.currentArticle!.downloaded =
                           !provider.currentArticle!.downloaded;
                     });
@@ -76,14 +78,21 @@ class _ArticlesContent extends State<ArticlesContent> {
               icon: Icon(provider.currentArticle != null &&
                       provider.currentArticle!.saved
                   ? Icons.favorite
-                  : Icons.favorite_border),
-              onPressed: () {
+                  : Icons.favorite_border,
+                color: provider.currentArticle != null &&
+                        provider.currentArticle!.saved
+                    ? Colors.red
+                    : Colors.black,
+              ),
+              onPressed: () => {
                 setState(() {
                   if (provider.currentArticle != null) {
-                    provider.currentArticle!.saved =
-                        !provider.currentArticle!.saved;
+                    provider.setFavorite(
+                      provider.currentArticle!.uuid,
+                        !provider.currentArticle!.saved,
+                    );
                   }
-                });
+                }),
               },
             ),
           ],

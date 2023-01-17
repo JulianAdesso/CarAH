@@ -12,11 +12,10 @@ import 'category_provider.dart';
 
 class ArticlesProvider extends ContentProvider<Article> {
   CategoryProvider categoryProvider;
-
   Article? currentArticle;
 
   Map<String, Uint8List> images = {};
-
+  List<String> favorites = [];
   List<Image> showingImages = [];
 
   final _offlineBox = Hive.box('myBox');
@@ -49,6 +48,12 @@ class ArticlesProvider extends ContentProvider<Article> {
     } else {
       items = _offlineBox.get("articles").cast<Article>();
     }
+    favorites = _offlineBox.get('favorites') ?? favorites;
+    for (var item in items as List<Article>) {
+      if (favorites.contains(item.uuid)) {
+        item.saved = true;
+      }
+    }
     notifyListeners();
   }
 
@@ -70,6 +75,12 @@ class ArticlesProvider extends ContentProvider<Article> {
         getImagesByUUID(currentArticle!.imageId!);
       } else {
         images = {};
+      }
+      favorites = _offlineBox.get('favorites') ?? favorites;
+      if (currentArticle != null && favorites.contains(currentArticle!.uuid)) {
+        currentArticle!.saved = true;
+      } else {
+        currentArticle!.saved = false;
       }
       notifyListeners();
     }
@@ -97,6 +108,24 @@ class ArticlesProvider extends ContentProvider<Article> {
         showingImages.add(Image.memory(_offlineBox.get(id)));
       }
     }
+    notifyListeners();
+  }
+
+  @override
+  setFavorite(String id, bool val) {
+    items[items.indexWhere((Article art) => art.uuid == id)]
+        .saved = val;
+    if (currentArticle != null && currentArticle!.uuid == id) {
+      currentArticle!.saved = val;
+    }
+    if (val) {
+      favorites.add(id);
+    } else {
+      if (favorites.isNotEmpty && favorites.contains(id)) {
+        favorites.remove(id);
+      }
+    }
+    _offlineBox.put('favorites', favorites);
     notifyListeners();
   }
 
