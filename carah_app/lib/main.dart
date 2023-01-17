@@ -9,6 +9,7 @@ import 'package:carah_app/ui/color_schemes.g.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+import 'model/content.dart';
 import 'model/faq_question.dart';
 
 void main() async {
@@ -26,7 +27,7 @@ void main() async {
         update: (_, categoryProvider, articlesProvider) => articlesProvider!.update(categoryProvider),
       ),
       ChangeNotifierProvider(create: (context) => QuestionsProvider()),
-      ChangeNotifierProvider(create: (context) => ContentProvider())
+      ChangeNotifierProvider(create: (context) => ContentProvider<Content>())
     ],
     child: const MyApp(),
   ));
