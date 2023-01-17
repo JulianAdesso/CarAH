@@ -6,8 +6,8 @@ import 'package:provider/provider.dart';
 
 import '../model/content.dart';
 
-class SubcategoryWidget<T extends Content, P extends ContentProvider> extends StatefulWidget {
-
+class SubcategoryWidget<T extends Content, P extends ContentProvider>
+    extends StatefulWidget {
   String id;
   String path;
 
@@ -17,12 +17,12 @@ class SubcategoryWidget<T extends Content, P extends ContentProvider> extends St
   _SubcategoryWidget createState() => _SubcategoryWidget<T, P>();
 }
 
-class _SubcategoryWidget<T extends Content, P extends ContentProvider> extends State<SubcategoryWidget> {
+class _SubcategoryWidget<T extends Content, P extends ContentProvider>
+    extends State<SubcategoryWidget> {
   TextEditingController editingController = TextEditingController();
 
   bool showSearchWidget = false;
   List<T> shownItems = [];
-
 
   @override
   void initState() {
@@ -92,12 +92,15 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider> extends S
                 },
                 controller: editingController,
                 decoration: const InputDecoration(
-                    labelText: "Search",
-                    hintText: "Search",
-                    prefixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(25.0)))),
+                  labelText: "Search",
+                  hintText: "Search",
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(25.0),
+                    ),
+                  ),
+                ),
               ),
             ),
           Expanded(
@@ -109,24 +112,33 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider> extends S
                 return Container(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   decoration: const BoxDecoration(
-                    border: Border(bottom: BorderSide(width: 1.0, color: Colors.grey)),
+                    border: Border(
+                        bottom: BorderSide(width: 1.0, color: Colors.grey),),
                   ),
                   child: ListTile(
                     title: Text(
                       shownItems[i].title.toString(),
                     ),
                     trailing: IconButton(
-                      icon: Icon(shownItems[i].saved
-                          ? Icons.favorite
-                          : Icons.favorite_border),
+                      icon: Icon(
+                        shownItems[i].saved
+                            ? Icons.favorite
+                            : Icons.favorite_border,
+                        color: shownItems[i].saved ? Colors.red : Colors.black,
+                      ),
                       onPressed: () => {
                         setState(() {
-                          shownItems[i].saved = !shownItems[i].saved;
-                        })
+                          provider.setFavorite(
+                            shownItems[i].uuid,
+                            !shownItems[i].saved,
+                          );
+                        }),
                       },
                     ),
                     onTap: () {
-                      context.push('/${widget.path}/${shownItems[i].uuid}');
+                      context.push(
+                        '/${widget.path}/${shownItems[i].uuid}',
+                      );
                     },
                   ),
                 );
