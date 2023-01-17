@@ -7,6 +7,7 @@ import 'package:carah_app/shared/subcategory_widget.dart';
 import 'package:carah_app/ui/Articles/articles_content.dart';
 import 'package:carah_app/ui/Articles/articles_gallery.dart';
 import 'package:carah_app/ui/home/home_page.dart';
+import 'package:carah_app/ui/home/search.dart';
 import 'package:carah_app/ui/settings/settings_widget.dart';
 import 'package:carah_app/ui/home/search.dart';
 import 'package:go_router/go_router.dart';

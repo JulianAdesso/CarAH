@@ -21,39 +21,43 @@ class _Search extends State<Search> {
 
   @override
   void initState() {
-    ContentProvider contentProvider =
-        Provider.of<ContentProvider>(context, listen: false);
-    contentProvider.fetchAllContent();
-    shownContents = contentProvider.items;
     super.initState();
   }
 
-  Future<void> filterSearchResults(
-      String query, ContentProvider contentProvider) async {
-    shownContents = [];
-    await contentProvider.fetchAllContent();
+  void filterSearchResults(String query) {
+    shownContents.clear();
+    print(query);
+    ContentProvider contentProvider =
+        Provider.of<ContentProvider>(context, listen: false);
+    contentProvider.fetchAllContent();
     if (query.isNotEmpty) {
       //Show all titles that contain query
-      List<Content> dummyListData = [];
-      for (var item in contentProvider.items) {
-        if ((item as Content).title.toLowerCase().contains(query.toLowerCase())) {
+      List<Content> dummyListData = <Content>[];
+      contentProvider.items.forEach((item) {
+        if (item.title.contains(query)) {
           dummyListData.add(item);
         }
-      }
-      setState(() {
-        shownContents = dummyListData;
       });
+      setState(() {
+        shownContents.clear();
+        shownContents.addAll(dummyListData);
+      });
+      print(shownContents.length);
+      return;
     } else {
       //Show all titles
       setState(() {
-        shownContents = contentProvider.items;
+        shownContents.clear();
+        shownContents.addAll(contentProvider.items);
       });
+      print(shownContents.length);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     ContentProvider contentProvider = Provider.of<ContentProvider>(context);
+    shownContents = contentProvider.items;
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
@@ -67,8 +71,9 @@ class _Search extends State<Search> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
-              onChanged: (value) async {
-                await filterSearchResults(value, contentProvider);
+              onChanged: (value) {
+                print("Changed");
+                filterSearchResults(value);
               },
               controller: editingController,
               decoration: const InputDecoration(
@@ -80,12 +85,11 @@ class _Search extends State<Search> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              // to here.
-              key: UniqueKey(),
-              padding: const EdgeInsets.all(0.0),
-              itemCount: shownContents.length,
-              itemBuilder: (context, i) {
+              child: ListView.builder(
+                // to here.
+                padding: const EdgeInsets.all(0.0),
+                itemCount: shownContents.length,
+                itemBuilder: (context, i) {
                 return Container(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   decoration: const BoxDecoration(
@@ -97,12 +101,10 @@ class _Search extends State<Search> {
                       shownContents[i].title.toString(),
                     ),
                     onTap: () {
-                      if (contentProvider.allArticlesUuid
-                          .contains(shownContents[i].uuid)) {
+                      if(contentProvider.allArticlesUuid.contains(shownContents[i].uuid)) {
                         context.push('/article/${shownContents[i].uuid}');
                       }
-                      if (contentProvider.allQuestionsUuid
-                          .contains(shownContents[i].uuid)) {
+                      if(contentProvider.allQuestionsUuid.contains(shownContents[i].uuid)) {
                         context.push('/faq/${shownContents[i].uuid}');
                       }
                     },
