@@ -22,40 +22,42 @@ class HomePage extends StatelessWidget {
               child: Card(
                   color: Theme.of(context).colorScheme.tertiaryContainer,
                   margin: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: Flexible(
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 5),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 15.0),
-                                    child: Text(element.title,
-                                        style:
-                                            Theme.of(context).textTheme.titleLarge,
+                  child: Row(
+                    children: [Flexible(
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 15.0),
+                                      child: Text(element.title,
+                                          style:
+                                              Theme.of(context).textTheme.titleLarge,
+                                      ),
                                     ),
-                                  ),
-                                  Text(element.description!,
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                  overflow: TextOverflow.visible,)
-                                ],
+                                    Text(element.description!,
+                                    style: Theme.of(context).textTheme.bodyMedium,
+                                    overflow: TextOverflow.visible,)
+                                  ],
+                                ),
                               ),
-                            ),
-                            Icon(element.icon,
-                              size: 50.0,),
-                          ],
+                              Icon(element.icon,
+                                size: 50.0,),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
+                    )],
                   )),
             );
           }).toList(),
