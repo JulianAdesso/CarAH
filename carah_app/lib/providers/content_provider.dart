@@ -15,8 +15,6 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
   List<String> _allArticlesByUuid = [];
   List<String> _allQuestionsByUuid = [];
 
-  List<Content> _AllContent = [];
-
   final _offlineBox = Hive.box('myBox');
   final _baseURL = 'http://h2992008.stratoserver.net:8080/api/v2/CarAH';
 
@@ -32,6 +30,7 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
   }
 
   fetchAllContent () async {
+    _items = [];
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi) {
@@ -49,10 +48,12 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
       items.removeWhere((element) => element.title == ""); //The "Article Images" Folder has been loaded without title
       _offlineBox.put("articles", items);
     } else {
-      //_items.clear();
-      _items = _offlineBox.get("questions").cast<Content>();
-      _items.addAll(_offlineBox.get("articles").cast<Content>());
-      print(items.length);
+      var tmp1 = _offlineBox.get("questions").cast<Content>();
+      var tmp2 = _offlineBox.get("articles").cast<Content>();
+
+      _items.addAll(tmp1 as List<P>);
+      _items.addAll(tmp2 as List<P>);
+
       var tmpArticlesUuid = _offlineBox.get("articles").cast<Content>();
       _allArticlesByUuid =   (tmpArticlesUuid as List<Content>).map((content) => (content.uuid.toString())).toList();
       var tmpQuestionUuid = _offlineBox.get("questions").cast<Content>();
