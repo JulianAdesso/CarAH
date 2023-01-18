@@ -20,7 +20,7 @@ class HomePage extends StatelessWidget {
             return GestureDetector(
               onTap: () => element.routerLink != null ? context.push(element.routerLink!) : null,
               child: Card(
-                  color: Theme.of(context).colorScheme.tertiaryContainer,
+                  color: Theme.of(context).colorScheme.background,
                   margin: const EdgeInsets.symmetric(vertical: 10.0),
                   child: Row(
                     children: [Flexible(
