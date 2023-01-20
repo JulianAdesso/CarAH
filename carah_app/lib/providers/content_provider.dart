@@ -48,17 +48,16 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
       items.removeWhere((element) => element.title == ""); //The "Article Images" Folder has been loaded without title
       _offlineBox.put("articles", items);
     } else {
-      var tmp1 = _offlineBox.get("questions").cast<Content>();
-      var tmp2 = _offlineBox.get("articles").cast<Content>();
-
-      _items.addAll(tmp1 as List<P>);
-      _items.addAll(tmp2 as List<P>);
-
+      if(_offlineBox.get("questions") != null ||  _offlineBox.get("questions") != null) {
+        var tmp1 = _offlineBox.get("questions").cast<Content>();
+        var tmp2 = _offlineBox.get("articles").cast<Content>();
+        _items.addAll(tmp1 as List<P>);
+        _items.addAll(tmp2 as List<P>);
       var tmpArticlesUuid = _offlineBox.get("articles").cast<Content>();
       _allArticlesByUuid =   (tmpArticlesUuid as List<Content>).map((content) => (content.uuid.toString())).toList();
       var tmpQuestionUuid = _offlineBox.get("questions").cast<Content>();
       _allQuestionsByUuid =   (tmpQuestionUuid as List<Content>).map((content) => (content.uuid.toString())).toList();
-
+      }
     }
     notifyListeners();
 }
