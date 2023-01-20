@@ -36,7 +36,7 @@ class _Search extends State<Search> {
       //Show all titles that contain query
       List<Content> dummyListData = [];
       for (var item in contentProvider.items) {
-        if ((item as Content).title.contains(query)) {
+        if ((item as Content).title.toLowerCase().contains(query.toLowerCase())) {
           dummyListData.add(item);
         }
       }
