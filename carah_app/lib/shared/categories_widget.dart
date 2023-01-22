@@ -34,9 +34,6 @@ class CategoriesWidget extends StatelessWidget {
       body: Consumer<CategoryProvider>(
         builder: (context, provider, child) {
           provider.fetchAllCategories(categoryUUID, type);
-          if(provider.categories.isEmpty){
-            return const Center(child: Text("No articles downloaded"));
-          }
           return ListView(
               children: provider.categories.isNotEmpty? provider.categories.map((item) {
                 return GestureDetector(
@@ -77,7 +74,7 @@ class CategoriesWidget extends StatelessWidget {
                     ),
                   ),
                 );
-              }).toList() : []);
+              }).toList() : [const Center(child: Text("No articles downloaded"))]);
 
 
         },

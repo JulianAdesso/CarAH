@@ -7,6 +7,7 @@ import 'package:carah_app/shared/subcategory_widget.dart';
 import 'package:carah_app/ui/Articles/articles_content.dart';
 import 'package:carah_app/ui/Articles/articles_gallery.dart';
 import 'package:carah_app/ui/home/home_page.dart';
+import 'package:carah_app/ui/settings/settings_widget.dart';
 import 'package:carah_app/ui/home/search.dart';
 import 'package:go_router/go_router.dart';
 
@@ -37,5 +38,7 @@ final router = GoRouter(
         builder: (context, state) => FAQGallery(id: state.params['id']!)),
     GoRoute(path: '/guides_categories',
       builder: (context, state) => const CategoriesWidget(path: 'guidelines', type: 'guides_category', title: 'Tokoloho Guides', categoryUUID: '032d1768c07b455c8ea700b5bf68e0ec')),
+    GoRoute(path: '/settings_widget.dart',
+    builder: (context, state) => const SettingsWidget())
   ],
 );
