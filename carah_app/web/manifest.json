@@ -1,6 +1,6 @@
 {
-    "name": "carah_app",
-    "short_name": "carah_app",
+    "name": "TokoloHO",
+    "short_name": "THO",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

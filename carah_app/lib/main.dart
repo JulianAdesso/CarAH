@@ -11,11 +11,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'model/faq_question.dart';
 
-
-
-
 void main() async {
-
   await Hive.initFlutter();
   Hive.registerAdapter(CategoryAdapter());
   Hive.registerAdapter(ArticleAdapter());
@@ -23,10 +19,12 @@ void main() async {
   await Hive.openBox('myBox');
   runApp(MultiProvider(
     providers: [
-      ChangeNotifierProvider(
-        create: (context) => ArticlesProvider(),
-      ),
       ChangeNotifierProvider(create: (context) => CategoryProvider()),
+      ChangeNotifierProxyProvider<CategoryProvider, ArticlesProvider>(
+        create: (context) => ArticlesProvider(
+            categoryProvider: Provider.of<CategoryProvider>(context, listen: false)),
+        update: (_, categoryProvider, articlesProvider) => articlesProvider!.update(categoryProvider),
+      ),
       ChangeNotifierProvider(create: (context) => QuestionsProvider()),
       ChangeNotifierProvider(create: (context) => ContentProvider())
     ],
@@ -41,14 +39,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-        routerConfig: router,
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: ThemeData(
-            useMaterial3: true,
-            colorScheme: lightColorScheme),
-        darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
-        themeMode: ThemeMode.light,
+      routerConfig: router,
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Demo',
+      theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
+      darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+      themeMode: ThemeMode.light,
     );
   }
 }

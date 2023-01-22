@@ -12,6 +12,7 @@ class BottomNavbar extends StatelessWidget {
   Widget build(BuildContext context) {
     return NavigationBar(
       onDestinationSelected: (int index) {
+        context.push(bottomNavbarItems[index].routerLink.toString());
         currIndex = index;
       },
       selectedIndex: currIndex,
@@ -20,7 +21,6 @@ class BottomNavbar extends StatelessWidget {
           .map((element) => NavigationDestination(
           icon: Icon(element.icon, size: 40.0), label: element.title))
           .toList(),
-
     );
   }
 }

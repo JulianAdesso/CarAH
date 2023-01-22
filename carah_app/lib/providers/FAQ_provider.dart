@@ -35,7 +35,6 @@ class QuestionsProvider extends ContentProvider<Question> {
             return Question.fromJson(element);
           }).toList();
       items.removeWhere((element) => element.title == ""); //The "Article Images" Folder has been loaded without title
-      _offlineBox.put("questions", items);
     } else {
       items = _offlineBox.get("questions").cast<Question>();
     }
@@ -84,7 +83,6 @@ class QuestionsProvider extends ContentProvider<Question> {
               "Content-Type": "application/json",
             });
         tmpImages.add(Image.memory(message.bodyBytes));
-        _offlineBox.put(id, message.bodyBytes);
         images = tmpImages;
       } else {
         tmpImages.add(Image.memory(_offlineBox.get(id)));
@@ -92,4 +90,5 @@ class QuestionsProvider extends ContentProvider<Question> {
       }
     }
   }
+
 }
