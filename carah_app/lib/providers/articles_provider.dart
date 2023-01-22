@@ -96,25 +96,24 @@ class ArticlesProvider extends ContentProvider<Article> {
   }
 
   getImagesByUUID(List<String> ids) async {
+    images = {};
+    showingImages = [];
     if(!settingsProvider.userSettings!.dataSaveMode) {
       var connectivityResult = await (Connectivity().checkConnectivity());
-      Map<String, Uint8List> tmpImages = {};
       for (var id in ids) {
         id = id.replaceAll('{uuid: ', '');
         id = id.replaceAll('}', '');
-        if (connectivityResult == ConnectivityResult.mobile ||
-            connectivityResult == ConnectivityResult.wifi &&
+        if ((connectivityResult == ConnectivityResult.mobile ||
+            connectivityResult == ConnectivityResult.wifi) &&
                 !_offlineBox.containsKey(id)) {
           var message = await http
               .get(Uri.parse('$_baseURL/nodes/$id/binary/image'), headers: {
             "Content-Type": "application/json",
           });
-          tmpImages.putIfAbsent(id, () => message.bodyBytes);
-          images = tmpImages;
+          images.putIfAbsent(id, () => message.bodyBytes);
           showingImages.add(Image.memory(message.bodyBytes));
         } else {
-          tmpImages.putIfAbsent(id, () => _offlineBox.get(id));
-          images = tmpImages;
+          images.putIfAbsent(id, () => _offlineBox.get(id));
           showingImages.add(Image.memory(_offlineBox.get(id)));
         }
       }
