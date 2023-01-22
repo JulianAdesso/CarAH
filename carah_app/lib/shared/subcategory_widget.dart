@@ -125,6 +125,7 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
                             ? Icons.favorite
                             : Icons.favorite_border,
                         color: shownItems[i].saved ? Colors.red : Colors.black,
+                        size: 30,
                       ),
                       onPressed: () => {
                         setState(() {
