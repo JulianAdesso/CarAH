@@ -17,10 +17,27 @@ class ArticlesGallery extends StatefulWidget {
   int shownPictureNumber = 1;
 
 class _ArticlesGallery extends State<ArticlesGallery> {
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    fetchData();
+    super.initState();
+  }
+
+  void fetchData() async {
+    setState(() {
+      isLoading = true;
+    });
+    var provider = Provider.of<ArticlesProvider>(context, listen: false);
+    await provider.getArticleByUUID(widget.id);
+    setState(() {
+      isLoading = false;
+    });
+  }
   @override
   Widget build(BuildContext context) {
-    Provider.of<ArticlesProvider>(context)
-        .getArticleByUUID(widget.id);
+
     return Consumer<ArticlesProvider>(
         builder: (context, provider, child) {
           return Scaffold(

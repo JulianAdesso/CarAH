@@ -77,7 +77,7 @@ class ArticlesProvider extends ContentProvider<Article> {
         currentArticle = _offlineBox.get("articles").cast<Article>().where((element) => element.uuid == id).toList().first;
       }
       if (currentArticle!.imageId != null) {
-        getImagesByUUID(currentArticle!.imageId!);
+        await getImagesByUUID(currentArticle!.imageId!);
       } else {
         images = {};
       }
