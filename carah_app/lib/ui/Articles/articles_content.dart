@@ -11,6 +11,7 @@ class ArticlesContent extends StatefulWidget {
   final String id;
   final String categoryUUID;
 
+
   const ArticlesContent({super.key, required this.id, required this.categoryUUID});
 
   @override
@@ -19,14 +20,27 @@ class ArticlesContent extends StatefulWidget {
 
 class _ArticlesContent extends State<ArticlesContent> {
 
+  bool isLoading = false;
+
   @override
   void initState() {
-    Provider.of<ArticlesProvider>(context, listen: false)
-        .getArticleByUUID(widget.id);
+    fetchData();
     super.initState();
   }
 
-  setFavorite() {}
+  void fetchData() async {
+    setState(() {
+      isLoading = true;
+    });
+    await Provider.of<ArticlesProvider>(context, listen: false)
+        .getArticleByUUID(widget.id);
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+
+    setFavorite() {}
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +58,24 @@ class _ArticlesContent extends State<ArticlesContent> {
       messageColor:
       Theme.of(context).dialogTheme.contentTextStyle?.color ?? Colors.black,
     );
+    if(isLoading) {
+      return Scaffold(
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Text('Loading...'),
+                ),
+              ],
+            ),
+          )
+      );
+    }
     return Consumer<ArticlesProvider>(builder: (context, provider, child) {
       return Scaffold(
         appBar: AppBar(
