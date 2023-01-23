@@ -37,7 +37,6 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
     });
     P contentProvider = Provider.of<P>(context, listen: false);
     await contentProvider.fetchDataByCategory(widget.id);
-    //Navigator.of(context).pop();
     setState((){
       isLoading = false;
     });

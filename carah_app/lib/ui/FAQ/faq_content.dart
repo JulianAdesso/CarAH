@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 
 class FAQContent extends StatefulWidget {
   final String id;
-
   const FAQContent({super.key, required this.id});
 
   @override
@@ -15,9 +14,47 @@ class FAQContent extends StatefulWidget {
 }
 
 class _FAQContent extends State<FAQContent> {
+
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    fetchData();
+    super.initState();
+  }
+
+  void fetchData() async {
+    setState(() {
+      isLoading = true;
+    });
+    var provider = Provider.of<QuestionsProvider>(context, listen: false);
+    await provider.getQuestionByUUID(widget.id);
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    Provider.of<QuestionsProvider>(context).getQuestionByUUID(widget.id);
+    if(isLoading) {
+      return Scaffold(
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Text('Loading...'),
+                ),
+              ],
+            ),
+          )
+      );
+    }
     return Consumer<QuestionsProvider>(builder: (context, provider, child) {
       return Scaffold(
         appBar: AppBar(

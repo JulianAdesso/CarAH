@@ -44,7 +44,6 @@ class _CategoryWidget
   });
     var provider = Provider.of<CategoryProvider>(context, listen: false);
   await provider.fetchAllCategories(widget.categoryUUID, widget.type);
-  //Navigator.of(context).pop();
   setState((){
     isLoading = false;
   });
