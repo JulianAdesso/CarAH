@@ -15,7 +15,7 @@ class ArticlesProvider extends ContentProvider<Article> {
   Article? currentArticle;
 
   Map<String, Uint8List> images = {};
-  List<String> favorites = [];
+  List<String> _favorites = [];
   List<Image> showingImages = [];
 
   final _offlineBox = Hive.box('myBox');
@@ -48,9 +48,9 @@ class ArticlesProvider extends ContentProvider<Article> {
     } else {
       items = _offlineBox.get("articles").cast<Article>();
     }
-    favorites = _offlineBox.get('favorites') ?? favorites;
+    _favorites = _offlineBox.get('favorites') ?? _favorites;
     for (var item in items as List<Article>) {
-      if (favorites.contains(item.uuid)) {
+      if (_favorites.contains(item.uuid)) {
         item.saved = true;
       }
     }
@@ -76,8 +76,8 @@ class ArticlesProvider extends ContentProvider<Article> {
       } else {
         images = {};
       }
-      favorites = _offlineBox.get('favorites') ?? favorites;
-      if (currentArticle != null && favorites.contains(currentArticle!.uuid)) {
+      _favorites = _offlineBox.get('favorites') ?? _favorites;
+      if (currentArticle != null && _favorites.contains(currentArticle!.uuid)) {
         currentArticle!.saved = true;
       } else {
         currentArticle!.saved = false;
@@ -123,13 +123,13 @@ class ArticlesProvider extends ContentProvider<Article> {
       currentArticle!.saved = val;
     }
     if (val) {
-      favorites.add(id);
+      _favorites.add(id);
     } else {
-      if (favorites.isNotEmpty && favorites.contains(id)) {
-        favorites.remove(id);
+      if (_favorites.isNotEmpty && _favorites.contains(id)) {
+        _favorites.remove(id);
       }
     }
-    _offlineBox.put('favorites', favorites);
+    _offlineBox.put('favorites', _favorites);
     notifyListeners();
   }
 
@@ -145,5 +145,20 @@ class ArticlesProvider extends ContentProvider<Article> {
       await _offlineBox.put("articles", articles);
     }
     return true;
+  }
+
+  Future<List<Article>> fetchFavorites() async {
+    _favorites = _offlineBox.get('favorites') ?? _favorites;
+    if (_favorites.isEmpty) {
+      return [];
+    }
+    List<Article> favoriteArticles = [];
+    for (var fav in _favorites) {
+      await getArticleByUUID(fav);
+      if (currentArticle != null) {
+        favoriteArticles.add(currentArticle!);
+      }
+    }
+    return favoriteArticles;
   }
 }
