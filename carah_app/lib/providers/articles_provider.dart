@@ -29,7 +29,7 @@ class ArticlesProvider extends ContentProvider<Article> {
   }
 
   @override
-  fetchDataByCategory(String id) async {
+  Future <void> fetchDataByCategory(String id) async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi) {
