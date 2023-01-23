@@ -33,8 +33,7 @@ class _FAQGallery extends State<FAQGallery> {
                 ),
                 title: Text( shownPictureNumber.toString() + " from " + provider.images.length.toString()),
               ),
-              body:
-              PhotoViewGallery.builder(
+              body: PhotoViewGallery.builder(
                 scrollPhysics: const BouncingScrollPhysics(),
                 builder: (BuildContext context, int index) {
                   shownPictureNumber = index + 1;

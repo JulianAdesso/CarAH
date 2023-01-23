@@ -33,8 +33,7 @@ class _ArticlesGallery extends State<ArticlesGallery> {
               ),
               title: Text( "$shownPictureNumber from ${provider.images.length}"),
             ),
-            body:
-            PhotoViewGallery.builder(
+            body: PhotoViewGallery.builder(
               scrollPhysics: const BouncingScrollPhysics(),
               builder: (BuildContext context, int index) {
                 shownPictureNumber = index + 1;
