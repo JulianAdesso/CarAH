@@ -83,9 +83,9 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
             CircularProgressIndicator(
               color: Theme.of(context).colorScheme.primary,
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: const Text('Loading...'),
+            const Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: Text('Loading...'),
             ),
           ],
         ),
