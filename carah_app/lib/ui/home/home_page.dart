@@ -96,7 +96,7 @@ class HomePage extends StatelessWidget {
                                       ),
                                       Icon(
                                         element.icon,
-                                        size: 50.0,
+                                        size: Theme.of(context).iconTheme.size,
                                       ),
                                     ],
                                   ),

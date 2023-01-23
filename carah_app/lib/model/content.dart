@@ -1,5 +1,7 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
+part 'content.g.dart';
+
 @HiveType(typeId: 2)
 class Content{
   @HiveField(0)

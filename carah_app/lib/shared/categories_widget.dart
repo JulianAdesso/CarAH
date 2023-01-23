@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import '../../providers/category_provider.dart';
 import '../ui/bottom_navbar.dart';
 
-class CategoriesWidget extends StatelessWidget {
+class CategoryWidget extends StatefulWidget {
 
   final String path;
 
@@ -17,31 +17,74 @@ class CategoriesWidget extends StatelessWidget {
 
   final String categoryUUID;
 
-  const CategoriesWidget({super.key, required this.path, required this.type, required this.title, required this.categoryUUID});
+  const CategoryWidget({super.key, required this.path, required this.type, required this.title, required this.categoryUUID});
+
+  @override
+  _CategoryWidget createState() => _CategoryWidget();
+}
+
+class _CategoryWidget
+    extends State<CategoryWidget> {
+
+  bool isLoading = true;
 
   get onTap => null;
 
+
+  @override
+  void initState() {
+    fetchData();
+    super.initState();
+  }
+
+
+  void fetchData() async{
+    setState((){
+    isLoading = true;
+  });
+    var provider = Provider.of<CategoryProvider>(context, listen: false);
+  await provider.fetchAllCategories(widget.categoryUUID, widget.type);
+  setState((){
+    isLoading = false;
+  });
+
+  }
+
   @override
   Widget build(BuildContext context) {
+    if(isLoading) {
+      return Scaffold(
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Text('Loading...'),
+                ),
+              ],
+            ),
+          )
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
           onPressed: () => context.pop(),
         ),
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-        title: Text(title),
+        title: Text(widget.title),
       ),
       body: Consumer<CategoryProvider>(
         builder: (context, provider, child) {
-          provider.fetchAllCategories(categoryUUID, type);
-          if(provider.categories.isEmpty){
-            return const Center(child: Text("No articles downloaded"));
-          }
           return ListView(
               children: provider.categories.isNotEmpty? provider.categories.map((item) {
                 return GestureDetector(
                   onTap: () {
-                    context.push('/$path/${item.uuid}');
+                    context.push('/${widget.path}/${item.uuid}');
                   },
                   child: Card(
                     margin: const EdgeInsets.all(15),
@@ -77,7 +120,7 @@ class CategoriesWidget extends StatelessWidget {
                     ),
                   ),
                 );
-              }).toList() : []);
+              }).toList() : [const Center(child: Text("No articles downloaded"))]);
 
 
         },

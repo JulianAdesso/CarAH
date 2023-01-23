@@ -21,14 +21,27 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
     extends State<SubcategoryWidget> {
   TextEditingController editingController = TextEditingController();
 
+  bool isLoading = false;
   bool showSearchWidget = false;
   List<T> shownItems = [];
 
   @override
   void initState() {
-    P contentProvider = Provider.of<P>(context, listen: false);
-    contentProvider.fetchDataByCategory(widget.id);
+    fetchData();
     super.initState();
+  }
+
+  void fetchData() async {
+    setState((){
+      isLoading = true;
+    });
+    P contentProvider = Provider.of<P>(context, listen: false);
+    await contentProvider.fetchDataByCategory(widget.id);
+    setState((){
+      isLoading = false;
+    });
+
+
   }
 
   void filterSearchResults(String query) {
@@ -59,6 +72,25 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
   Widget build(BuildContext context) {
     P provider = Provider.of<P>(context);
     shownItems = provider.items;
+
+    if(isLoading) {
+      return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            const Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: Text('Loading...'),
+            ),
+          ],
+        ),
+      )
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
@@ -113,7 +145,8 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   decoration: const BoxDecoration(
                     border: Border(
-                        bottom: BorderSide(width: 1.0, color: Colors.grey),),
+                      bottom: BorderSide(width: 1.0, color: Colors.grey),
+                    ),
                   ),
                   child: ListTile(
                     title: Text(
@@ -125,6 +158,7 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
                             ? Icons.favorite
                             : Icons.favorite_border,
                         color: shownItems[i].saved ? Colors.red : Colors.black,
+                        size: 30,
                       ),
                       onPressed: () => {
                         setState(() {
@@ -136,12 +170,13 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
                       },
                     ),
                     onTap: () {
-                      if(widget.path=="article"){
-                        context.push('/${widget.path}/${widget.id}/${shownItems[i].uuid}');
+                      if (widget.path == "article") {
+                        context.push(
+                            '/${widget.path}/${widget.id}/${shownItems[i].uuid}');
                       } else {
                         context.push(
-                        '/${widget.path}/${shownItems[i].uuid}',
-                      );
+                          '/${widget.path}/${shownItems[i].uuid}',
+                        );
                       }
                     },
                   ),

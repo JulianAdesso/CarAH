@@ -8,6 +8,7 @@ import 'package:carah_app/ui/Articles/articles_content.dart';
 import 'package:carah_app/ui/Articles/articles_gallery.dart';
 import 'package:carah_app/ui/Favorites/favorites_view.dart';
 import 'package:carah_app/ui/home/home_page.dart';
+import 'package:carah_app/ui/settings/settings_widget.dart';
 import 'package:go_router/go_router.dart';
 
 import '../ui/FAQ/faq_content.dart';
@@ -18,7 +19,7 @@ final router = GoRouter(
     GoRoute(path: '/',
     builder: (context, state) => const HomePage()),
     GoRoute(path: '/articles_categories',
-        builder: (context, state) => const CategoriesWidget(path: 'articles', type: 'articles_category',title: 'Articles', categoryUUID: '0a8e66b695f5410cac44b1a9531a7a2b')),
+        builder: (context, state) => const CategoryWidget(path: 'articles', type: 'articles_category',title: 'Articles', categoryUUID: '0a8e66b695f5410cac44b1a9531a7a2b')),
     GoRoute(path: '/articles/:id',
     builder: (context, state) => SubcategoryWidget<Article, ArticlesProvider>(id: state.params['id']!, path: 'article')),
     GoRoute(path: '/article/:id/gallery',
@@ -26,7 +27,7 @@ final router = GoRouter(
     GoRoute(path: '/article/:categoryId/:id',
     builder: (context, state) => ArticlesContent(id: state.params['id']!, categoryUUID: state.params['categoryId']!,)),
     GoRoute(path: '/faq_categories',
-        builder: (context, state) => const CategoriesWidget(path: 'faqs', type: 'faq_category', title: 'FAQ', categoryUUID: 'b46628c6bc284debbd2ab8c76888a850')),
+        builder: (context, state) => const CategoryWidget(path: 'faqs', type: 'faq_category', title: 'FAQ', categoryUUID: 'b46628c6bc284debbd2ab8c76888a850')),
     GoRoute(path: '/faqs/:id',
         builder: (context, state) => SubcategoryWidget<Question, QuestionsProvider>(id: state.params['id']!, path: 'faq')),
     GoRoute(path: '/faq/:id',
@@ -36,6 +37,8 @@ final router = GoRouter(
     GoRoute(path: '/favorites',
         builder: (context, state) => const FavoritesView()),
     GoRoute(path: '/guides_categories',
-      builder: (context, state) => const CategoriesWidget(path: 'guidelines', type: 'guides_category', title: 'Tokoloho Guides', categoryUUID: '032d1768c07b455c8ea700b5bf68e0ec')),
+      builder: (context, state) => const CategoryWidget(path: 'guidelines', type: 'guides_category', title: 'Tokoloho Guides', categoryUUID: '032d1768c07b455c8ea700b5bf68e0ec')),
+    GoRoute(path: '/settings_widget.dart',
+    builder: (context, state) => const SettingsWidget())
   ],
 );

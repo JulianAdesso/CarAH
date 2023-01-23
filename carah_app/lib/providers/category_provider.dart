@@ -18,7 +18,7 @@ class CategoryProvider extends ChangeNotifier{
   final _offlineBox = Hive.box('myBox');
   final _baseURL = 'http://h2992008.stratoserver.net:8080/api/v2/CarAH';
 
-  void fetchAllCategories(String categoryUUID, String type) async {
+  Future <void> fetchAllCategories(String categoryUUID, String type) async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
       var categoriesFromCMS = await http.get(
