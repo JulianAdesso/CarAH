@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:carah_app/ui/home/navigation_items.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
@@ -13,19 +15,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool connectivity = true;
+  late StreamSubscription<ConnectivityResult> connectivityStream;
+  bool connectivityState = true;
 
   @override
   void initState() {
     super.initState();
-    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+    var connectivity = Connectivity();
+    setInitialConnectivity(connectivity);
+    connectivityStream = connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
       if (result != ConnectivityResult.none) {
         setState(() {
-          connectivity = true;
+          connectivityState = true;
         });
       } else {
         setState(() {
-          connectivity = false;
+          connectivityState = false;
         });
       }
     });
@@ -34,9 +39,9 @@ class _HomePageState extends State<HomePage> {
   bool isEnabled(ListItem element) {
     if (element.routerLink == null) {
       return false;
-    } else if (connectivity) {
+    } else if (connectivityState) {
       return true;
-    } else if (!connectivity && element.availableInOfflineMode) {
+    } else if (!connectivityState && element.availableInOfflineMode) {
       return true;
     } else {
       return false;
@@ -118,4 +123,19 @@ class _HomePageState extends State<HomePage> {
         ),
         bottomNavigationBar: BottomNavbar(currIndex: 0));
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    connectivityStream.cancel();
+  }
+
+  void setInitialConnectivity(Connectivity connectivity) async{
+    var result = await connectivity.checkConnectivity();
+    setState(() {
+      connectivityState = result != ConnectivityResult.none;
+    });
+  }
+
 }
