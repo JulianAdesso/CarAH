@@ -32,16 +32,14 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
   }
 
   void fetchData() async {
-    setState((){
+    setState(() {
       isLoading = true;
     });
     P contentProvider = Provider.of<P>(context, listen: false);
     await contentProvider.fetchDataByCategory(widget.id);
-    setState((){
+    setState(() {
       isLoading = false;
     });
-
-
   }
 
   void filterSearchResults(String query) {
@@ -73,9 +71,9 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
     P provider = Provider.of<P>(context);
     shownItems = provider.items;
 
-    if(isLoading) {
+    if (isLoading) {
       return Scaffold(
-      body: Center(
+          body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -88,8 +86,7 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
             ),
           ],
         ),
-      )
-      );
+      ));
     }
     return Scaffold(
       appBar: AppBar(
@@ -170,14 +167,7 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
                       },
                     ),
                     onTap: () {
-                      if (widget.path == "article") {
-                        context.push(
-                            '/${widget.path}/${widget.id}/${shownItems[i].uuid}');
-                      } else {
-                        context.push(
-                          '/${widget.path}/${shownItems[i].uuid}',
-                        );
-                      }
+                      context.push('/${widget.path}/${shownItems[i].uuid}');
                     },
                   ),
                 );

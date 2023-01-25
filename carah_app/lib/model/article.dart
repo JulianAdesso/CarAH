@@ -17,5 +17,5 @@ class Article extends Content{
       : imageId = (json['fields']['images'] as List?)?.map((item) => item.toString()).toList(), super(uuid : json['uuid'] ?? "",
         title : json['fields']['Display_Name'] ?? "",
         content : json['fields']['Html_Text'] ?? "",
-        category : json['parentNode']['displayName'] ?? "");
+        category : json['parentNode']['uuid'] ?? "");
 }
