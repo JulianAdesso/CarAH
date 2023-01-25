@@ -31,7 +31,6 @@ class _Search extends State<Search> {
   Future<void> filterSearchResults(
       String query, ContentProvider contentProvider) async {
     shownContents = [];
-    await contentProvider.fetchAllContent();
     if (query.isNotEmpty) {
       //Show all titles that contain query
       List<Content> dummyListData = [];
