@@ -1,5 +1,7 @@
+import 'package:carah_app/model/searchContent.dart';
 import 'package:carah_app/providers/content_provider.dart';
 import 'package:carah_app/ui/bottom_navbar.dart';
+import 'package:carah_app/ui/home/navigation_items.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +14,7 @@ class Search extends StatefulWidget {
   @override
   _Search createState() => _Search();
 }
+
 String query = "";
 bool isLoading = false;
 
@@ -29,15 +32,26 @@ class _Search extends State<Search> {
     fetchData(contentProvider);
   }
 
-  void fetchData(ContentProvider<Content> contentProvider) async {
+  void fetchData(ContentProvider<Content> tmpContentProvider) async {
     setState(() {
       isLoading = true;
     });
-    await Provider.of<ContentProvider>(context, listen: false).fetchAllContent();
-    filterSearchResults(query, contentProvider);
+    await Provider.of<ContentProvider>(context, listen: false)
+        .fetchAllContent();
+    filterSearchResults(query, tmpContentProvider);
     setState(() {
       isLoading = false;
     });
+  }
+
+  IconData getIcon(SearchContent tmpSearchIcon) {
+    if(tmpSearchIcon.contentType == ContentType.article) {
+      return homeItemsList[0].icon;
+    } else if(tmpSearchIcon.contentType == ContentType.question) {
+      return homeItemsList[1].icon;
+    } else {
+      return Icons.question_mark;
+    }
   }
 
   Future<void> filterSearchResults(
@@ -47,7 +61,10 @@ class _Search extends State<Search> {
       //Show all titles that contain query
       List<Content> dummyListData = [];
       for (var item in contentProvider.items) {
-        if ((item as Content).title.toLowerCase().contains(query.toLowerCase())) {
+        if ((item as Content)
+            .title
+            .toLowerCase()
+            .contains(query.toLowerCase())) {
           dummyListData.add(item);
         }
       }
@@ -92,53 +109,57 @@ class _Search extends State<Search> {
             ),
           ),
           Expanded(
-            child: isLoading?
-   Center(
-    child: Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-    CircularProgressIndicator(
-    color: Theme.of(context).colorScheme.primary,
-    ),
-    const Padding(
-    padding: EdgeInsets.only(top: 10),
-    child: Text('Loading...'),
-    ),
-    ],
-    ),
-    )
-
-
-            : ListView.builder(
-              // to here.
-              key: UniqueKey(),
-              padding: const EdgeInsets.all(0.0),
-              itemCount: shownContents.length,
-              itemBuilder: (context, i) {
-                return Container(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  decoration: const BoxDecoration(
-                    border: Border(
-                        bottom: BorderSide(width: 1.0, color: Colors.grey)),
-                  ),
-                  child: ListTile(
-                    title: Text(
-                      shownContents[i].title.toString(),
+            child: isLoading
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 10),
+                          child: Text('Loading...'),
+                        ),
+                      ],
                     ),
-                    onTap: () {
-                      if (contentProvider.allArticlesUuid
-                          .contains(shownContents[i].uuid)) {
-                        context.push('/article/${shownContents[i].uuid}');
-                      }
-                      if (contentProvider.allQuestionsUuid
-                          .contains(shownContents[i].uuid)) {
-                        context.push('/faq/${shownContents[i].uuid}');
-                      }
+                  )
+                : ListView.builder(
+                    // to here.
+                    key: UniqueKey(),
+                    padding: const EdgeInsets.all(0.0),
+                    itemCount: shownContents.length,
+                    itemBuilder: (context, i) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        decoration: const BoxDecoration(
+                          border: Border(
+                              bottom:
+                                  BorderSide(width: 1.0, color: Colors.grey)),
+                        ),
+                        child: ListTile(
+                          //leading: Icon(homeItemsList[0].icon),
+                          //leading: (shownContents[i] as SearchContent).contentType == ContentType.article ? Icon(homeItemsList[0].icon) : Icon(homeItemsList[1].icon),
+                          leading: Icon(getIcon(shownContents[i] as SearchContent)),
+                          title: Text(
+                            shownContents[i].title.toString(),
+                          ),
+                          onTap: () {
+                            if ((shownContents[i] as SearchContent)
+                                    .contentType ==
+                                ContentType.article) {
+                              context.push('/article/${shownContents[i].uuid}');
+                            }
+                            if ((shownContents[i] as SearchContent)
+                                    .contentType ==
+                                ContentType.question) {
+                              context.push('/faq/${shownContents[i].uuid}');
+                            }
+                          },
+                        ),
+                      );
                     },
                   ),
-                );
-              },
-            ),
           ),
         ],
       ),
