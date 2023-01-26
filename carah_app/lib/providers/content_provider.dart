@@ -79,7 +79,6 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
               return SearchArticle.fromJson(element);
             }).toList();
         tmpItems += categorySearchArticlesList;
-
       }
       items = tmpItems;
       items.removeWhere((element) => element.title == ""); //The "Article Images" Folder has been loaded without title

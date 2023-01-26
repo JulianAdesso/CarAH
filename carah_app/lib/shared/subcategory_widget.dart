@@ -170,14 +170,9 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
                       },
                     ),
                     onTap: () {
-                      if (widget.path == "article") {
-                        context.push(
-                            '/${widget.path}/${widget.id}/${shownItems[i].uuid}');
-                      } else {
                         context.push(
                           '/${widget.path}/${shownItems[i].uuid}',
                         );
-                      }
                     },
                   ),
                 );

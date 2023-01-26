@@ -9,10 +9,9 @@ import '../../providers/articles_provider.dart';
 
 class ArticlesContent extends StatefulWidget {
   final String id;
-  final String categoryUUID;
 
 
-  const ArticlesContent({super.key, required this.id, required this.categoryUUID});
+  const ArticlesContent({super.key, required this.id});
 
   @override
   _ArticlesContent createState() => _ArticlesContent();
@@ -101,7 +100,7 @@ class _ArticlesContent extends State<ArticlesContent> {
                           !provider.currentArticle!.downloaded;
                     });
                     if (await provider
-                        .downloadArticle(provider.currentArticle!, widget.categoryUUID)) {
+                        .downloadArticle(provider.currentArticle!, provider.currentArticle!.category)) {
                       snackBar.show(context);
                     }
                   }
