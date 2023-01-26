@@ -32,7 +32,7 @@ class _FavoritesViewState extends State<FavoritesView> {
         leading: BackButton(
           onPressed: () => context.pop(),
         ),
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         title: const Text('Favorites Overview'),
       ),
       body: FutureBuilder(
@@ -90,7 +90,7 @@ class _FavoritesViewState extends State<FavoritesView> {
                       },
                     ),
                     onTap: () async {
-                      await context.push('/article/${snapshot.data![i].category}/${snapshot.data![i].uuid}');
+                      await context.push('/article/${snapshot.data![i].uuid}');
                       _favoritesFuture = articlesProvider.fetchFavorites();
                     },
                   ),
