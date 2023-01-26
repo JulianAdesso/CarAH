@@ -93,7 +93,7 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
         leading: BackButton(
           onPressed: () => context.pop(),
         ),
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         title: const Text('Articles Overview'),
         actions: [
           IconButton(

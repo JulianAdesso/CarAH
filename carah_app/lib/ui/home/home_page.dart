@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Tokoloho Health Outreach'),
-          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+          backgroundColor: Theme.of(context).colorScheme.primary,
         ),
         body: ListView(
           padding: const EdgeInsets.all(15),
@@ -64,8 +64,8 @@ class _HomePageState extends State<HomePage> {
                   : null,
               child: Card(
                   color: isEnabled(element)
-                      ? Theme.of(context).colorScheme.tertiaryContainer
-                      : Theme.of(context).disabledColor,
+                      ? Theme.of(context).colorScheme.secondaryContainer
+                      : Theme.of(context).colorScheme.outline.withOpacity(0.2),
                   margin: const EdgeInsets.symmetric(vertical: 10.0),
                   child: Row(
                     children: [

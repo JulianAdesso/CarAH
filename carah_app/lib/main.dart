@@ -47,8 +47,8 @@ class MyApp extends StatelessWidget {
       routerConfig: router,
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme, iconTheme: const IconThemeData(size: 50.0)),
-      darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+      theme: ThemeData(colorScheme: lightColorScheme, iconTheme: const IconThemeData(size: 30.0)),
+      darkTheme: ThemeData(colorScheme: darkColorScheme),
       themeMode: ThemeMode.light,
     );
   }

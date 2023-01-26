@@ -81,7 +81,7 @@ class _ArticlesContent extends State<ArticlesContent> {
           leading: BackButton(
             onPressed: () => context.pop(),
           ),
-          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+          backgroundColor: Theme.of(context).colorScheme.primary,
           title: Text(provider.currentArticle != null
               ? provider.currentArticle!.title
               : '',
@@ -112,8 +112,8 @@ class _ArticlesContent extends State<ArticlesContent> {
                   : Icons.favorite_border,
                 color: provider.currentArticle != null &&
                         provider.currentArticle!.saved
-                    ? Colors.red
-                    : Colors.black,
+                    ? Theme.of(context).colorScheme.error
+                    : Colors.white,
               ),
               onPressed: () => {
                 setState(() {

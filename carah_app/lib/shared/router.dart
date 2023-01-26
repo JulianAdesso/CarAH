@@ -11,7 +11,6 @@ import 'package:carah_app/ui/settings/settings_widget.dart';
 import 'package:go_router/go_router.dart';
 
 import '../ui/FAQ/faq_content.dart';
-import '../ui/FAQ/faq_gallery.dart';
 
 final router = GoRouter(
   routes: [
@@ -31,8 +30,6 @@ final router = GoRouter(
         builder: (context, state) => SubcategoryWidget<Question, QuestionsProvider>(id: state.params['id']!, path: 'faq')),
     GoRoute(path: '/faq/:id',
         builder: (context, state) => FAQContent(id: state.params['id']!)),
-    GoRoute(path: '/faq/:id/gallery',
-        builder: (context, state) => FAQGallery(id: state.params['id']!)),
     GoRoute(path: '/guides_categories',
       builder: (context, state) => const CategoryWidget(path: 'guidelines', type: 'guides_category', title: 'Tokoloho Guides', categoryUUID: '032d1768c07b455c8ea700b5bf68e0ec')),
     GoRoute(path: '/settings_widget.dart',
