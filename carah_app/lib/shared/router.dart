@@ -9,8 +9,7 @@ import 'package:carah_app/ui/Articles/articles_gallery.dart';
 import 'package:carah_app/ui/Favorites/favorites_view.dart';
 import 'package:carah_app/ui/home/home_page.dart';
 import 'package:carah_app/ui/settings/settings_widget.dart';
-import 'package:go_router/go_router.dart';
-
+import 'package:go_router_flow/go_router_flow.dart';
 import '../ui/FAQ/faq_content.dart';
 import '../ui/FAQ/faq_gallery.dart';
 

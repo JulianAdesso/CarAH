@@ -2,7 +2,7 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:carah_app/ui/bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:go_router/go_router.dart';
+import 'package:go_router_flow/go_router_flow.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/articles_provider.dart';

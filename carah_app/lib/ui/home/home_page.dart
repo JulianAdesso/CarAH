@@ -1,7 +1,7 @@
 import 'package:carah_app/ui/home/navigation_items.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:go_router_flow/go_router_flow.dart';
 
 import '../bottom_navbar.dart';
 

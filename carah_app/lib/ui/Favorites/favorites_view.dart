@@ -1,7 +1,7 @@
 import 'package:carah_app/model/article.dart';
 import 'package:carah_app/providers/articles_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:go_router_flow/go_router_flow.dart';
 import 'package:provider/provider.dart';
 
 import '../bottom_navbar.dart';
@@ -89,8 +89,9 @@ class _FavoritesViewState extends State<FavoritesView> {
                         ),
                       },
                     ),
-                    onTap: () {
-                      context.push('/article/${snapshot.data![i].category}/${snapshot.data![i].uuid}');
+                    onTap: () async {
+                      await context.push('/article/${snapshot.data![i].category}/${snapshot.data![i].uuid}');
+                      _favoritesFuture = articlesProvider.fetchFavorites();
                     },
                   ),
                 );
