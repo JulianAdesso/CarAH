@@ -12,20 +12,32 @@ class Search extends StatefulWidget {
   @override
   _Search createState() => _Search();
 }
+String query = "";
+bool isLoading = false;
 
 class _Search extends State<Search> {
   TextEditingController editingController = TextEditingController();
 
   bool showSearchWidget = false;
   List<Content> shownContents = [];
-
   @override
   void initState() {
     ContentProvider contentProvider =
         Provider.of<ContentProvider>(context, listen: false);
-    contentProvider.fetchAllContent();
-    shownContents = contentProvider.items;
     super.initState();
+    shownContents = contentProvider.items;
+    fetchData(contentProvider);
+  }
+
+  void fetchData(ContentProvider<Content> contentProvider) async {
+    setState(() {
+      isLoading = true;
+    });
+    await Provider.of<ContentProvider>(context, listen: false).fetchAllContent();
+    filterSearchResults(query, contentProvider);
+    setState(() {
+      isLoading = false;
+    });
   }
 
   Future<void> filterSearchResults(
@@ -67,6 +79,7 @@ class _Search extends State<Search> {
             padding: const EdgeInsets.all(8.0),
             child: TextField(
               onChanged: (value) async {
+                query = value;
                 await filterSearchResults(value, contentProvider);
               },
               controller: editingController,
@@ -79,7 +92,24 @@ class _Search extends State<Search> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
+            child: isLoading?
+   Center(
+    child: Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+    CircularProgressIndicator(
+    color: Theme.of(context).colorScheme.primary,
+    ),
+    const Padding(
+    padding: EdgeInsets.only(top: 10),
+    child: Text('Loading...'),
+    ),
+    ],
+    ),
+    )
+
+
+            : ListView.builder(
               // to here.
               key: UniqueKey(),
               padding: const EdgeInsets.all(0.0),

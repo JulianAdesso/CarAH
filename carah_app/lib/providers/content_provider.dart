@@ -63,6 +63,7 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
         connectivityResult == ConnectivityResult.wifi) {
       var articlesFromCMS;
       List<Content> tmpItems = [];
+      int tmpTimeBefore = DateTime.now().millisecondsSinceEpoch;
       for(String categoryUuid in categoryUuidList) {
 
           articlesFromCMS = await http.post(Uri.parse(
@@ -80,9 +81,12 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
             }).toList();
         tmpItems += categorySearchArticlesList;
       }
+      print("TimeAfter1 " + (DateTime.now().millisecondsSinceEpoch - tmpTimeBefore).toString());
+
       items = tmpItems;
       items.removeWhere((element) => element.title == ""); //The "Article Images" Folder has been loaded without title
       _allArticlesByUuid =   (items as List<Content>).map((content) => (content.uuid.toString())).toList();
+      print("TimeAfter2 " + (DateTime.now().millisecondsSinceEpoch - tmpTimeBefore).toString());
     } else {
       print("offline");
         var tmp1 = _offlineBox.get("questions")?.cast<Content>();
