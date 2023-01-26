@@ -123,12 +123,13 @@ class ArticlesProvider extends ContentProvider<Article> {
 
   @override
   setFavorite(String id, bool val) {
-    items[items.indexWhere((Article art) => art.uuid == id)]
-        .saved = val;
+    if (items != null && items.isNotEmpty){
+      items[items.indexWhere((Article art) => art.uuid == id)].saved = val;
+    }
     if (currentArticle != null && currentArticle!.uuid == id) {
       currentArticle!.saved = val;
     }
-    if (val) {
+    if (val && !_favorites.contains(id)) {
       _favorites.add(id);
     } else {
       if (_favorites.isNotEmpty && _favorites.contains(id)) {
@@ -160,6 +161,7 @@ class ArticlesProvider extends ContentProvider<Article> {
     if (_favorites.isEmpty) {
       return [];
     }
+    Article? tmpArticle = currentArticle;
     List<Article> favoriteArticles = [];
     for (var fav in _favorites) {
       await getArticleByUUID(fav);
@@ -167,6 +169,7 @@ class ArticlesProvider extends ContentProvider<Article> {
         favoriteArticles.add(currentArticle!);
       }
     }
+    currentArticle = tmpArticle;
     return favoriteArticles;
   }
 }

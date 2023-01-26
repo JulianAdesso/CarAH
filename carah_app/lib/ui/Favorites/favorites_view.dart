@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../bottom_navbar.dart';
+
 class FavoritesView extends StatefulWidget {
   const FavoritesView({Key? key}) : super(key: key);
 
@@ -73,6 +75,7 @@ class _FavoritesViewState extends State<FavoritesView> {
                             : Icons.favorite_border,
                         color:
                             snapshot.data![i].saved ? Colors.red : Colors.black,
+                        size: 30,
                       ),
                       onPressed: () => {
                         setState(
@@ -81,14 +84,13 @@ class _FavoritesViewState extends State<FavoritesView> {
                               snapshot.data![i].uuid,
                               !snapshot.data![i].saved,
                             );
+                            snapshot.data!.removeAt(i);
                           },
                         ),
                       },
                     ),
                     onTap: () {
-                      context.push(
-                        '../articles/${snapshot.data![i].category}/${snapshot.data![i].uuid}',
-                      );
+                      context.push('/article/${snapshot.data![i].category}/${snapshot.data![i].uuid}');
                     },
                   ),
                 );
@@ -96,6 +98,9 @@ class _FavoritesViewState extends State<FavoritesView> {
             );
           }
         },
+      ),
+      bottomNavigationBar: BottomNavbar(
+        currIndex: 2,
       ),
     );
   }
