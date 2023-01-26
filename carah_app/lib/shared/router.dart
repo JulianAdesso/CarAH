@@ -11,7 +11,6 @@ import 'package:carah_app/ui/home/home_page.dart';
 import 'package:carah_app/ui/settings/settings_widget.dart';
 import 'package:go_router_flow/go_router_flow.dart';
 import '../ui/FAQ/faq_content.dart';
-import '../ui/FAQ/faq_gallery.dart';
 
 final router = GoRouter(
   routes: [
@@ -23,16 +22,14 @@ final router = GoRouter(
     builder: (context, state) => SubcategoryWidget<Article, ArticlesProvider>(id: state.params['id']!, path: 'article')),
     GoRoute(path: '/article/:id/gallery',
         builder: (context, state) => ArticlesGallery(id: state.params['id']!)),
-    GoRoute(path: '/article/:categoryId/:id',
-    builder: (context, state) => ArticlesContent(id: state.params['id']!, categoryUUID: state.params['categoryId']!,)),
+    GoRoute(path: '/article/:id',
+    builder: (context, state) => ArticlesContent(id: state.params['id']!)),
     GoRoute(path: '/faq_categories',
         builder: (context, state) => const CategoryWidget(path: 'faqs', type: 'faq_category', title: 'FAQ', categoryUUID: 'b46628c6bc284debbd2ab8c76888a850')),
     GoRoute(path: '/faqs/:id',
         builder: (context, state) => SubcategoryWidget<Question, QuestionsProvider>(id: state.params['id']!, path: 'faq')),
     GoRoute(path: '/faq/:id',
         builder: (context, state) => FAQContent(id: state.params['id']!)),
-    GoRoute(path: '/faq/:id/gallery',
-        builder: (context, state) => FAQGallery(id: state.params['id']!)),
     GoRoute(path: '/favorites',
         builder: (context, state) => const FavoritesView()),
     GoRoute(path: '/guides_categories',

@@ -75,7 +75,7 @@ class _CategoryWidget
         leading: BackButton(
           onPressed: () => context.pop(),
         ),
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         title: Text(widget.title),
       ),
       body: Consumer<CategoryProvider>(

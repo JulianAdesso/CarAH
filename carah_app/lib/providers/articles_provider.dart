@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:carah_app/providers/content_provider.dart';
 import 'package:carah_app/providers/settings_provider.dart';
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
 
@@ -77,7 +77,7 @@ class ArticlesProvider extends ContentProvider<Article> {
         currentArticle = _offlineBox.get("articles").cast<Article>().where((element) => element.uuid == id).toList().first;
       }
       if (currentArticle!.imageId != null) {
-        getImagesByUUID(currentArticle!.imageId!);
+        await getImagesByUUID(currentArticle!.imageId!);
       } else {
         images = {};
       }

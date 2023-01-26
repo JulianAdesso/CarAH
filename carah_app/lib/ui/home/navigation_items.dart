@@ -15,11 +15,11 @@ class ListItem {
 }
 
 final List<ListItem> homeItemsList  = [
-  ListItem(title: 'Tokoloho Articles', description: 'Lipsum', icon: Icons.article_outlined, routerLink: '/articles_categories', availableInOfflineMode: true),
+  ListItem(title: 'Tokoloho Articles', description: '', icon: Icons.article_outlined, routerLink: '/articles_categories', availableInOfflineMode: true),
   ListItem(title: 'FAQ', description: 'Frequently Asked Questions', icon: Icons.forum_outlined, routerLink: '/faq_categories', availableInOfflineMode: false),
   ListItem(title: 'Tokoloho Guides', description: 'Basic Information about HIV/AIDS & TB', icon: Icons.directions_outlined, routerLink: '/guides_categories', availableInOfflineMode: false),
-  ListItem(title: 'Events', description: 'Lipsum', icon: Icons.event_outlined, routerLink: '/events', availableInOfflineMode: false),
-  ListItem(title: 'Medicine pick up dates', description: 'Lipsum', icon: Icons.medication_outlined, routerLink: '/pick_up_dates', availableInOfflineMode: false)
+  ListItem(title: 'Events', description: '', icon: Icons.event_outlined, routerLink: '/events', availableInOfflineMode: false),
+  ListItem(title: 'Medicine pick up dates', description: '', icon: Icons.medication_outlined, routerLink: '/pick_up_dates', availableInOfflineMode: false)
 ];
 
 final List<ListItem> bottomNavbarItems = [

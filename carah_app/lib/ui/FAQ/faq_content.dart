@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 class FAQContent extends StatefulWidget {
   final String id;
+
   const FAQContent({super.key, required this.id});
 
   @override
@@ -14,7 +15,6 @@ class FAQContent extends StatefulWidget {
 }
 
 class _FAQContent extends State<FAQContent> {
-
   bool isLoading = false;
 
   @override
@@ -37,28 +37,27 @@ class _FAQContent extends State<FAQContent> {
 
   @override
   Widget build(BuildContext context) {
-    if(isLoading) {
+    if (isLoading) {
       return Scaffold(
           body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircularProgressIndicator(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(top: 10),
-                  child: Text('Loading...'),
-                ),
-              ],
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(
+              color: Theme.of(context).colorScheme.primary,
             ),
-          )
-      );
+            const Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: Text('Loading...'),
+            ),
+          ],
+        ),
+      ));
     }
     return Consumer<QuestionsProvider>(builder: (context, provider, child) {
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+          backgroundColor: Theme.of(context).colorScheme.primary,
           leading: BackButton(
             onPressed: () => context.pop(),
           ),
@@ -80,17 +79,21 @@ class _FAQContent extends State<FAQContent> {
                 child: SizedBox(
                   height: 100,
                   child: Center(
-                    child: Text(provider.currentQuestion != null
-                        ? provider.currentQuestion!.title
-                        : ''),
+                    child: Text(
+                      provider.currentQuestion != null
+                          ? provider.currentQuestion!.title
+                          : '',
+                      style: Theme.of(context).textTheme.subtitle1,
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
               ),
             ),
             provider.currentQuestion != null
                 ? Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Html(data: provider.currentQuestion!.content))
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Html(data: provider.currentQuestion!.content))
                 : const Text("Keine Daten zu der ID")
           ],
         )),
