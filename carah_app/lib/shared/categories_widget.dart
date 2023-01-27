@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:core';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router_flow/go_router_flow.dart';
 import 'package:provider/provider.dart';
@@ -29,12 +31,20 @@ class _CategoryWidget
 
   bool isLoading = true;
 
+  late StreamSubscription<ConnectivityResult> connectivityStream;
+
   get onTap => null;
 
 
   @override
   void initState() {
+    var connectivity = Connectivity();
     fetchData();
+    connectivityStream = connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+        fetchData();
+      }
+    });
     super.initState();
   }
 
