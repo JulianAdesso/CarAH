@@ -53,7 +53,7 @@ class ArticlesProvider extends ContentProvider<Article> {
           element.title ==
           ""); //The "Article Images" Folder has been loaded without title
     } else {
-      items = _offlineBox.get("articles").cast<Article>();
+      items = _offlineBox.get("articles_$id")?.cast<Article>();
     }
     _favorites = _offlineBox.get('favorites') ?? _favorites;
     for (var item in items as List<Article>) {
@@ -77,7 +77,7 @@ class ArticlesProvider extends ContentProvider<Article> {
             jsonDecode(utf8.decoder.convert(articlesFromCMS.bodyBytes)));
       } else {
         currentArticle = _offlineBox
-            .get("articles")
+            .get("articles_$id")
             .cast<Article>()
             .where((element) => element.uuid == id)
             .toList()
@@ -94,7 +94,7 @@ class ArticlesProvider extends ContentProvider<Article> {
       } else {
         currentArticle!.saved = false;
       }
-      var savedArticles = _offlineBox.get('articles') ?? [];
+      var savedArticles = _offlineBox.get('articles_$id') ?? [];
       if (savedArticles
           .any((element) => element.uuid == currentArticle!.uuid)) {
         currentArticle!.downloaded = true;
@@ -173,7 +173,7 @@ class ArticlesProvider extends ContentProvider<Article> {
 
   Future<bool> downloadArticle(Article article, String categoryUUID) async {
     List<Article>? articles =
-        await _offlineBox.get("articles")?.cast<Article>();
+        await _offlineBox.get('articles_${article.category}')?.cast<Article>();
     articles ??= [];
     if (!articles.any((element) => element.uuid == article.uuid)) {
       await categoryProvider.downloadCategory(categoryUUID);
@@ -183,15 +183,15 @@ class ArticlesProvider extends ContentProvider<Article> {
         });
       }
       articles.add(article);
-      await _offlineBox.put("articles", articles);
+      await _offlineBox.put('articles_${article.category}', articles);
     }
     return true;
   }
 
   Future<bool> removeArticleFromDownloads(Article toBeRemoved) async {
-    List<Article> articles = await _offlineBox.get("articles")?.cast<Article>();
+    List<Article> articles = await _offlineBox.get("articles_${toBeRemoved.category}")?.cast<Article>();
     articles.removeWhere((element) => element.uuid == toBeRemoved.uuid);
-    await _offlineBox.put("articles", articles);
+    await _offlineBox.put("articles_${toBeRemoved.category}", articles);
     if(!articles.any((element) => element.category == toBeRemoved.category)) {
       await categoryProvider.removeDownloadFromCategories(toBeRemoved.category);
     }
