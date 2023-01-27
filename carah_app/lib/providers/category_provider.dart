@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:carah_app/shared/constants.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -16,14 +17,13 @@ class CategoryProvider extends ChangeNotifier{
   List<Category> get categories => _categories;
 
   final _offlineBox = Hive.box('myBox');
-  final _baseURL = 'http://h2992008.stratoserver.net:8080/api/v2/CarAH';
 
   Future <void> fetchAllCategories(String categoryUUID, String type) async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
       var categoriesFromCMS = await http.get(
           Uri.parse(
-              '$_baseURL/nodes/$categoryUUID/children'),
+              '$baseUrl/nodes/$categoryUUID/children'),
           headers: {
             "Content-Type": "application/json",
           });
@@ -43,7 +43,7 @@ class CategoryProvider extends ChangeNotifier{
     if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
       var categoriesFromCMS = await http.get(
           Uri.parse(
-              '$_baseURL/nodes/$categoryUUID'),
+              '$baseUrl/nodes/$categoryUUID'),
           headers: {
             "Content-Type": "application/json",
           });

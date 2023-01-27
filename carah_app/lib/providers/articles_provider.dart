@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:carah_app/providers/content_provider.dart';
 import 'package:carah_app/providers/settings_provider.dart';
+import 'package:carah_app/shared/constants.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
@@ -21,7 +22,6 @@ class ArticlesProvider extends ContentProvider<Article> {
   List<Image> showingImages = [];
 
   final _offlineBox = Hive.box('myBox');
-  final _baseURL = 'http://h2992008.stratoserver.net:8080/api/v2/CarAH';
 
   ArticlesProvider({required this.categoryProvider, required this.settingsProvider}) {
    settingsProvider.getSettingsOfUser();
@@ -39,7 +39,7 @@ class ArticlesProvider extends ContentProvider<Article> {
     if (connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi) {
       var articlesFromCMS =
-          await http.get(Uri.parse('$_baseURL/nodes/$id/children'), headers: {
+          await http.get(Uri.parse('$baseUrl/nodes/$id/children'), headers: {
         "Content-Type": "application/json",
       });
       items =
@@ -68,7 +68,7 @@ class ArticlesProvider extends ContentProvider<Article> {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
         var articlesFromCMS =
-            await http.get(Uri.parse('$_baseURL/nodes/$id'), headers: {
+            await http.get(Uri.parse('$baseUrl/nodes/$id'), headers: {
           "Content-Type": "application/json",
         });
         currentArticle = Article.fromJson(
@@ -107,7 +107,7 @@ class ArticlesProvider extends ContentProvider<Article> {
             connectivityResult == ConnectivityResult.wifi) &&
                 !_offlineBox.containsKey(id)) {
           var message = await http
-              .get(Uri.parse('$_baseURL/nodes/$id/binary/image'), headers: {
+              .get(Uri.parse('$baseUrl/nodes/$id/binary/image'), headers: {
             "Content-Type": "application/json",
           });
           images.putIfAbsent(id, () => message.bodyBytes);
