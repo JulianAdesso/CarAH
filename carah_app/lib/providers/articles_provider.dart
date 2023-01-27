@@ -100,7 +100,7 @@ class ArticlesProvider extends ContentProvider<Article> {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
         var articlesFromCMS =
-        await http.get(Uri.parse('$_baseURL/nodes/1839c4d1daf246829fcb0da11b085b59'), headers: {
+        await http.get(Uri.parse('$baseUrl/nodes/1839c4d1daf246829fcb0da11b085b59'), headers: {
           "Content-Type": "application/json",
         });
         currentArticle = Article.fromJson(

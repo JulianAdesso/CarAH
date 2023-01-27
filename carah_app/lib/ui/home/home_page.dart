@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:carah_app/shared/appbar_widget.dart';
 import 'package:carah_app/ui/home/navigation_items.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router_flow/go_router_flow.dart';
 
@@ -52,7 +53,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const AppbarWidget(
+        appBar: AppbarWidget(
+          actions: kIsWeb ? [IconButton(onPressed: () {
+            context.push('/settings/imprint');
+          }, icon: const Icon(Icons.info_outline))] : null,
           title: 'Tokoloho Health Outreach',
         ),
         body: ListView(
