@@ -16,7 +16,7 @@ class BottomNavbar extends StatelessWidget {
               icon: Icon(element.icon, size: 40.0), label: element.title))
           .toList(),
       currentIndex: currIndex,
-      onTap: (index) => index != currIndex
+      onTap: (index) => bottomNavbarItems[index].routerLink != GoRouterState.of(context).path
           ? context.push(bottomNavbarItems[index].routerLink!)
           : null,
       backgroundColor: Theme.of(context).colorScheme.primary,
