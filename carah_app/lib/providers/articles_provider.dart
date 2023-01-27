@@ -3,8 +3,6 @@ import 'dart:typed_data';
 import 'package:carah_app/providers/content_provider.dart';
 import 'package:carah_app/providers/settings_provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:carah_app/providers/settings_provider.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
 

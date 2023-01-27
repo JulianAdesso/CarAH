@@ -11,9 +11,7 @@ import 'package:carah_app/ui/home/home_page.dart';
 import 'package:carah_app/ui/settings/settings_widget.dart';
 import 'package:go_router_flow/go_router_flow.dart';
 import 'package:carah_app/ui/home/search.dart';
-import 'package:carah_app/ui/settings/settings_widget.dart';
-import 'package:carah_app/ui/home/search.dart';
-import 'package:go_router/go_router.dart';
+
 
 import '../ui/FAQ/faq_content.dart';
 

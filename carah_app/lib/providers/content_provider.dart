@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:carah_app/model/category.dart';
 import 'package:carah_app/model/searchContent.dart';
 import 'package:carah_app/providers/category_provider.dart';
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
@@ -94,7 +94,7 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
           ""); //The "Article Images" Folder has been loaded without title
       _items.addAll(tmpQuestionList as List<P>);
     } else {
-      var tmpArticlesList = _offlineBox?.get("articles")?.cast<Content>();
+      var tmpArticlesList = _offlineBox.get("articles")?.cast<Content>();
       if(tmpArticlesList != null) {
         for (Content tmpArticle in tmpArticlesList) {
           SearchContent tmpSearchContent = SearchContent(
@@ -106,7 +106,7 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
           _items.add(tmpSearchContent as P);
         }
       }
-      var tmpQuestionsList = _offlineBox?.get("questions")?.cast<Content>();
+      var tmpQuestionsList = _offlineBox.get("questions")?.cast<Content>();
       if(tmpQuestionsList != null) {
         for (Content tmpQuestion in tmpQuestionsList) {
           SearchContent tmpSearchContent = SearchContent(
