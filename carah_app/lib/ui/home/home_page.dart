@@ -1,11 +1,12 @@
 import 'dart:async';
 
+import 'package:carah_app/shared/appbar_widget.dart';
 import 'package:carah_app/ui/home/navigation_items.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router_flow/go_router_flow.dart';
 
-import '../bottom_navbar.dart';
+import '../../shared/bottom_navbar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -51,9 +52,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Tokoloho Health Outreach'),
-          backgroundColor: Theme.of(context).colorScheme.primary,
+        appBar: const AppbarWidget(
+          title: 'Tokoloho Health Outreach',
         ),
         body: ListView(
           padding: const EdgeInsets.all(15),

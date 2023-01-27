@@ -5,7 +5,8 @@ import 'package:go_router_flow/go_router_flow.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/category_provider.dart';
-import '../ui/bottom_navbar.dart';
+import 'appbar_widget.dart';
+import 'bottom_navbar.dart';
 
 class CategoryWidget extends StatefulWidget {
 
@@ -71,12 +72,8 @@ class _CategoryWidget
       );
     }
     return Scaffold(
-      appBar: AppBar(
-        leading: BackButton(
-          onPressed: () => context.pop(),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        title: Text(widget.title),
+      appBar: AppbarWidget(
+        title: widget.title,
       ),
       body: Consumer<CategoryProvider>(
         builder: (context, provider, child) {
