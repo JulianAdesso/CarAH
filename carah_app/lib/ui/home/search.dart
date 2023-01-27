@@ -1,6 +1,7 @@
 import 'package:carah_app/model/searchContent.dart';
 import 'package:carah_app/providers/content_provider.dart';
-import 'package:carah_app/ui/bottom_navbar.dart';
+import 'package:carah_app/shared/appbar_widget.dart';
+import 'package:carah_app/shared/bottom_navbar.dart';
 import 'package:carah_app/ui/home/navigation_items.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router_flow/go_router_flow.dart';
@@ -82,12 +83,8 @@ class _Search extends State<Search> {
   Widget build(BuildContext context) {
     ContentProvider contentProvider = Provider.of<ContentProvider>(context);
     return Scaffold(
-      appBar: AppBar(
-        leading: BackButton(
-          onPressed: () => context.pop(),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-        title: const Text('Search'),
+      appBar: const AppbarWidget(
+        title: 'Search',
       ),
       body: Column(
         children: <Widget>[

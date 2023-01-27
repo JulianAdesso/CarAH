@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:carah_app/model/category.dart';
 import 'package:carah_app/model/searchContent.dart';
 import 'package:carah_app/providers/category_provider.dart';
+import 'package:carah_app/shared/constants.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -18,7 +19,6 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
   CategoryProvider categoryProvider = CategoryProvider();
 
   final _offlineBox = Hive.box('myBox');
-  final _baseURL = 'http://h2992008.stratoserver.net:8080/api/v2/CarAH';
 
   get items => _items;
 
@@ -42,7 +42,7 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
       List<SearchContent> tmpArticleList = [];
       for (String categoryUuid in articlesUuidList) {
         articlesFromCMS = await http.post(
-          Uri.parse('$_baseURL/graphql'),
+          Uri.parse('$baseUrl/graphql'),
           headers: {
             "Content-Type": "application/json",
           },
@@ -73,7 +73,7 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
       }
       for (String categoryUuid in questionsUuidList) {
         articlesFromCMS = await http.post(
-          Uri.parse('$_baseURL/graphql'),
+          Uri.parse('$baseUrl/graphql'),
           headers: {
             "Content-Type": "application/json",
           },
