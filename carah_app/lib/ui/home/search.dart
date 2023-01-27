@@ -20,7 +20,6 @@ bool isLoading = false;
 
 class _Search extends State<Search> {
   TextEditingController editingController = TextEditingController();
-
   bool showSearchWidget = false;
   List<Content> shownContents = [];
   @override
@@ -45,9 +44,9 @@ class _Search extends State<Search> {
   }
 
   IconData getIcon(SearchContent tmpSearchIcon) {
-    if(tmpSearchIcon.contentType == ContentType.article) {
+    if (tmpSearchIcon.contentType == ContentType.article) {
       return homeItemsList[0].icon;
-    } else if(tmpSearchIcon.contentType == ContentType.question) {
+    } else if (tmpSearchIcon.contentType == ContentType.question) {
       return homeItemsList[1].icon;
     } else {
       return Icons.question_mark;
@@ -138,9 +137,8 @@ class _Search extends State<Search> {
                                   BorderSide(width: 1.0, color: Colors.grey)),
                         ),
                         child: ListTile(
-                          //leading: Icon(homeItemsList[0].icon),
-                          //leading: (shownContents[i] as SearchContent).contentType == ContentType.article ? Icon(homeItemsList[0].icon) : Icon(homeItemsList[1].icon),
-                          leading: Icon(getIcon(shownContents[i] as SearchContent)),
+                          leading:
+                              Icon(getIcon(shownContents[i] as SearchContent)),
                           title: Text(
                             shownContents[i].title.toString(),
                           ),
