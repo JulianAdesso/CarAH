@@ -5,6 +5,7 @@ import 'package:go_router_flow/go_router_flow.dart';
 import 'package:provider/provider.dart';
 
 import '../model/content.dart';
+import '../ui/home/navigation_items.dart';
 
 class SubcategoryWidget<T extends Content, P extends ContentProvider>
     extends StatefulWidget {
@@ -111,10 +112,11 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
                     ),
                   ),
                   child: ListTile(
+                    leading: Icon(getIcon()),
                     title: Text(
                       shownItems[i].title.toString(),
                     ),
-                    trailing: IconButton(
+                    trailing: widget.path == 'article' ? IconButton(
                       icon: Icon(
                         shownItems[i].saved
                             ? Icons.favorite
@@ -130,7 +132,7 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
                           );
                         }),
                       },
-                    ),
+                    ) : null,
                     onTap: () {
                       context.push('/${widget.path}/${shownItems[i].uuid}');
                     },
@@ -143,5 +145,15 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
       ),
       bottomNavigationBar: BottomNavbar(currIndex: 0),
     );
+  }
+
+  IconData getIcon() {
+    if (widget.path == 'article') {
+      return homeItemsList[0].icon;
+    } else if (widget.path == 'faq') {
+      return homeItemsList[1].icon;
+    } else {
+      return Icons.question_mark;
+    }
   }
 }
