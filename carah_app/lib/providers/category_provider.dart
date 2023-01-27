@@ -1,12 +1,13 @@
 import 'dart:convert';
 
-import 'package:carah_app/shared/constants.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../model/category.dart';
 import 'package:http/http.dart' as http;
+
+import '../shared/constants.dart';
 
 
 class CategoryProvider extends ChangeNotifier{
@@ -21,13 +22,15 @@ class CategoryProvider extends ChangeNotifier{
   Future <void> fetchAllCategories(String categoryUUID, String type) async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
-      var categoriesFromCMS = await http.get(
-          Uri.parse(
-              '$baseUrl/nodes/$categoryUUID/children'),
-          headers: {
-            "Content-Type": "application/json",
-          });
-      _categories = jsonDecode(utf8.decoder.convert(categoriesFromCMS.bodyBytes))['data'].map<Category>((element) {
+      var categoriesFromCMS = await http.post(
+        Uri.parse('$baseUrl/graphql'),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: '''{"query":"        {\\r\\n          node(uuid: \\"$categoryUUID\\") \\r\\n          {\\r\\n              children(filter: {\\r\\n    }   \\r\\n            ){\\r\\n                elements {\\r\\n                    uuid\\r\\n                    ... on Category {\\r\\n                         fields {\\r\\n                             Name\\r\\n                             Description}\\r\\n                    }\\r\\n                }\\r\\n            }\\r\\n          }\\r\\n        }","variables":{}}''',
+      );
+
+      _categories = jsonDecode(utf8.decoder.convert(categoriesFromCMS.bodyBytes))['data'] ['node']['children']['elements'].map<Category>((element) {
         return Category.fromJson(element);
       }).toList();
     } else {
@@ -41,13 +44,14 @@ class CategoryProvider extends ChangeNotifier{
     Category category;
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
-      var categoriesFromCMS = await http.get(
-          Uri.parse(
-              '$baseUrl/nodes/$categoryUUID'),
-          headers: {
-            "Content-Type": "application/json",
-          });
-      category = Category.fromJson(jsonDecode(utf8.decoder.convert(categoriesFromCMS.bodyBytes)));
+      var categoriesFromCMS = await http.post(
+        Uri.parse('$baseUrl/graphql'),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body:  '''{"query":"        {\\r\\n          node(uuid: \\"$categoryUUID\\") {\\r\\n            uuid\\r\\n            ... on Category {\\r\\n                         fields {\\r\\n                             Name\\r\\n                             Description}\\r\\n                    }\\r\\n          }\\r\\n        }","variables":{}}''',
+      );
+      category = Category.fromJson(jsonDecode(utf8.decoder.convert(categoriesFromCMS.bodyBytes))['data']['node']);
     } else {
       List<Category> offlineCategories  = _offlineBox.get(type)?.cast<Category>();
       category = offlineCategories.where((element) => element.uuid == categoryUUID).toList().first;
