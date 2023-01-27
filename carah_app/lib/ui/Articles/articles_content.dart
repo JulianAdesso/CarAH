@@ -145,7 +145,7 @@ class _ArticlesContent extends State<ArticlesContent> {
                     : const SizedBox.shrink()),
             provider.currentArticle != null
                 ? Html(data: provider.currentArticle!.content)
-                : const Text("Keine Daten zu der ID")
+                : const Text("No Data for ID")
           ],
         )),
         bottomNavigationBar: BottomNavbar(currIndex: 0),

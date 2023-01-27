@@ -77,8 +77,8 @@ class _CategoryWidget
       ),
       body: Consumer<CategoryProvider>(
         builder: (context, provider, child) {
-          return ListView(
-              children: provider.categories.isNotEmpty? provider.categories.map((item) {
+          return provider.categories.isNotEmpty ? ListView(
+              children: provider.categories.map((item) {
                 return GestureDetector(
                   onTap: () {
                     context.push('/${widget.path}/${item.uuid}');
@@ -117,7 +117,7 @@ class _CategoryWidget
                     ),
                   ),
                 );
-              }).toList() : [const Center(child: Text("No articles downloaded"))]);
+              }).toList()) : const Center(child: Text("No articles downloaded yet"));
 
 
         },

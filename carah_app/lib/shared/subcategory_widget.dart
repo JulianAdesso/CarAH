@@ -12,8 +12,9 @@ class SubcategoryWidget<T extends Content, P extends ContentProvider>
     extends StatefulWidget {
   String id;
   String path;
+  String title;
 
-  SubcategoryWidget({super.key, required this.id, required this.path});
+  SubcategoryWidget({super.key, required this.id, required this.path, required this.title});
 
   @override
   _SubcategoryWidget createState() => _SubcategoryWidget<T, P>();
@@ -90,8 +91,8 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
       ));
     }
     return Scaffold(
-      appBar: const AppbarWidget(
-        title: 'Articles Overview',
+      appBar: AppbarWidget(
+        title: widget.title,
       ),
       body: Column(
         children: <Widget>[
