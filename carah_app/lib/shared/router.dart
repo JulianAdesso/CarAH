@@ -10,12 +10,19 @@ import 'package:carah_app/ui/Favorites/favorites_view.dart';
 import 'package:carah_app/ui/home/home_page.dart';
 import 'package:carah_app/ui/settings/settings_widget.dart';
 import 'package:go_router_flow/go_router_flow.dart';
+import 'package:carah_app/ui/home/search.dart';
+import 'package:carah_app/ui/settings/settings_widget.dart';
+import 'package:carah_app/ui/home/search.dart';
+import 'package:go_router/go_router.dart';
+
 import '../ui/FAQ/faq_content.dart';
 
 final router = GoRouter(
   routes: [
     GoRoute(path: '/',
-    builder: (context, state) => const HomePage()),
+      builder: (context, state) => const HomePage()),
+    GoRoute(path: '/search',
+      builder: (context, state) => Search()),
     GoRoute(path: '/articles_categories',
         builder: (context, state) => const CategoryWidget(path: 'articles', type: 'articles_category',title: 'Articles', categoryUUID: '0a8e66b695f5410cac44b1a9531a7a2b')),
     GoRoute(path: '/articles/:id',
