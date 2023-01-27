@@ -1,6 +1,7 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:carah_app/shared/appbar_widget.dart';
 import 'package:carah_app/shared/bottom_navbar.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:go_router_flow/go_router_flow.dart';
@@ -11,7 +12,6 @@ import '../../providers/articles_provider.dart';
 class ArticlesContent extends StatefulWidget {
   final String id;
 
-
   const ArticlesContent({super.key, required this.id});
 
   @override
@@ -19,7 +19,6 @@ class ArticlesContent extends StatefulWidget {
 }
 
 class _ArticlesContent extends State<ArticlesContent> {
-
   bool isLoading = false;
 
   @override
@@ -39,73 +38,83 @@ class _ArticlesContent extends State<ArticlesContent> {
     });
   }
 
-
-    setFavorite() {}
+  setFavorite() {}
 
   @override
   Widget build(BuildContext context) {
     var snackBar = Flushbar(
       message:
-      "The article was successfully downloaded and is now available in offline mode",
+          "The article was successfully downloaded and is now available in offline mode",
       duration: const Duration(seconds: 3),
       forwardAnimationCurve: Curves.decelerate,
       reverseAnimationCurve: Curves.decelerate,
       flushbarPosition: FlushbarPosition.TOP,
-      margin: const EdgeInsets.fromLTRB(8, 60, 8, 8),
+      margin: const EdgeInsets.fromLTRB(8, 65, 8, 8),
       borderRadius: BorderRadius.circular(8),
       backgroundColor: Theme.of(context).dialogBackgroundColor,
       borderColor: Colors.grey,
       messageColor:
-      Theme.of(context).dialogTheme.contentTextStyle?.color ?? Colors.black,
+          Theme.of(context).dialogTheme.contentTextStyle?.color ?? Colors.black,
     );
-    if(isLoading) {
+    if (isLoading) {
       return Scaffold(
           body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircularProgressIndicator(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(top: 10),
-                  child: Text('Loading...'),
-                ),
-              ],
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(
+              color: Theme.of(context).colorScheme.primary,
             ),
-          )
-      );
+            const Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: Text('Loading...'),
+            ),
+          ],
+        ),
+      ));
     }
     return Consumer<ArticlesProvider>(builder: (context, provider, child) {
       return Scaffold(
         appBar: AppbarWidget(
-          title : provider.currentArticle != null
+          title: provider.currentArticle != null
               ? provider.currentArticle!.title
               : '',
           actions: [
-            IconButton(
-                icon: Icon(provider.currentArticle != null &&
-                        provider.currentArticle!.downloaded
-                    ? Icons.cloud_download
-                    : Icons.cloud_download_outlined,),
-                onPressed: () async {
-                  if (provider.currentArticle != null &&
-                      !provider.currentArticle!.downloaded) {
-                        setState(() {
-                      provider.currentArticle!.downloaded =
-                          !provider.currentArticle!.downloaded;
-                    });
-                    if (await provider
-                        .downloadArticle(provider.currentArticle!, provider.currentArticle!.category)) {
-                      snackBar.show(context);
+            if (!kIsWeb)
+              IconButton(
+                  icon: Icon(
+                    provider.currentArticle != null &&
+                            provider.currentArticle!.downloaded
+                        ? Icons.cloud_download
+                        : Icons.cloud_download_outlined,
+                  ),
+                  onPressed: () async {
+                    if (provider.currentArticle != null) {
+                      if (!provider.currentArticle!.downloaded) {
+                        if (await provider.downloadArticle(
+                            provider.currentArticle!,
+                            provider.currentArticle!.category)) {
+                          snackBar.show(context);
+                          setState(() {
+                            provider.currentArticle!.downloaded = true;
+                          });
+                        }
+                      } else {
+                        if (await provider.removeArticleFromDownloads(
+                            provider.currentArticle!)) {
+                          setState(() {
+                            provider.currentArticle!.downloaded = false;
+                          });
+                        }
+                      }
                     }
-                  }
-                }),
+                  }),
             IconButton(
-              icon: Icon(provider.currentArticle != null &&
-                      provider.currentArticle!.saved
-                  ? Icons.favorite
-                  : Icons.favorite_border,
+              icon: Icon(
+                provider.currentArticle != null &&
+                        provider.currentArticle!.saved
+                    ? Icons.favorite
+                    : Icons.favorite_border,
                 color: provider.currentArticle != null &&
                         provider.currentArticle!.saved
                     ? Theme.of(context).colorScheme.error
@@ -116,7 +125,7 @@ class _ArticlesContent extends State<ArticlesContent> {
                   if (provider.currentArticle != null) {
                     provider.setFavorite(
                       provider.currentArticle!.uuid,
-                        !provider.currentArticle!.saved,
+                      !provider.currentArticle!.saved,
                     );
                   }
                 }),

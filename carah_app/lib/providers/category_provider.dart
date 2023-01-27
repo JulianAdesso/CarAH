@@ -71,5 +71,12 @@ class CategoryProvider extends ChangeNotifier{
     return true;
   }
 
+  Future<bool> removeDownloadFromCategories(String categoryID) async {
+    List<Category>? cat  = await _offlineBox.get('articles_category')?.cast<Category>();
+    cat?.removeWhere((element) => element.uuid == categoryID);
+    await _offlineBox.put('articles_category', cat);
+    return true;
+  }
+
 
 }
