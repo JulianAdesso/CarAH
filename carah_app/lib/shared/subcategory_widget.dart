@@ -22,7 +22,6 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
   TextEditingController editingController = TextEditingController();
 
   bool isLoading = false;
-  bool showSearchWidget = false;
   List<T> shownItems = [];
 
   @override
@@ -95,43 +94,9 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         title: const Text('Articles Overview'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              setState(() {
-                showSearchWidget = !showSearchWidget;
-                shownItems.clear();
-                shownItems.addAll(provider.items);
-                editingController.text = "";
-              });
-            },
-            tooltip: 'search',
-          ),
-        ],
       ),
       body: Column(
         children: <Widget>[
-          if (showSearchWidget)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                onChanged: (value) {
-                  filterSearchResults(value);
-                },
-                controller: editingController,
-                decoration: const InputDecoration(
-                  labelText: "Search",
-                  hintText: "Search",
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(25.0),
-                    ),
-                  ),
-                ),
-              ),
-            ),
           Expanded(
             child: ListView.builder(
               // to here.
