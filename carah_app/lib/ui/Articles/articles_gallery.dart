@@ -4,6 +4,8 @@ import '../../providers/articles_provider.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
+import '../../shared/appbar_widget.dart';
+
 class ArticlesGallery extends StatefulWidget {
 
   final String id;
@@ -41,14 +43,10 @@ class _ArticlesGallery extends State<ArticlesGallery> {
     return Consumer<ArticlesProvider>(
         builder: (context, provider, child) {
           return Scaffold(
-            appBar: AppBar(
+            appBar: AppbarWidget(
               centerTitle: true,
               backgroundColor: Colors.black ,
-              leading: IconButton(
-                icon: const Icon(Icons.close, color: Colors.white),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-              title: Text( "$shownPictureNumber from ${provider.images.length}"),
+              title:  "$shownPictureNumber from ${provider.images.length}",
             ),
             body: PhotoViewGallery.builder(
               scrollPhysics: const BouncingScrollPhysics(),

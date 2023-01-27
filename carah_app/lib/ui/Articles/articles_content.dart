@@ -1,5 +1,6 @@
 import 'package:another_flushbar/flushbar.dart';
-import 'package:carah_app/ui/bottom_navbar.dart';
+import 'package:carah_app/shared/appbar_widget.dart';
+import 'package:carah_app/shared/bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:go_router_flow/go_router_flow.dart';
@@ -77,15 +78,10 @@ class _ArticlesContent extends State<ArticlesContent> {
     }
     return Consumer<ArticlesProvider>(builder: (context, provider, child) {
       return Scaffold(
-        appBar: AppBar(
-          leading: BackButton(
-            onPressed: () => context.pop(),
-          ),
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          title: Text(provider.currentArticle != null
+        appBar: AppbarWidget(
+          title : provider.currentArticle != null
               ? provider.currentArticle!.title
               : '',
-          ),
           actions: [
             IconButton(
                 icon: Icon(provider.currentArticle != null &&

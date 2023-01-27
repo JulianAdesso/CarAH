@@ -1,10 +1,12 @@
 import 'package:carah_app/providers/content_provider.dart';
-import 'package:carah_app/ui/bottom_navbar.dart';
+import 'package:carah_app/shared/bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router_flow/go_router_flow.dart';
 import 'package:provider/provider.dart';
 
 import '../model/content.dart';
+import '../ui/home/navigation_items.dart';
+import 'appbar_widget.dart';
 
 class SubcategoryWidget<T extends Content, P extends ContentProvider>
     extends StatefulWidget {
@@ -22,7 +24,6 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
   TextEditingController editingController = TextEditingController();
 
   bool isLoading = false;
-  bool showSearchWidget = false;
   List<T> shownItems = [];
 
   @override
@@ -89,49 +90,11 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
       ));
     }
     return Scaffold(
-      appBar: AppBar(
-        leading: BackButton(
-          onPressed: () => context.pop(),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        title: const Text('Articles Overview'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              setState(() {
-                showSearchWidget = !showSearchWidget;
-                shownItems.clear();
-                shownItems.addAll(provider.items);
-                editingController.text = "";
-              });
-            },
-            tooltip: 'search',
-          ),
-        ],
+      appBar: const AppbarWidget(
+        title: 'Articles Overview',
       ),
       body: Column(
         children: <Widget>[
-          if (showSearchWidget)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                onChanged: (value) {
-                  filterSearchResults(value);
-                },
-                controller: editingController,
-                decoration: const InputDecoration(
-                  labelText: "Search",
-                  hintText: "Search",
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(25.0),
-                    ),
-                  ),
-                ),
-              ),
-            ),
           Expanded(
             child: ListView.builder(
               // to here.
@@ -146,10 +109,11 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
                     ),
                   ),
                   child: ListTile(
+                    leading: Icon(getIcon()),
                     title: Text(
                       shownItems[i].title.toString(),
                     ),
-                    trailing: IconButton(
+                    trailing: widget.path == 'article' ? IconButton(
                       icon: Icon(
                         shownItems[i].saved
                             ? Icons.favorite
@@ -165,7 +129,7 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
                           );
                         }),
                       },
-                    ),
+                    ) : null,
                     onTap: () {
                       context.push('/${widget.path}/${shownItems[i].uuid}');
                     },
@@ -178,5 +142,15 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
       ),
       bottomNavigationBar: BottomNavbar(currIndex: 0),
     );
+  }
+
+  IconData getIcon() {
+    if (widget.path == 'article') {
+      return homeItemsList[0].icon;
+    } else if (widget.path == 'faq') {
+      return homeItemsList[1].icon;
+    } else {
+      return Icons.question_mark;
+    }
   }
 }

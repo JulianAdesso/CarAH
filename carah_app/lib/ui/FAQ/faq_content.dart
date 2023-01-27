@@ -1,8 +1,8 @@
 import 'package:carah_app/providers/FAQ_provider.dart';
-import 'package:carah_app/ui/bottom_navbar.dart';
+import 'package:carah_app/shared/appbar_widget.dart';
+import 'package:carah_app/shared/bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:go_router_flow/go_router_flow.dart';
 import 'package:provider/provider.dart';
 
 class FAQContent extends StatefulWidget {
@@ -56,12 +56,8 @@ class _FAQContent extends State<FAQContent> {
     }
     return Consumer<QuestionsProvider>(builder: (context, provider, child) {
       return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          leading: BackButton(
-            onPressed: () => context.pop(),
-          ),
-          title: const Text('Answer'),
+        appBar: const AppbarWidget(
+          title: 'Answer',
         ),
         body: SingleChildScrollView(
             child: Column(
