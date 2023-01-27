@@ -16,5 +16,5 @@ class SearchContent extends Content{
       : super(uuid : json['uuid'] ?? "",
       title : json['displayName'] ?? "",
       content : "",
-      category : "");
+      category : json['schema']['uuid']);
 }

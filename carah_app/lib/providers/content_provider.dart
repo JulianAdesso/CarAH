@@ -46,7 +46,7 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
           headers: {
             "Content-Type": "application/json",
           },
-          body: '''{"query":"        {\\r\\n          node(uuid: \\"$categoryUuid\\") {\\r\\n              children(filter: {\\r\\n    }\\r\\n            ){\\r\\n                elements {\\r\\n                    displayName\\r\\n                    uuid\\r\\n                }\\r\\n            }\\r\\n          }\\r\\n        }","variables":{}}''',
+          body: '''{"query":"        {\\r\\n          node(uuid: \\"$categoryUuid\\") {\\r\\n              children(filter: {\\r\\n    }\\r\\n            ){\\r\\n                elements {\\r\\n                    displayName\\r\\n                    uuid\\r\\n                    schema {uuid}\\r\\n                }\\r\\n            }\\r\\n          }\\r\\n        }","variables":{}}''',
         );
         var categorySearchArticlesList =
             jsonDecode(utf8.decoder.convert(articlesFromCMS.bodyBytes))['data']
@@ -59,9 +59,10 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
       for (SearchContent tmpArticle in tmpArticleList) {
         tmpArticle.contentType = ContentType.article;
       }
+      //Remove all image folders
       tmpArticleList.removeWhere((element) =>
-          element.title ==
-          ""); //ToDo: Die Bilder Objekte werden nicht rausgefiltert. Wir müssen sie irgendwie markieren
+          element.category ==
+          "066e4aa01dc14ad6a8951e789c719bf6");
       _items.addAll(tmpArticleList as List<P>);
       List<SearchContent> tmpQuestionList = [];
       List<String> questionsUuidList = [];
@@ -76,7 +77,7 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
           headers: {
             "Content-Type": "application/json",
           },
-          body: '''{"query":"        {\\r\\n          node(uuid: \\"$categoryUuid\\") {\\r\\n              children(filter: {\\r\\n    }\\r\\n            ){\\r\\n                elements {\\r\\n                    displayName\\r\\n                    uuid\\r\\n                }\\r\\n            }\\r\\n          }\\r\\n        }","variables":{}}''',
+            body: '''{"query":"        {\\r\\n          node(uuid: \\"$categoryUuid\\") {\\r\\n              children(filter: {\\r\\n    }\\r\\n            ){\\r\\n                elements {\\r\\n                    displayName\\r\\n                    uuid\\r\\n                    schema {uuid}\\r\\n                }\\r\\n            }\\r\\n          }\\r\\n        }","variables":{}}''',
         );
         var categorySearchQuestionList =
             jsonDecode(utf8.decoder.convert(articlesFromCMS.bodyBytes))['data']
@@ -89,9 +90,10 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
       for (SearchContent tmpQuestion in tmpQuestionList) {
         tmpQuestion.contentType = ContentType.question;
       }
+      //Remove all image folders
       tmpQuestionList.removeWhere((element) =>
-          element.title ==
-          ""); //The "Article Images" Folder has been loaded without title
+      element.category ==
+          "066e4aa01dc14ad6a8951e789c719bf6");
       _items.addAll(tmpQuestionList as List<P>);
     } else {
       var tmpArticlesList = _offlineBox.get("articles")?.cast<Content>();
