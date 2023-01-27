@@ -41,7 +41,6 @@ class QuestionsProvider extends ContentProvider<Question> {
   }
 
   getQuestionByUUID(String uuid) async {
-    print(uuid);
     if(uuid != currentQuestion?.uuid) {
       var connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.mobile ||
