@@ -17,18 +17,19 @@ class QuestionsProvider extends ContentProvider<Question> {
   final _offlineBox = Hive.box('myBox');
 
   @override
-  fetchDataByCategory(String id) async {
+  fetchDataByCategory(String uuid) async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi) {
-      var questionsFromCMS = await http.get(
-          Uri.parse(
-              '$baseUrl/nodes/$id/children'),
-          headers: {
-            "Content-Type": "application/json",
-          });
+      var questionsFromCMS = await http.post(
+        Uri.parse('$baseUrl/graphql'),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: '''{"query":"        {\\r\\n          node(uuid: \\"$uuid\\") \\r\\n          {\\r\\n              children(filter: {\\r\\n    }   \\r\\n            ){\\r\\n                elements {\\r\\n                    uuid\\r\\n                    \\r\\n                    \\r\\n                    ... on Article {\\r\\n                         fields {\\r\\n                             Display_Name\\r\\n                             Html_Text\\r\\n                             }\\r\\n                             parent {\\r\\n                                 displayName\\r\\n                             }\\r\\n                    }\\r\\n\\r\\n                }\\r\\n            }\\r\\n          }\\r\\n        }","variables":{}}''',
+      );
       items =
-          jsonDecode(utf8.decoder.convert(questionsFromCMS.bodyBytes))['data']
+          jsonDecode(utf8.decoder.convert(questionsFromCMS.bodyBytes))['data']['node']['children']['elements']
               .map<Question>((element) {
             return Question.fromJson(element);
           }).toList();
@@ -39,22 +40,24 @@ class QuestionsProvider extends ContentProvider<Question> {
     notifyListeners();
   }
 
-  getQuestionByUUID(String id) async {
-    if(id != currentQuestion?.uuid) {
+  getQuestionByUUID(String uuid) async {
+    print(uuid);
+    if(uuid != currentQuestion?.uuid) {
       var connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var questionsFromCMS = await http.get(
-            Uri.parse(
-                '$baseUrl/nodes/$id'),
-            headers: {
-              "Content-Type": "application/json",
-            });
+        var questionsFromCMS = await http.post(
+          Uri.parse('$baseUrl/graphql'),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body:  '''{"query":" {\\r\\n          node(uuid: \\"2679fe5c2c5641ea86fb37a0ff1fe032\\") {\\r\\n            uuid\\r\\n            ... on Article {\\r\\n                         fields {\\r\\n                             Html_Text\\r\\n                             Display_Name\\r\\n                             }\\r\\n                             parent {\\r\\n                                 displayName\\r\\n                             }\\r\\n                    }\\r\\n          }\\r\\n        }","variables":{}}''',
+        );
         currentQuestion = Question.fromJson(
-            jsonDecode(utf8.decoder.convert(questionsFromCMS.bodyBytes)));
-        _offlineBox.put(id, currentQuestion);
+            jsonDecode(utf8.decoder.convert(questionsFromCMS.bodyBytes))['data']['node']);
+        _offlineBox.put(uuid, currentQuestion);
       } else {
-        currentQuestion = _offlineBox.get(id);
+        currentQuestion = _offlineBox.get(uuid);
       }
       notifyListeners();
       lastArticleID = currentQuestion?.uuid;

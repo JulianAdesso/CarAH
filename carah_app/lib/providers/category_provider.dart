@@ -30,7 +30,7 @@ class CategoryProvider extends ChangeNotifier{
         body: '''{"query":"        {\\r\\n          node(uuid: \\"$categoryUUID\\") \\r\\n          {\\r\\n              children(filter: {\\r\\n    }   \\r\\n            ){\\r\\n                elements {\\r\\n                    uuid\\r\\n                    ... on Category {\\r\\n                         fields {\\r\\n                             Name\\r\\n                             Description}\\r\\n                    }\\r\\n                }\\r\\n            }\\r\\n          }\\r\\n        }","variables":{}}''',
       );
 
-      _categories = jsonDecode(utf8.decoder.convert(categoriesFromCMS.bodyBytes))['data'] ['node']['children']['elements'].map<Category>((element) {
+      _categories = jsonDecode(utf8.decoder.convert(categoriesFromCMS.bodyBytes))['data']['node']['children']['elements'].map<Category>((element) {
         return Category.fromJson(element);
       }).toList();
     } else {
