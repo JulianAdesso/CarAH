@@ -62,7 +62,7 @@ class ArticlesProvider extends ContentProvider<Article> {
     notifyListeners();
   }
 
-  Future<void> getArticleByUUID(String id) async {
+  Future<void>getArticleByUUID(String id) async {
     if (id != currentArticle?.uuid) {
       var connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.mobile ||
@@ -93,6 +93,28 @@ class ArticlesProvider extends ContentProvider<Article> {
         }
       notifyListeners();
     }
+  }
+
+  Future<void> getImprint() async {
+      var connectivityResult = await (Connectivity().checkConnectivity());
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        var articlesFromCMS =
+        await http.get(Uri.parse('$_baseURL/nodes/1839c4d1daf246829fcb0da11b085b59'), headers: {
+          "Content-Type": "application/json",
+        });
+        currentArticle = Article.fromJson(
+            jsonDecode(utf8.decoder.convert(articlesFromCMS.bodyBytes)));
+        _offlineBox.put('imprint', currentArticle);
+      } else {
+        currentArticle = _offlineBox.get("imprint").cast<Article>();
+      }
+      if (currentArticle!.imageId != null) {
+        await getImagesByUUID(currentArticle!.imageId!);
+      } else {
+        images = {};
+      }
+      notifyListeners();
   }
 
   getImagesByUUID(List<String> ids) async {

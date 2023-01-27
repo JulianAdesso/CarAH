@@ -26,5 +26,5 @@ final List<ListItem> bottomNavbarItems = [
   ListItem(title: 'Home', icon: Icons.home_outlined, routerLink: '/', availableInOfflineMode: true),
   ListItem(title: 'Search', icon: Icons.search, routerLink: '/search', availableInOfflineMode: true),
   ListItem(title: 'Favorites', icon: Icons.favorite_border_outlined, routerLink: '/favorites', availableInOfflineMode: true),
-  ListItem(title: 'Settings', icon: Icons.settings_outlined, routerLink: '/settings_widget.dart', availableInOfflineMode: true)
+  ListItem(title: 'Settings', icon: Icons.settings_outlined, routerLink: '/settings', availableInOfflineMode: true)
 ];
