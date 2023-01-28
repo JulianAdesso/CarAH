@@ -9,8 +9,9 @@ import '../../shared/appbar_widget.dart';
 class ArticlesGallery extends StatefulWidget {
 
   final String id;
+  final String categoryId;
 
-  const ArticlesGallery({super.key, required this.id});
+  const ArticlesGallery({super.key, required this.id, required this.categoryId});
 
   @override
   _ArticlesGallery createState() => _ArticlesGallery();
@@ -32,7 +33,7 @@ class _ArticlesGallery extends State<ArticlesGallery> {
       isLoading = true;
     });
     var provider = Provider.of<ArticlesProvider>(context, listen: false);
-    await provider.getArticleByUUID(widget.id);
+    await provider.getArticleByUUID(widget.id, widget.categoryId);
     setState(() {
       isLoading = false;
     });

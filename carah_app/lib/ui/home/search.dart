@@ -143,7 +143,7 @@ class _Search extends State<Search> {
                             if ((shownContents[i] as SearchContent)
                                     .contentType ==
                                 ContentType.article) {
-                              context.push('/article/${shownContents[i].uuid}');
+                              context.push(Uri(path: '/article/${shownContents[i].uuid}', queryParameters: {'catId': shownContents[i].category}).toString());
                             }
                             if ((shownContents[i] as SearchContent)
                                     .contentType ==

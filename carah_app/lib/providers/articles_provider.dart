@@ -64,7 +64,7 @@ class ArticlesProvider extends ContentProvider<Article> {
     notifyListeners();
   }
 
-  Future<void> getArticleByUUID(String id) async {
+  Future<void> getArticleByUUID(String id, String categoryId) async {
     if (id != currentArticle?.uuid) {
       var connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.mobile ||
@@ -77,16 +77,15 @@ class ArticlesProvider extends ContentProvider<Article> {
             jsonDecode(utf8.decoder.convert(articlesFromCMS.bodyBytes)));
       } else {
         currentArticle = _offlineBox
-            .get("articles_$id")
+            .get("articles_$categoryId")
             .cast<Article>()
-            .where((element) => element.uuid == id)
-            .toList()
-            .first;
+            .firstWhere((element) => element.uuid == id);
       }
       if (currentArticle!.imageId != null) {
         await getImagesByUUID(currentArticle!.imageId!);
       } else {
         images = {};
+        showingImages = [];
       }
       _favorites = _offlineBox.get('favorites') ?? _favorites;
       if (currentArticle != null && _favorites.contains(currentArticle!.uuid)) {
@@ -94,7 +93,7 @@ class ArticlesProvider extends ContentProvider<Article> {
       } else {
         currentArticle!.saved = false;
       }
-      var savedArticles = _offlineBox.get('articles_$id') ?? [];
+      var savedArticles = _offlineBox.get('articles_$categoryId') ?? [];
       if (savedArticles
           .any((element) => element.uuid == currentArticle!.uuid)) {
         currentArticle!.downloaded = true;
@@ -204,15 +203,17 @@ class ArticlesProvider extends ContentProvider<Article> {
     if (_favorites.isEmpty) {
       return [];
     }
-    Article? tmpArticle = currentArticle;
     List<Article> favoriteArticles = [];
-    for (var fav in _favorites) {
-      await getArticleByUUID(fav);
-      if (currentArticle != null) {
-        favoriteArticles.add(currentArticle!);
+    await categoryProvider.fetchAllCategories("0a8e66b695f5410cac44b1a9531a7a2b", "articles_category");
+    for(var cat in categoryProvider.categories){
+      await fetchDataByCategory(cat.uuid);
+      for (var fav in _favorites) {
+        if(items.any((element) => element.uuid == fav)) {
+          favoriteArticles.add(
+              items.firstWhere((element) => element.uuid == fav));
+        }
       }
     }
-    currentArticle = tmpArticle;
     return favoriteArticles;
   }
 }

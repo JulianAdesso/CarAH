@@ -29,7 +29,6 @@ class QuestionAdapter extends TypeAdapter<Question> {
   @override
   void write(BinaryWriter writer, Question obj) {
     writer
-      ..writeByte(7)
       ..writeByte(6)
       ..writeByte(0)
       ..write(obj.uuid)

@@ -11,8 +11,9 @@ import '../../providers/articles_provider.dart';
 
 class ArticlesContent extends StatefulWidget {
   final String id;
+  final String categoryId;
 
-  const ArticlesContent({super.key, required this.id});
+  const ArticlesContent({super.key, required this.id, required this.categoryId});
 
   @override
   _ArticlesContent createState() => _ArticlesContent();
@@ -32,7 +33,7 @@ class _ArticlesContent extends State<ArticlesContent> {
       isLoading = true;
     });
     await Provider.of<ArticlesProvider>(context, listen: false)
-        .getArticleByUUID(widget.id);
+        .getArticleByUUID(widget.id, widget.categoryId);
     setState(() {
       isLoading = false;
     });
@@ -138,7 +139,7 @@ class _ArticlesContent extends State<ArticlesContent> {
           children: [
             GestureDetector(
                 onTap: () {
-                  context.push('/article/${widget.id}/gallery');
+                  context.push(Uri(path: '/article/${widget.id}/gallery', queryParameters: {'catId': widget.categoryId}).toString());
                 },
                 child: provider.showingImages.isNotEmpty
                     ? provider.showingImages.first

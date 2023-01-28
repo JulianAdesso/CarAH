@@ -14,7 +14,8 @@ class SubcategoryWidget<T extends Content, P extends ContentProvider>
   String path;
   String title;
 
-  SubcategoryWidget({super.key, required this.id, required this.path, required this.title});
+  SubcategoryWidget(
+      {super.key, required this.id, required this.path, required this.title});
 
   @override
   _SubcategoryWidget createState() => _SubcategoryWidget<T, P>();
@@ -114,25 +115,34 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
                     title: Text(
                       shownItems[i].title.toString(),
                     ),
-                    trailing: widget.path == 'article' ? IconButton(
-                      icon: Icon(
-                        shownItems[i].saved
-                            ? Icons.favorite
-                            : Icons.favorite_border,
-                        color: shownItems[i].saved ? Colors.red : Colors.black,
-                        size: 30,
-                      ),
-                      onPressed: () => {
-                        setState(() {
-                          provider.setFavorite(
-                            shownItems[i].uuid,
-                            !shownItems[i].saved,
-                          );
-                        }),
-                      },
-                    ) : null,
+                    trailing: widget.path == 'article'
+                        ? IconButton(
+                            icon: Icon(
+                              shownItems[i].saved
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: shownItems[i].saved
+                                  ? Colors.red
+                                  : Colors.black,
+                              size: 30,
+                            ),
+                            onPressed: () => {
+                              setState(() {
+                                provider.setFavorite(
+                                  shownItems[i].uuid,
+                                  !shownItems[i].saved,
+                                );
+                              }),
+                            },
+                          )
+                        : null,
                     onTap: () {
-                      context.push('/${widget.path}/${shownItems[i].uuid}');
+                      context.push(Uri(
+                              path: '/${widget.path}/${shownItems[i].uuid}',
+                              queryParameters: widget.path == 'article'
+                                  ? {'catId': widget.id}
+                                  : null)
+                          .toString());
                     },
                   ),
                 );

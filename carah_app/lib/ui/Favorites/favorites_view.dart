@@ -87,7 +87,11 @@ class _FavoritesViewState extends State<FavoritesView> {
                       },
                     ),
                     onTap: () async {
-                      await context.push('/article/${snapshot.data![i].uuid}');
+                      await context.push(Uri(
+                          path: '/article/${snapshot.data![i].uuid}',
+                          queryParameters: {
+                            'catId': snapshot.data![i].category
+                          }).toString());
                       _favoritesFuture = articlesProvider.fetchFavorites();
                     },
                   ),
