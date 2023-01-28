@@ -36,29 +36,24 @@ class ArticlesProvider extends ContentProvider<Article> {
   }
 
   @override
-  Future<void> fetchDataByCategory(String uuid) async {
+  Future<void> fetchDataByCategory(String id) async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi) {
-      print(uuid);
-      var questionsFromCMS = await http.post(
-        Uri.parse('$baseUrl/graphql'),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: '''{"query":"        {\\r\\n          node(uuid: \\"8dc33d54f3594897ab8292e2d04280c7\\") \\r\\n          {\\r\\n              children(filter: {\\r\\n    }   \\r\\n            ){\\r\\n                elements {\\r\\n                    uuid\\r\\n                    \\r\\n                    \\r\\n                    ... on Article {\\r\\n                         fields {\\r\\n                             Display_Name\\r\\n                             Html_Text\\r\\n                             images {\\r\\n                                 uuid\\r\\n                             }\\r\\n                             }\\r\\n                             parent {\\r\\n                                 displayName\\r\\n                             }\\r\\n                    }\\r\\n\\r\\n                }\\r\\n            }\\r\\n          }\\r\\n        }","variables":{}}''',
-      );
-      print(jsonDecode(utf8.decoder.convert(questionsFromCMS.bodyBytes)));
+      var articlesFromCMS =
+          await http.get(Uri.parse('$baseUrl/nodes/$id/children'), headers: {
+        "Content-Type": "application/json",
+      });
       items =
-          jsonDecode(utf8.decoder.convert(questionsFromCMS.bodyBytes))['data']['node']['children']['elements']
+          jsonDecode(utf8.decoder.convert(articlesFromCMS.bodyBytes))['data']
               .map<Article>((element) {
-            return Article.fromJson(element);
-          }).toList();
+        return Article.fromJson(element);
+      }).toList();
       items.removeWhere((element) =>
           element.title ==
           ""); //The "Article Images" Folder has been loaded without title
     } else {
-      items = _offlineBox.get("articles_$uuid")?.cast<Article>();
+      items = _offlineBox.get("articles_$id")?.cast<Article>();
     }
     _favorites = _offlineBox.get('favorites') ?? _favorites;
     for (var item in items as List<Article>) {
