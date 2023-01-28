@@ -50,7 +50,7 @@ class QuestionsProvider extends ContentProvider<Question> {
           headers: {
             "Content-Type": "application/json",
           },
-          body:  '''{"query":" {\\r\\n          node(uuid: \\"2679fe5c2c5641ea86fb37a0ff1fe032\\") {\\r\\n            uuid\\r\\n            ... on Article {\\r\\n                         fields {\\r\\n                             Html_Text\\r\\n                             Display_Name\\r\\n                             }\\r\\n                             parent {\\r\\n                                 displayName\\r\\n                             }\\r\\n                    }\\r\\n          }\\r\\n        }","variables":{}}''',
+          body:  '''{"query":" {\\r\\n          node(uuid: \\"$uuid\\") {\\r\\n            uuid\\r\\n            ... on Article {\\r\\n                         fields {\\r\\n                             Html_Text\\r\\n                             Display_Name\\r\\n                             }\\r\\n                             parent {\\r\\n                                 displayName\\r\\n                             }\\r\\n                    }\\r\\n          }\\r\\n        }","variables":{}}''',
         );
         currentQuestion = Question.fromJson(
             jsonDecode(utf8.decoder.convert(questionsFromCMS.bodyBytes))['data']['node']);
