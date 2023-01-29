@@ -63,11 +63,6 @@ final List<ListItem> bottomNavbarItems = kIsWeb
             icon: Icons.search,
             routerLink: '/search',
             availableInOfflineMode: true),
-        ListItem(
-            title: 'Favorites',
-            icon: Icons.favorite_border_outlined,
-            routerLink: '/favorites',
-            availableInOfflineMode: true),
       ]
     : [
         ListItem(

@@ -1,4 +1,5 @@
 import 'package:carah_app/shared/bottom_navbar.dart';
+import 'package:carah_app/shared/loading_spinner_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:go_router_flow/go_router_flow.dart';
@@ -42,22 +43,7 @@ class _Imprint extends State<Imprint> {
   @override
   Widget build(BuildContext context) {
     if(isLoading) {
-      return Scaffold(
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircularProgressIndicator(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(top: 10),
-                  child: Text('Loading...'),
-                ),
-              ],
-            ),
-          )
-      );
+      return const LoadingSpinnerWidget();
     }
     return Consumer<ArticlesProvider>(builder: (context, provider, child) {
       return Scaffold(

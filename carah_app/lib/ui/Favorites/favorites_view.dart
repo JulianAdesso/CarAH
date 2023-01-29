@@ -6,6 +6,7 @@ import 'package:go_router_flow/go_router_flow.dart';
 import 'package:provider/provider.dart';
 
 import '../../shared/bottom_navbar.dart';
+import '../../shared/loading_spinner_widget.dart';
 
 class FavoritesView extends StatefulWidget {
   const FavoritesView({Key? key}) : super(key: key);
@@ -36,9 +37,7 @@ class _FavoritesViewState extends State<FavoritesView> {
         future: _favoritesFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const LoadingSpinnerWidget();
           } else {
             if (!snapshot.hasData) {
               return const Center(

@@ -1,6 +1,7 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:carah_app/shared/appbar_widget.dart';
 import 'package:carah_app/shared/bottom_navbar.dart';
+import 'package:carah_app/shared/loading_spinner_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -13,7 +14,8 @@ class ArticlesContent extends StatefulWidget {
   final String id;
   final String categoryId;
 
-  const ArticlesContent({super.key, required this.id, required this.categoryId});
+  const ArticlesContent(
+      {super.key, required this.id, required this.categoryId});
 
   @override
   _ArticlesContent createState() => _ArticlesContent();
@@ -58,21 +60,7 @@ class _ArticlesContent extends State<ArticlesContent> {
           Theme.of(context).dialogTheme.contentTextStyle?.color ?? Colors.black,
     );
     if (isLoading) {
-      return Scaffold(
-          body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircularProgressIndicator(
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            const Padding(
-              padding: EdgeInsets.only(top: 10),
-              child: Text('Loading...'),
-            ),
-          ],
-        ),
-      ));
+      return const LoadingSpinnerWidget();
     }
     return Consumer<ArticlesProvider>(builder: (context, provider, child) {
       return Scaffold(
@@ -110,28 +98,29 @@ class _ArticlesContent extends State<ArticlesContent> {
                       }
                     }
                   }),
-            IconButton(
-              icon: Icon(
-                provider.currentArticle != null &&
-                        provider.currentArticle!.saved
-                    ? Icons.favorite
-                    : Icons.favorite_border,
-                color: provider.currentArticle != null &&
-                        provider.currentArticle!.saved
-                    ? Theme.of(context).colorScheme.error
-                    : Colors.white,
+            if (!kIsWeb)
+              IconButton(
+                icon: Icon(
+                  provider.currentArticle != null &&
+                          provider.currentArticle!.saved
+                      ? Icons.favorite
+                      : Icons.favorite_border,
+                  color: provider.currentArticle != null &&
+                          provider.currentArticle!.saved
+                      ? Theme.of(context).colorScheme.error
+                      : Colors.white,
+                ),
+                onPressed: () => {
+                  setState(() {
+                    if (provider.currentArticle != null) {
+                      provider.setFavorite(
+                        provider.currentArticle!.uuid,
+                        !provider.currentArticle!.saved,
+                      );
+                    }
+                  }),
+                },
               ),
-              onPressed: () => {
-                setState(() {
-                  if (provider.currentArticle != null) {
-                    provider.setFavorite(
-                      provider.currentArticle!.uuid,
-                      !provider.currentArticle!.saved,
-                    );
-                  }
-                }),
-              },
-            ),
           ],
         ),
         body: SingleChildScrollView(
@@ -139,7 +128,10 @@ class _ArticlesContent extends State<ArticlesContent> {
           children: [
             GestureDetector(
                 onTap: () {
-                  context.push(Uri(path: '/article/${widget.id}/gallery', queryParameters: {'catId': widget.categoryId}).toString());
+                  context.push(Uri(
+                          path: '/article/${widget.id}/gallery',
+                          queryParameters: {'catId': widget.categoryId})
+                      .toString());
                 },
                 child: provider.showingImages.isNotEmpty
                     ? provider.showingImages.first

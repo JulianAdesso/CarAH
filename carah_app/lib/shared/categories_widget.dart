@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../../providers/category_provider.dart';
 import 'appbar_widget.dart';
 import 'bottom_navbar.dart';
+import 'loading_spinner_widget.dart';
 
 class CategoryWidget extends StatefulWidget {
   final String path;
@@ -66,21 +67,7 @@ class _CategoryWidget extends State<CategoryWidget> {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return Scaffold(
-          body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircularProgressIndicator(
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            const Padding(
-              padding: EdgeInsets.only(top: 10),
-              child: Text('Loading...'),
-            ),
-          ],
-        ),
-      ));
+      return const LoadingSpinnerWidget();
     }
     return Scaffold(
       appBar: AppbarWidget(

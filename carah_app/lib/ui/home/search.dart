@@ -2,7 +2,8 @@ import 'package:carah_app/model/searchContent.dart';
 import 'package:carah_app/providers/content_provider.dart';
 import 'package:carah_app/shared/appbar_widget.dart';
 import 'package:carah_app/shared/bottom_navbar.dart';
-import 'package:carah_app/ui/home/navigation_items.dart';
+import 'package:carah_app/shared/loading_spinner_widget.dart';
+import 'package:carah_app/shared/navigation_items.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router_flow/go_router_flow.dart';
 import 'package:provider/provider.dart';
@@ -106,20 +107,7 @@ class _Search extends State<Search> {
           ),
           Expanded(
             child: isLoading
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircularProgressIndicator(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.only(top: 10),
-                          child: Text('Loading...'),
-                        ),
-                      ],
-                    ),
-                  )
+                ? const LoadingSpinnerWidget()
                 : ListView.builder(
                     // to here.
                     key: UniqueKey(),

@@ -1,11 +1,13 @@
 import 'package:carah_app/providers/content_provider.dart';
 import 'package:carah_app/shared/bottom_navbar.dart';
+import 'package:carah_app/shared/loading_spinner_widget.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:go_router_flow/go_router_flow.dart';
 import 'package:provider/provider.dart';
 
 import '../model/content.dart';
-import '../ui/home/navigation_items.dart';
+import 'navigation_items.dart';
 import 'appbar_widget.dart';
 
 class SubcategoryWidget<T extends Content, P extends ContentProvider>
@@ -75,21 +77,7 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
     shownItems = provider.items;
 
     if (isLoading) {
-      return Scaffold(
-          body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircularProgressIndicator(
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            const Padding(
-              padding: EdgeInsets.only(top: 10),
-              child: Text('Loading...'),
-            ),
-          ],
-        ),
-      ));
+      return const LoadingSpinnerWidget();
     }
     return Scaffold(
       appBar: AppbarWidget(
@@ -115,7 +103,7 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
                     title: Text(
                       shownItems[i].title.toString(),
                     ),
-                    trailing: widget.path == 'article'
+                    trailing: widget.path == 'article' && !kIsWeb
                         ? IconButton(
                             icon: Icon(
                               shownItems[i].saved
