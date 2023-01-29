@@ -96,14 +96,21 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
           "066e4aa01dc14ad6a8951e789c719bf6");
       _items.addAll(tmpQuestionList as List<P>);
     } else {
-      var tmpArticlesList = _offlineBox.get("articles")?.cast<Content>();
+      await categoryProvider.fetchAllCategories("0a8e66b695f5410cac44b1a9531a7a2b", "articles_category");
+      var tmpArticlesList = [];
+      for(var cat in categoryProvider.categories){
+        String tmpCategoryUuid = cat.uuid;
+        if(_offlineBox.get("articles_$tmpCategoryUuid")?.cast<Content>() != null) {
+          tmpArticlesList += _offlineBox.get("articles_$tmpCategoryUuid")?.cast<Content>();
+        }
+      }
       if(tmpArticlesList != null) {
         for (Content tmpArticle in tmpArticlesList) {
           SearchContent tmpSearchContent = SearchContent(
               uuid: tmpArticle.uuid,
               title: tmpArticle.title,
               content: "",
-              category: "");
+              category: tmpArticle.category);
           tmpSearchContent.contentType = ContentType.article;
           _items.add(tmpSearchContent as P);
         }
