@@ -36,7 +36,7 @@ class CategoryProvider extends ChangeNotifier {
         return Category.fromJson(element);
       }).toList();
     } else {
-      _categories = _offlineBox.get(type)?.cast<Category>();
+      _categories = _offlineBox.get(type)?.cast<Category>() ?? [];
     }
     notifyListeners();
   }
