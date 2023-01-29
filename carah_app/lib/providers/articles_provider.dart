@@ -36,24 +36,29 @@ class ArticlesProvider extends ContentProvider<Article> {
   }
 
   @override
-  Future<void> fetchDataByCategory(String id) async {
+  Future<void> fetchDataByCategory(String uuid) async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi) {
-      var articlesFromCMS =
-          await http.get(Uri.parse('$baseUrl/nodes/$id/children'), headers: {
-        "Content-Type": "application/json",
-      });
+      print(uuid);
+      var questionsFromCMS = await http.post(
+        Uri.parse('$baseUrl/graphql'),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: '''{"query":"        {\\r\\n          node(uuid: \\"$uuid\\") \\r\\n          {\\r\\n              children(filter: {\\r\\n    }   \\r\\n            ){\\r\\n                elements {\\r\\n                    uuid\\r\\n                    \\r\\n                    \\r\\n                    ... on Article {\\r\\n                         fields {\\r\\n                             Display_Name\\r\\n                             Html_Text\\r\\n                             images {\\r\\n                                 uuid\\r\\n                             }\\r\\n                             }\\r\\n                             parent {\\r\\n                                 displayName\\r\\n                             }\\r\\n                    }\\r\\n\\r\\n                }\\r\\n            }\\r\\n          }\\r\\n        }","variables":{}}''',
+      );
+      print(jsonDecode(utf8.decoder.convert(questionsFromCMS.bodyBytes)));
       items =
-          jsonDecode(utf8.decoder.convert(articlesFromCMS.bodyBytes))['data']
+          jsonDecode(utf8.decoder.convert(questionsFromCMS.bodyBytes))['data']['node']['children']['elements']
               .map<Article>((element) {
-        return Article.fromJson(element);
-      }).toList();
+            return Article.fromJson(element);
+          }).toList();
       items.removeWhere((element) =>
-          element.title ==
+      element.title ==
           ""); //The "Article Images" Folder has been loaded without title
     } else {
-      items = _offlineBox.get("articles_$id")?.cast<Article>();
+      items = _offlineBox.get("articles_$uuid")?.cast<Article>();
     }
     _favorites = _offlineBox.get('favorites') ?? _favorites;
     for (var item in items as List<Article>) {
@@ -70,7 +75,7 @@ class ArticlesProvider extends ContentProvider<Article> {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
         var articlesFromCMS =
-            await http.get(Uri.parse('$baseUrl/nodes/$id'), headers: {
+        await http.get(Uri.parse('$baseUrl/nodes/$id'), headers: {
           "Content-Type": "application/json",
         });
         currentArticle = Article.fromJson(
@@ -134,7 +139,7 @@ class ArticlesProvider extends ContentProvider<Article> {
         id = id.replaceAll('{uuid: ', '');
         id = id.replaceAll('}', '');
         if ((connectivityResult == ConnectivityResult.mobile ||
-                connectivityResult == ConnectivityResult.wifi) &&
+            connectivityResult == ConnectivityResult.wifi) &&
             !_offlineBox.containsKey(id)) {
           var message = await http
               .get(Uri.parse('$baseUrl/nodes/$id/binary/image'), headers: {
@@ -172,7 +177,7 @@ class ArticlesProvider extends ContentProvider<Article> {
 
   Future<bool> downloadArticle(Article article, String categoryUUID) async {
     List<Article>? articles =
-        await _offlineBox.get('articles_${article.category}')?.cast<Article>();
+    await _offlineBox.get('articles_${article.category}')?.cast<Article>();
     articles ??= [];
     if (!articles.any((element) => element.uuid == article.uuid)) {
       await categoryProvider.downloadCategory(categoryUUID);
