@@ -50,6 +50,7 @@ class _CategoryWidget extends State<CategoryWidget> {
     });
     var provider = Provider.of<CategoryProvider>(context, listen: false);
     await provider.fetchAllCategories(widget.categoryUUID, widget.type);
+    provider.categories.sort((a, b) => a.name.compareTo(b.name));
     setState(() {
       isLoading = false;
     });
