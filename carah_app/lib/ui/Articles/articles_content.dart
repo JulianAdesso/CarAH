@@ -134,7 +134,45 @@ class _ArticlesContent extends State<ArticlesContent> {
                       .toString());
                 },
                 child: provider.showingImages.isNotEmpty
-                    ? provider.showingImages.first
+                    ? Stack(
+                        children: <Widget>[
+                          provider.showingImages.first,
+                          if (provider.showingImages.length > 1)
+                            Positioned(
+                              right: 15,
+                              bottom: 15,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(30.0),
+                                child: Container(
+                                    alignment: Alignment.center,
+                                    constraints: const BoxConstraints(
+                                      maxWidth: 80,
+                                      maxHeight: 40,
+                                    ),
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .secondary
+                                        .withOpacity(0.5),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: <Widget>[
+                                        const Icon(
+                                          Icons.camera_alt_outlined,
+                                          color: Colors.white,
+                                        ),
+                                        Text(
+                                          '1 / ${provider.showingImages.length}',
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        )
+                                      ],
+                                    )),
+                              ),
+                            )
+                        ],
+                      )
                     : const SizedBox.shrink()),
             provider.currentArticle != null
                 ? Html(data: provider.currentArticle!.content)
