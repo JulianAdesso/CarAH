@@ -1,4 +1,5 @@
 import 'package:another_flushbar/flushbar.dart';
+import 'package:carah_app/model/bottom_navbar_index.dart';
 import 'package:carah_app/shared/appbar_widget.dart';
 import 'package:carah_app/shared/bottom_navbar.dart';
 import 'package:carah_app/shared/loading_spinner_widget.dart';
@@ -179,7 +180,7 @@ class _ArticlesContent extends State<ArticlesContent> {
                 : const Text("No Data for ID")
           ],
         )),
-        bottomNavigationBar: BottomNavbar(currIndex: 0),
+        bottomNavigationBar: BottomNavbar(currIndex: BottomNavbarIndex.home.index),
       );
     });
   }

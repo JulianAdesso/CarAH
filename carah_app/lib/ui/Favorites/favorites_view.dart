@@ -1,4 +1,5 @@
 import 'package:carah_app/model/article.dart';
+import 'package:carah_app/model/bottom_navbar_index.dart';
 import 'package:carah_app/providers/articles_provider.dart';
 import 'package:carah_app/shared/appbar_widget.dart';
 import 'package:flutter/material.dart';
@@ -101,7 +102,7 @@ class _FavoritesViewState extends State<FavoritesView> {
         },
       ),
       bottomNavigationBar: BottomNavbar(
-        currIndex: 2,
+        currIndex: BottomNavbarIndex.favorites.index,
       ),
     );
   }

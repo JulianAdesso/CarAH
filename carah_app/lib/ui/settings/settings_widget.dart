@@ -1,3 +1,4 @@
+import 'package:carah_app/model/bottom_navbar_index.dart';
 import 'package:carah_app/shared/appbar_widget.dart';
 import 'package:carah_app/shared/bottom_navbar.dart';
 import 'package:flutter/material.dart';
@@ -117,7 +118,7 @@ class _SettingsState extends State<SettingsWidget> {
         });
       }),
       bottomNavigationBar: BottomNavbar(
-        currIndex: 3,
+        currIndex: BottomNavbarIndex.settings.index,
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:carah_app/model/bottom_navbar_index.dart';
 import 'package:carah_app/providers/content_provider.dart';
 import 'package:carah_app/shared/bottom_navbar.dart';
 import 'package:carah_app/shared/loading_spinner_widget.dart';
@@ -139,7 +140,7 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavbar(currIndex: 0),
+      bottomNavigationBar: BottomNavbar(currIndex: BottomNavbarIndex.home.index),
     );
   }
 

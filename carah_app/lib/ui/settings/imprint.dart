@@ -1,3 +1,4 @@
+import 'package:carah_app/model/bottom_navbar_index.dart';
 import 'package:carah_app/shared/bottom_navbar.dart';
 import 'package:carah_app/shared/loading_spinner_widget.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +66,7 @@ class _Imprint extends State<Imprint> {
                     : const Text("Keine Daten zu der ID")
               ],
             )),
-        bottomNavigationBar: BottomNavbar(currIndex: 0),
+        bottomNavigationBar: BottomNavbar(currIndex: BottomNavbarIndex.home.index),
       );
     });
   }

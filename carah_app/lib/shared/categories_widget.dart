@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:core';
 
+import 'package:carah_app/model/bottom_navbar_index.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router_flow/go_router_flow.dart';
@@ -130,7 +131,7 @@ class _CategoryWidget extends State<CategoryWidget> {
               : const Center(child: Text("No articles downloaded yet"));
         },
       ),
-      bottomNavigationBar: BottomNavbar(currIndex: 0),
+      bottomNavigationBar: BottomNavbar(currIndex: BottomNavbarIndex.home.index),
     );
   }
 
