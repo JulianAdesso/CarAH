@@ -17,15 +17,20 @@ class ArticlesGallery extends StatefulWidget {
   _ArticlesGallery createState() => _ArticlesGallery();
   }
 
-  int shownPictureNumber = 1;
-
 class _ArticlesGallery extends State<ArticlesGallery> {
   bool isLoading = false;
+  late int shownPictureNumber = 1;
 
   @override
   void initState() {
     fetchData();
     super.initState();
+  }
+
+  void onPageChanged(int index) {
+    setState(() {
+      shownPictureNumber = index + 1;
+    });
   }
 
   void fetchData() async {
@@ -51,8 +56,8 @@ class _ArticlesGallery extends State<ArticlesGallery> {
             ),
             body: PhotoViewGallery.builder(
               scrollPhysics: const BouncingScrollPhysics(),
+              onPageChanged: onPageChanged,
               builder: (BuildContext context, int index) {
-                shownPictureNumber = index + 1;
                 return PhotoViewGalleryPageOptions(
                 imageProvider: (provider.showingImages[index].image),
                   initialScale: PhotoViewComputedScale.contained * 1,
