@@ -18,11 +18,11 @@ class BugReport extends StatelessWidget {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(bottom: 16),
+                padding: const EdgeInsets.only(bottom: 32),
                 child: Text('With this contact form you can send us feedback, errors and suggestions for improvement.', style: Theme.of(context).textTheme.headline6),
               ),
               const Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
+                padding: EdgeInsets.only(bottom: 16),
                 child: TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -31,7 +31,7 @@ class BugReport extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
+                padding: EdgeInsets.only(bottom: 16),
                 child: const TextField(
                   decoration: InputDecoration(
                       border: OutlineInputBorder(),
@@ -41,7 +41,7 @@ class BugReport extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
+                padding: EdgeInsets.only(bottom: 16),
                 child: const TextField(
                   minLines: 2,
                   maxLines: 5,
@@ -52,6 +52,12 @@ class BugReport extends StatelessWidget {
 
                 ),
               ),
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(50),
+                  ),
+                  onPressed: (){},
+                  child: Text('Send'))
             ],
           ),
         ),
