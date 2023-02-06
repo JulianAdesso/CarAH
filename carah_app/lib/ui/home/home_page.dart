@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:carah_app/model/bottom_navbar_index.dart';
 import 'package:carah_app/shared/appbar_widget.dart';
 import 'package:carah_app/shared/navigation_items.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -125,7 +126,7 @@ class _HomePageState extends State<HomePage> {
             );
           }).toList(),
         ),
-        bottomNavigationBar: BottomNavbar(currIndex: 0));
+        bottomNavigationBar: BottomNavbar(currIndex: BottomNavbarIndex.home.index));
   }
 
   @override

@@ -1,3 +1,4 @@
+import 'package:carah_app/model/bottom_navbar_index.dart';
 import 'package:carah_app/model/searchContent.dart';
 import 'package:carah_app/providers/content_provider.dart';
 import 'package:carah_app/shared/appbar_widget.dart';
@@ -97,12 +98,21 @@ class _Search extends State<Search> {
                 await filterSearchResults(value, contentProvider);
               },
               controller: editingController,
-              decoration: const InputDecoration(
-                  labelText: "Search",
-                  hintText: "Search",
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(25.0)))),
+              decoration: InputDecoration(
+                labelText: "Search",
+                hintText: "Search",
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        shownContents = contentProvider.items;
+                        editingController.clear();
+                      });
+                    },
+                    icon: const Icon(Icons.clear)),
+                border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(25.0))),
+              ),
             ),
           ),
           Expanded(
@@ -131,7 +141,11 @@ class _Search extends State<Search> {
                             if ((shownContents[i] as SearchContent)
                                     .contentType ==
                                 ContentType.article) {
-                              context.push(Uri(path: '/article/${shownContents[i].uuid}', queryParameters: {'catId': shownContents[i].category}).toString());
+                              context.push(Uri(
+                                  path: '/article/${shownContents[i].uuid}',
+                                  queryParameters: {
+                                    'catId': shownContents[i].category
+                                  }).toString());
                             }
                             if ((shownContents[i] as SearchContent)
                                     .contentType ==
@@ -146,7 +160,7 @@ class _Search extends State<Search> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavbar(currIndex: 0),
+      bottomNavigationBar: BottomNavbar(currIndex: BottomNavbarIndex.search.index),
     );
   }
 }
