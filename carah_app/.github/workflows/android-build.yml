@@ -1,8 +1,10 @@
 name: Android Release
 
 on:
-  push
-  workflow_dispatch
+  push:
+    branches:
+      - CAR-CI-pipeline
+  # workflow_dispatch
 jobs:
   build:
     runs-on: ubuntu-latest
