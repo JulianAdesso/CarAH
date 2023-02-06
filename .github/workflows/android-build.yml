@@ -1,10 +1,8 @@
 name: Android Release
 
 on:
-  push:
-    branches:
-      - CAR-CI-pipeline
-  # workflow_dispatch
+  push
+  workflow_dispatch
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -12,7 +10,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-java@v3
         with:
-          distribution: 'AdoptOpenJDK'
+          distribution: 'adopt'
           java-version: "17.x"
           cache: 'gradle'
       - uses: subosito/flutter-action@v2
