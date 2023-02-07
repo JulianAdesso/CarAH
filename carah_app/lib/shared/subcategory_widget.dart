@@ -1,4 +1,5 @@
 import 'package:carah_app/model/bottom_navbar_index.dart';
+import 'package:carah_app/model/lightContent.dart';
 import 'package:carah_app/providers/content_provider.dart';
 import 'package:carah_app/shared/bottom_navbar.dart';
 import 'package:carah_app/shared/loading_spinner_widget.dart';
@@ -29,7 +30,7 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
   TextEditingController editingController = TextEditingController();
 
   bool isLoading = false;
-  List<T> shownItems = [];
+  List<LightContent> shownItems = [];
 
   @override
   void initState() {
@@ -42,17 +43,17 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
       isLoading = true;
     });
     P contentProvider = Provider.of<P>(context, listen: false);
-    await contentProvider.fetchDataByCategory(widget.id);
+    await contentProvider.fetchLightDataByCategory(widget.id);
     setState(() {
       isLoading = false;
     });
   }
 
   void filterSearchResults(String query) {
-    List<T> dummySearchList = <T>[];
+    List<LightContent> dummySearchList = <LightContent>[];
     if (query.isNotEmpty) {
       //Show all titles that contain query
-      List<T> dummyListData = <T>[];
+      List<LightContent> dummyListData = <LightContent>[];
       dummySearchList.forEach((item) {
         if (item.title.contains(query)) {
           dummyListData.add(item);
@@ -67,7 +68,7 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
       //Show all titles
       setState(() {
         shownItems.clear();
-        shownItems.addAll(Provider.of<P>(context).items);
+        shownItems.addAll(Provider.of<P>(context).lightItems);
       });
     }
   }
@@ -75,7 +76,7 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
   @override
   Widget build(BuildContext context) {
     P provider = Provider.of<P>(context);
-    shownItems = provider.items;
+    shownItems = provider.lightItems;
 
     if (isLoading) {
       return const LoadingSpinnerWidget();
