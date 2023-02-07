@@ -4,6 +4,7 @@ import 'package:carah_app/providers/content_provider.dart';
 import 'package:carah_app/providers/settings_provider.dart';
 import 'package:carah_app/shared/constants.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
 
@@ -59,7 +60,18 @@ class ArticlesProvider extends ContentProvider<Article> {
           element.category ==
           "066e4aa01dc14ad6a8951e789c719bf6"); //Remove all image folders
     } else {
-      lightItems = _offlineBox.get("questions").cast<Article>();
+      items = _offlineBox.get("articles_$uuid")?.cast<Article>();
+      lightItems.clear();
+      for(Article tmpItem in items) {
+        LightContent tmpLightContent = LightContent(uuid: tmpItem.uuid, title: tmpItem.title, content: "", category: tmpItem.category);
+        lightItems.add(tmpLightContent);
+      }
+    }
+    _favorites = _offlineBox.get('favorites') ?? _favorites;
+    for (var tmpLightItem in lightItems as List<LightContent>) {
+      if (_favorites.contains(tmpLightItem.uuid)) {
+        tmpLightItem.saved = true;
+      }
     }
     notifyListeners();
   }
@@ -182,8 +194,8 @@ class ArticlesProvider extends ContentProvider<Article> {
 
   @override
   setFavorite(String uuid, bool val) {
-    if (items != null && items.isNotEmpty) {
-      items[items.indexWhere((Article art) => art.uuid == uuid)].saved = val;
+    if (lightItems != null && lightItems.isNotEmpty) {
+      lightItems[lightItems.indexWhere((LightContent art) => art.uuid == uuid)].saved = val;
     }
     if (currentArticle != null && currentArticle!.uuid == uuid) {
       currentArticle!.saved = val;
