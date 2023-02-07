@@ -32,8 +32,8 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
     _lightItems = value;
   }
 
-  fetchDataByCategory(String id) {}
-  fetchLightDataByCategory(String id) {}
+  fetchDataByCategory(String uuid) {}
+  fetchLightDataByCategory(String uuid) {}
   fetchAllContent() async {
     _items = [];
     var connectivityResult = await (Connectivity().checkConnectivity());
@@ -53,7 +53,8 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
           headers: {
             "Content-Type": "application/json",
           },
-          body: '''{"query":"        {\\r\\n          node(uuid: \\"$categoryUuid\\") {\\r\\n              children(filter: {\\r\\n    }\\r\\n            ){\\r\\n                elements {\\r\\n                    displayName\\r\\n                    uuid\\r\\n                    schema {uuid}\\r\\n                }\\r\\n            }\\r\\n          }\\r\\n        }","variables":{}}''',
+          body:
+              '''{"query":"        {\\r\\n          node(uuid: \\"$categoryUuid\\") {\\r\\n              children(filter: {\\r\\n    }\\r\\n            ){\\r\\n                elements {\\r\\n                    displayName\\r\\n                    uuid\\r\\n                    schema {uuid}\\r\\n                }\\r\\n            }\\r\\n          }\\r\\n        }","variables":{}}''',
         );
         var categorySearchArticlesList =
             jsonDecode(utf8.decoder.convert(articlesFromCMS.bodyBytes))['data']
@@ -67,9 +68,8 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
         tmpArticle.contentType = ContentType.article;
       }
       //Remove all image folders
-      tmpArticleList.removeWhere((element) =>
-          element.category ==
-          "066e4aa01dc14ad6a8951e789c719bf6");
+      tmpArticleList.removeWhere(
+          (element) => element.category == "066e4aa01dc14ad6a8951e789c719bf6");
       _items.addAll(tmpArticleList as List<P>);
       List<LightContent> tmpQuestionList = [];
       List<String> questionsUuidList = [];
@@ -84,7 +84,8 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
           headers: {
             "Content-Type": "application/json",
           },
-            body: '''{"query":"        {\\r\\n          node(uuid: \\"$categoryUuid\\") {\\r\\n              children(filter: {\\r\\n    }\\r\\n            ){\\r\\n                elements {\\r\\n                    displayName\\r\\n                    uuid\\r\\n                    schema {uuid}\\r\\n                }\\r\\n            }\\r\\n          }\\r\\n        }","variables":{}}''',
+          body:
+              '''{"query":"        {\\r\\n          node(uuid: \\"$categoryUuid\\") {\\r\\n              children(filter: {\\r\\n    }\\r\\n            ){\\r\\n                elements {\\r\\n                    displayName\\r\\n                    uuid\\r\\n                    schema {uuid}\\r\\n                }\\r\\n            }\\r\\n          }\\r\\n        }","variables":{}}''',
         );
         var categorySearchQuestionList =
             jsonDecode(utf8.decoder.convert(articlesFromCMS.bodyBytes))['data']
@@ -98,20 +99,22 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
         tmpQuestion.contentType = ContentType.question;
       }
       //Remove all image folders
-      tmpQuestionList.removeWhere((element) =>
-      element.category ==
-          "066e4aa01dc14ad6a8951e789c719bf6");
+      tmpQuestionList.removeWhere(
+          (element) => element.category == "066e4aa01dc14ad6a8951e789c719bf6");
       _items.addAll(tmpQuestionList as List<P>);
     } else {
-      await categoryProvider.fetchAllCategories("0a8e66b695f5410cac44b1a9531a7a2b", "articles_category");
+      await categoryProvider.fetchAllCategories(
+          "0a8e66b695f5410cac44b1a9531a7a2b", "articles_category");
       var tmpArticlesList = [];
-      for(var cat in categoryProvider.categories){
+      for (var cat in categoryProvider.categories) {
         String tmpCategoryUuid = cat.uuid;
-        if(_offlineBox.get("articles_$tmpCategoryUuid")?.cast<Content>() != null) {
-          tmpArticlesList += _offlineBox.get("articles_$tmpCategoryUuid")?.cast<Content>();
+        if (_offlineBox.get("articles_$tmpCategoryUuid")?.cast<Content>() !=
+            null) {
+          tmpArticlesList +=
+              _offlineBox.get("articles_$tmpCategoryUuid")?.cast<Content>();
         }
       }
-      if(tmpArticlesList != null) {
+      if (tmpArticlesList != null) {
         for (Content tmpArticle in tmpArticlesList) {
           LightContent tmpSearchContent = LightContent(
               uuid: tmpArticle.uuid,
@@ -123,7 +126,7 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
         }
       }
       var tmpQuestionsList = _offlineBox.get("questions")?.cast<Content>();
-      if(tmpQuestionsList != null) {
+      if (tmpQuestionsList != null) {
         for (Content tmpQuestion in tmpQuestionsList) {
           LightContent tmpSearchContent = LightContent(
               uuid: tmpQuestion.uuid,
@@ -138,5 +141,5 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
     }
   }
 
-  setFavorite(String id, bool val) {}
+  setFavorite(String uuid, bool val) {}
 }
