@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:carah_app/model/lightContent.dart';
 import 'package:carah_app/shared/constants.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:hive/hive.dart';
@@ -15,6 +16,30 @@ class QuestionsProvider extends ContentProvider<Question> {
 
 
   final _offlineBox = Hive.box('myBox');
+
+  @override
+  fetchLightDataByCategory(String uuid) async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile ||
+        connectivityResult == ConnectivityResult.wifi) {
+      var questionsFromCMS = await http.post(
+        Uri.parse('$baseUrl/graphql'),
+        headers: {
+          "Content-Type": "application/json",
+        },
+          body: '''{"query":"        {\\r\\n          node(uuid: \\"$uuid\\") \\r\\n          {\\r\\n              children(filter: {\\r\\n    }   \\r\\n            ){\\r\\n                elements {\\r\\n                    displayName\\r\\n                    uuid\\r\\n                    schema {\\r\\n                        uuid\\r\\n                    }\\r\\n                    \\r\\n                }\\r\\n            }\\r\\n          }\\r\\n        }","variables":{}}''',
+      );
+      lightItems =
+          jsonDecode(utf8.decoder.convert(questionsFromCMS.bodyBytes))['data']['node']['children']['elements']
+              .map<LightContent>((element) {
+            return LightContent.fromJson(element);
+          }).toList();
+      lightItems.removeWhere((element) => element.title == "");//The "Article Images" Folder has been loaded without title
+    } else {
+      lightItems = _offlineBox.get("questions").cast<Question>();
+    }
+    notifyListeners();
+  }
 
   @override
   fetchDataByCategory(String uuid) async {
