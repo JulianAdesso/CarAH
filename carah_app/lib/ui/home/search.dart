@@ -1,5 +1,5 @@
 import 'package:carah_app/model/bottom_navbar_index.dart';
-import 'package:carah_app/model/searchContent.dart';
+import 'package:carah_app/model/lightContent.dart';
 import 'package:carah_app/providers/content_provider.dart';
 import 'package:carah_app/shared/appbar_widget.dart';
 import 'package:carah_app/shared/bottom_navbar.dart';
@@ -46,7 +46,7 @@ class _Search extends State<Search> {
     });
   }
 
-  IconData getIcon(SearchContent tmpSearchIcon) {
+  IconData getIcon(LightContent tmpSearchIcon) {
     if (tmpSearchIcon.contentType == ContentType.article) {
       return homeItemsList[0].icon;
     } else if (tmpSearchIcon.contentType == ContentType.question) {
@@ -133,12 +133,12 @@ class _Search extends State<Search> {
                         ),
                         child: ListTile(
                           leading:
-                              Icon(getIcon(shownContents[i] as SearchContent)),
+                              Icon(getIcon(shownContents[i] as LightContent)),
                           title: Text(
                             shownContents[i].title.toString(),
                           ),
                           onTap: () {
-                            if ((shownContents[i] as SearchContent)
+                            if ((shownContents[i] as LightContent)
                                     .contentType ==
                                 ContentType.article) {
                               context.push(Uri(
@@ -147,7 +147,7 @@ class _Search extends State<Search> {
                                     'catId': shownContents[i].category
                                   }).toString());
                             }
-                            if ((shownContents[i] as SearchContent)
+                            if ((shownContents[i] as LightContent)
                                     .contentType ==
                                 ContentType.question) {
                               context.push('/faq/${shownContents[i].uuid}');
