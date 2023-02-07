@@ -1,4 +1,4 @@
-name: Android Release
+name: Android and Web Build
 
 on:
   - push
@@ -21,7 +21,7 @@ jobs:
           flutter-version: "3.7.0"
           channel: 'stable'
           cache: true
-      # next steps build the App for Android and Web. For further fluuter build configurations, check https://github.com/marketplace/actions/flutter-action
+      # next steps build the App for Android and Web. For further flutter build configurations, check https://github.com/marketplace/actions/flutter-action
       - name: Get dependencies
         run: flutter pub get
       - name: Run tests
