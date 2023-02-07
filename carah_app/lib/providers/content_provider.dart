@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:carah_app/model/category.dart';
-import 'package:carah_app/model/searchContent.dart';
+import 'package:carah_app/model/lightContent.dart';
 import 'package:carah_app/providers/category_provider.dart';
 import 'package:carah_app/shared/constants.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -15,18 +15,25 @@ import '../model/content.dart';
 
 class ContentProvider<P extends Content> extends ChangeNotifier {
   List<P> _items = [];
+  List<LightContent> _lightItems = [];
 
   CategoryProvider categoryProvider = CategoryProvider();
 
   final _offlineBox = Hive.box('myBox');
 
   get items => _items;
+  get lightItems => _lightItems;
 
   set items(value) {
     _items = value;
   }
 
+  set lightItems(value) {
+    _lightItems = value;
+  }
+
   fetchDataByCategory(String id) {}
+  fetchLightDataByCategory(String id) {}
   fetchAllContent() async {
     _items = [];
     var connectivityResult = await (Connectivity().checkConnectivity());
@@ -39,7 +46,7 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
         articlesUuidList.add(singleCategory.uuid);
       }
       http.Response articlesFromCMS;
-      List<SearchContent> tmpArticleList = [];
+      List<LightContent> tmpArticleList = [];
       for (String categoryUuid in articlesUuidList) {
         articlesFromCMS = await http.post(
           Uri.parse('$baseUrl/graphql'),
@@ -51,12 +58,12 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
         var categorySearchArticlesList =
             jsonDecode(utf8.decoder.convert(articlesFromCMS.bodyBytes))['data']
                     ['node']['children']['elements']
-                .map<SearchContent>((element) {
-          return SearchContent.fromJson(element);
+                .map<LightContent>((element) {
+          return LightContent.fromJson(element);
         }).toList();
         tmpArticleList += categorySearchArticlesList;
       }
-      for (SearchContent tmpArticle in tmpArticleList) {
+      for (LightContent tmpArticle in tmpArticleList) {
         tmpArticle.contentType = ContentType.article;
       }
       //Remove all image folders
@@ -64,7 +71,7 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
           element.category ==
           "066e4aa01dc14ad6a8951e789c719bf6");
       _items.addAll(tmpArticleList as List<P>);
-      List<SearchContent> tmpQuestionList = [];
+      List<LightContent> tmpQuestionList = [];
       List<String> questionsUuidList = [];
       await categoryProvider.fetchAllCategories(
           "b46628c6bc284debbd2ab8c76888a850", "faq_category");
@@ -82,12 +89,12 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
         var categorySearchQuestionList =
             jsonDecode(utf8.decoder.convert(articlesFromCMS.bodyBytes))['data']
                     ['node']['children']['elements']
-                .map<SearchContent>((element) {
-          return SearchContent.fromJson(element);
+                .map<LightContent>((element) {
+          return LightContent.fromJson(element);
         }).toList();
         tmpQuestionList += categorySearchQuestionList;
       }
-      for (SearchContent tmpQuestion in tmpQuestionList) {
+      for (LightContent tmpQuestion in tmpQuestionList) {
         tmpQuestion.contentType = ContentType.question;
       }
       //Remove all image folders
@@ -106,7 +113,7 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
       }
       if(tmpArticlesList != null) {
         for (Content tmpArticle in tmpArticlesList) {
-          SearchContent tmpSearchContent = SearchContent(
+          LightContent tmpSearchContent = LightContent(
               uuid: tmpArticle.uuid,
               title: tmpArticle.title,
               content: "",
@@ -118,7 +125,7 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
       var tmpQuestionsList = _offlineBox.get("questions")?.cast<Content>();
       if(tmpQuestionsList != null) {
         for (Content tmpQuestion in tmpQuestionsList) {
-          SearchContent tmpSearchContent = SearchContent(
+          LightContent tmpSearchContent = LightContent(
               uuid: tmpQuestion.uuid,
               title: tmpQuestion.title,
               content: "",
