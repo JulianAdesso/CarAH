@@ -24,8 +24,8 @@ jobs:
       # next steps build the App for Android and Web. For further fluuter build configurations, check https://github.com/marketplace/actions/flutter-action
       - name: Get dependencies
         run: flutter pub get
-      # - name: Run tests
-      #   run: flutter test
+      - name: Run tests
+        run: flutter test
       - name: Build Android APK
         run: flutter build apk
       - name: Build Android appbundle
