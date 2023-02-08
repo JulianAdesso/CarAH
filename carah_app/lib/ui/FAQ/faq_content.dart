@@ -60,15 +60,18 @@ class _FAQContent extends State<FAQContent> {
                   ),
                   borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
-                child: SizedBox(
-                  height: 100,
-                  child: Center(
-                    child: Text(
-                      provider.currentQuestion != null
-                          ? provider.currentQuestion!.title
-                          : '',
-                      style: Theme.of(context).textTheme.subtitle1,
-                      textAlign: TextAlign.center,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: SizedBox(
+                    height: 100,
+                    child: Center(
+                      child: Text(
+                        provider.currentQuestion != null
+                            ? provider.currentQuestion!.title
+                            : '',
+                        style: Theme.of(context).textTheme.subtitle1,
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
                 ),
