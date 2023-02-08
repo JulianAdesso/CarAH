@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:carah_app/model/bottom_navbar_index.dart';
 import 'package:carah_app/shared/appbar_widget.dart';
+import 'package:carah_app/shared/constants.dart';
 import 'package:carah_app/shared/navigation_items.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
@@ -58,7 +59,7 @@ class _HomePageState extends State<HomePage> {
           actions: kIsWeb ? [IconButton(onPressed: () {
             context.push('/settings/imprint');
           }, icon: const Icon(Icons.info_outline))] : null,
-          title: 'Tokoloho Health Outreach',
+          title: homeScreenTitle,
         ),
         body: ListView(
           padding: const EdgeInsets.all(15),

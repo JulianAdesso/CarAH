@@ -18,8 +18,9 @@ class AppbarWidget extends StatelessWidget with PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      // Only display Backbutton, when there is still a page on the stack
-      leading: context.canPop()
+      // Only display BackButton, when there is still a page on the stack and not on home screen
+      automaticallyImplyLeading: false,
+      leading: shouldShowBackButton(context)
           ? BackButton(
               //When on favorites page, always go back to home screen
               onPressed: () => title == favoritesTitle
@@ -34,5 +35,9 @@ class AppbarWidget extends StatelessWidget with PreferredSizeWidget {
       title: Text(title),
       actions: actions,
     );
+  }
+
+  bool shouldShowBackButton(BuildContext context) {
+    return context.canPop() && title != homeScreenTitle;
   }
 }
