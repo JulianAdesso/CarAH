@@ -25,8 +25,10 @@ class _Search extends State<Search> {
   TextEditingController editingController = TextEditingController();
   bool showSearchWidget = false;
   List<Content> shownContents = [];
+
   @override
   void initState() {
+    query = "";
     ContentProvider contentProvider =
         Provider.of<ContentProvider>(context, listen: false);
     super.initState();
