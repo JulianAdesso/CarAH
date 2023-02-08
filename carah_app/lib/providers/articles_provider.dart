@@ -63,7 +63,7 @@ class ArticlesProvider extends ContentProvider<Article> {
       items = _offlineBox.get("articles_$uuid")?.cast<Article>();
       lightItems.clear();
       for(Article tmpItem in items) {
-        LightContent tmpLightContent = LightContent(uuid: tmpItem.uuid, title: tmpItem.title, content: "", category: tmpItem.category);
+        LightContent tmpLightContent = LightContent(uuid: tmpItem.uuid, title: tmpItem.title, category: tmpItem.category);
         lightItems.add(tmpLightContent);
       }
     }
