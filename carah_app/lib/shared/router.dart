@@ -7,6 +7,7 @@ import 'package:carah_app/shared/subcategory_widget.dart';
 import 'package:carah_app/ui/Articles/articles_content.dart';
 import 'package:carah_app/ui/Articles/articles_gallery.dart';
 import 'package:carah_app/ui/Favorites/favorites_view.dart';
+import 'package:carah_app/ui/guidelines/guidelines_category_widget.dart';
 import 'package:carah_app/ui/home/home_page.dart';
 import 'package:carah_app/ui/settings/imprint.dart';
 import 'package:carah_app/ui/settings/settings_widget.dart';
@@ -40,6 +41,8 @@ final router = GoRouter(
         builder: (context, state) => const FavoritesView()),
     GoRoute(path: '/guides_categories',
       builder: (context, state) => const CategoryWidget(path: 'guidelines', type: 'guides_category', title: 'Tokoloho Guides', categoryUUID: '032d1768c07b455c8ea700b5bf68e0ec')),
+    GoRoute(path: '/guidelines/:id',
+        builder: (context, state) => GuidelinesCategoryWidget(id: state.params['id']!)),
     GoRoute(path: '/settings',
     builder: (context, state) => const SettingsWidget()),
     GoRoute(path: '/settings/imprint',
