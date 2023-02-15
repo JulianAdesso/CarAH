@@ -1,5 +1,6 @@
 import 'package:carah_app/model/guideline.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 class GuidelineSubPage extends StatelessWidget {
   const GuidelineSubPage({
@@ -23,9 +24,8 @@ class GuidelineSubPage extends StatelessWidget {
         ),
         Expanded(
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              alignment: Alignment.center,
-              child: Text(guideline.content),
+              padding: const EdgeInsets.all(16.0),
+              child: Html(data: guideline.content),
             ))
       ],
     );

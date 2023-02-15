@@ -53,8 +53,14 @@ class _GuidelinesContent extends State<GuidelinesCategoryWidget> {
       return const LoadingSpinnerWidget();
     }
     return Consumer<GuidelinesProvider>(builder: (context, provider, child) {
+      final List<Widget> pages = [
+        GuidelineSubPage(guideline: showGuidelinePages[0]),
+        GuidelineSubPage(guideline: showGuidelinePages[1]),
+        GuidelineSubPage(guideline: showGuidelinePages[2]),
+        GuidelineSubPage(guideline: showGuidelinePages[3]),
+      ];
       return Scaffold(
-        appBar: AppbarWidget(title: provider.guidelines.first.category),
+        appBar: AppbarWidget(title: showGuidelinePages.first.category),
         body: Column(children: <Widget>[
           PageViewIndicator(
               itemCount: showGuidelinePages.length,
@@ -70,7 +76,7 @@ class _GuidelinesContent extends State<GuidelinesCategoryWidget> {
               },
               itemCount: showGuidelinePages.length,
               itemBuilder: (BuildContext context, int index) {
-                return GuidelineSubPage(guideline: showGuidelinePages[index]);
+                return pages[index];
               },
             ),
           ),
