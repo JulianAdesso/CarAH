@@ -20,15 +20,15 @@ class CategoryProvider extends ChangeNotifier {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi) {
+      var queryType = type == 'guides_category'? 'Guideline' : ' Category';
       var categoriesFromCMS = await http.post(
         Uri.parse('$baseUrl/graphql'),
         headers: {
           "Content-Type": "application/json",
         },
         body:
-            '''{"query":"        {\\r\\n          node(uuid: \\"$categoryUUID\\") \\r\\n          {\\r\\n              children(filter: {\\r\\n    }   \\r\\n            ){\\r\\n                elements {\\r\\n                    uuid\\r\\n                    ... on Category {\\r\\n                         fields {\\r\\n                             Name\\r\\n                             Description}\\r\\n                    }\\r\\n                }\\r\\n            }\\r\\n          }\\r\\n        }","variables":{}}''',
+            '''{"query":"        {\\r\\n          node(uuid: \\"$categoryUUID\\") \\r\\n          {\\r\\n              children(filter: {\\r\\n    }   \\r\\n            ){\\r\\n                elements {\\r\\n                    uuid\\r\\n                    ... on $queryType {\\r\\n                         fields {\\r\\n                             Name\\r\\n                             Description}\\r\\n                    }\\r\\n                }\\r\\n            }\\r\\n          }\\r\\n        }","variables":{}}''',
       );
-
       _categories =
           jsonDecode(utf8.decoder.convert(categoriesFromCMS.bodyBytes))['data']
                   ['node']['children']['elements']

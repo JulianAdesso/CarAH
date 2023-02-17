@@ -33,9 +33,9 @@ final List<ListItem> homeItemsList = [
       availableInOfflineMode: false),
   ListItem(
       title: 'Tokoloho Guides',
-      description: 'Coming soon!',
+      description: '',
       icon: Icons.directions_outlined,
-      routerLink: null,
+      routerLink: '/guides_categories',
       availableInOfflineMode: false),
   ListItem(
       title: 'Events',
