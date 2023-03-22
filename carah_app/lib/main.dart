@@ -39,7 +39,9 @@ void main() async {
       ),
       ChangeNotifierProvider(create: (context) => QuestionsProvider()),
       ChangeNotifierProvider(create: (context) => ContentProvider()),
-      ChangeNotifierProvider(create: (context) => GuidelinesProvider())
+      ChangeNotifierProxyProvider<SettingsProvider, GuidelinesProvider>(
+          create: (context) => GuidelinesProvider(settingsProvider: Provider.of<SettingsProvider>(context, listen: false)),
+      update: (_, settingsProvider, guidelineProvider) => guidelineProvider!.update(settingsProvider))
     ],
     child: const MyApp(),
   ));
