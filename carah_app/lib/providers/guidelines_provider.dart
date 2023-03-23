@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:developer';
+import 'dart:typed_data';
 import 'package:carah_app/model/guideline.dart';
 import 'package:carah_app/model/lightContent.dart';
 import 'package:carah_app/providers/content_provider.dart';
@@ -43,7 +43,6 @@ class GuidelinesProvider extends ContentProvider<Guideline> {
         },
         body:
         '''{"query":"{\\r\\n          node(uuid: \\"$uuid\\", version: ${dotenv.get('CMS_DATA_VERSION')}) {\\r\\n          uuid\\r\\n          parent {\\r\\n              displayName\\r\\n          }\\r\\n          ... on Slide {\\r\\n            fields {\\r\\n                title\\r\\n                text\\r\\n                position_in_guideline\\r\\n                images {\\r\\n                    uuid\\r\\n                    displayName\\r\\n                }\\r\\n            }\\r\\n          }\\r\\n        }\\r\\n}","variables":{}}''');
-      log(jsonDecode(utf8.decoder.convert(guidelineFromCMS.bodyBytes)).toString());
       Guideline guideline = Guideline.fromJson(
           jsonDecode(utf8.decoder.convert(guidelineFromCMS.bodyBytes))['data']
               ['node']);
@@ -51,6 +50,7 @@ class GuidelinesProvider extends ContentProvider<Guideline> {
         for(var img in guideline.images!) {
           await getImagesByUUID(img);
         }
+       replaceContentPlaceholdersWithImages(guideline);
       }
       guidelines.add(guideline);
 
@@ -98,9 +98,29 @@ class GuidelinesProvider extends ContentProvider<Guideline> {
               .get(Uri.parse('$baseUrl/nodes/${image.uuid}/binary/image'), headers: {
             "Content-Type": "application/json",
           });
-          image.image = Image.memory(message.bodyBytes);
+          image.image = message.bodyBytes;
         }
     }
     notifyListeners();
+  }
+
+  void replaceContentPlaceholdersWithImages(Guideline guideline) {
+    final imgIdentifier = RegExp('{[.\\S][^<,>]*}');
+    guideline.content = guideline.content.replaceAllMapped(imgIdentifier, (match) {
+      String imgTag = '';
+      //remove the brackets to extract the image name
+      String? imgName = match.group(0)?.substring(1, match.group(0)!.length - 1);
+      if(guideline.images != null && imgName != null) {
+        //find the image to the name
+        Iterable<ContentImage> allFittingImages = guideline.images!.where((element) => element.displayName == imgName);
+        Uint8List? imgData = allFittingImages.isNotEmpty ? allFittingImages.first.image : null;
+        //encode image to base64 to show it in a html img tag
+        String? imgEncoded = imgData != null
+            ? base64.encode(imgData)
+            : null;
+        imgTag = imgEncoded != null ? '<img src="data:image/png;base64, $imgEncoded" alt="$imgName" />' : '';
+      }
+      return imgTag;
+    });
   }
 }

@@ -1,14 +1,11 @@
 import 'dart:typed_data';
 
-import 'package:flutter/widgets.dart';
-
 class ContentImage{
   String uuid;
   String displayName;
-  Image? image;
+  Uint8List? image;
 
-  ContentImage({required this.uuid, required this.displayName, required Uint8List imageBytes}):
-   image = Image.memory(imageBytes);
+  ContentImage({required this.uuid, required this.displayName, required this.image});
 
   ContentImage.fromJson(Map<String, dynamic> json):
   uuid = json['uuid'],
