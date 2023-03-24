@@ -6,6 +6,8 @@ import 'package:carah_app/shared/constants.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+// import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive/hive.dart';
 
 import 'package:http/http.dart' as http;
@@ -48,7 +50,7 @@ class ArticlesProvider extends ContentProvider<Article> {
           "Content-Type": "application/json",
         },
         body:
-            '''{"query":"        {\\r\\n          node(uuid: \\"$uuid\\") \\r\\n          {\\r\\n              children(filter: {\\r\\n    }   \\r\\n            ){\\r\\n                elements {\\r\\n                    displayName\\r\\n                    uuid\\r\\n                    schema {\\r\\n                        uuid\\r\\n                    }\\r\\n                    \\r\\n                }\\r\\n            }\\r\\n          }\\r\\n        }","variables":{}}''',
+            '''{"query":"        {\\r\\n          node(uuid: \\"$uuid\\", version: ${dotenv.get('CMS_DATA_VERSION')}) \\r\\n          {\\r\\n              children(filter: {\\r\\n    }   \\r\\n            ){\\r\\n                elements {\\r\\n                    displayName\\r\\n                    uuid\\r\\n                    schema {\\r\\n                        uuid\\r\\n                    }\\r\\n                    \\r\\n                }\\r\\n            }\\r\\n          }\\r\\n        }","variables":{}}''',
       );
       lightItems =
           jsonDecode(utf8.decoder.convert(questionsFromCMS.bodyBytes))['data']

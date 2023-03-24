@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../model/category.dart';
@@ -27,7 +28,7 @@ class CategoryProvider extends ChangeNotifier {
           "Content-Type": "application/json",
         },
         body:
-            '''{"query":"        {\\r\\n          node(uuid: \\"$categoryUUID\\") \\r\\n          {\\r\\n              children(filter: {\\r\\n    }   \\r\\n            ){\\r\\n                elements {\\r\\n                    uuid\\r\\n                    ... on $queryType {\\r\\n                         fields {\\r\\n                             Name\\r\\n                             Description}\\r\\n                    }\\r\\n                }\\r\\n            }\\r\\n          }\\r\\n        }","variables":{}}''',
+            '''{"query":"        {\\r\\n          node(uuid: \\"$categoryUUID\\", version: ${dotenv.get('CMS_DATA_VERSION')}) \\r\\n          {\\r\\n              children(filter: {\\r\\n    }   \\r\\n            ){\\r\\n                elements {\\r\\n                    uuid\\r\\n                    ... on $queryType {\\r\\n                         fields {\\r\\n                             Name\\r\\n                             Description}\\r\\n                    }\\r\\n                }\\r\\n            }\\r\\n          }\\r\\n        }","variables":{}}''',
       );
       _categories =
           jsonDecode(utf8.decoder.convert(categoriesFromCMS.bodyBytes))['data']
