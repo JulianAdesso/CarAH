@@ -7,7 +7,6 @@ import 'package:carah_app/providers/settings_provider.dart';
 import 'package:carah_app/shared/constants.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter/widgets.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -42,7 +41,7 @@ class GuidelinesProvider extends ContentProvider<Guideline> {
           "Content-Type": "application/json",
         },
         body:
-        '''{"query":"{\\r\\n          node(uuid: \\"$uuid\\", version: ${dotenv.get('CMS_DATA_VERSION')}) {\\r\\n          uuid\\r\\n          parent {\\r\\n              displayName\\r\\n          }\\r\\n          ... on Slide {\\r\\n            fields {\\r\\n                title\\r\\n                text\\r\\n                position_in_guideline\\r\\n                images {\\r\\n                    uuid\\r\\n                    displayName\\r\\n                }\\r\\n            }\\r\\n          }\\r\\n        }\\r\\n}","variables":{}}''');
+        '''{"query":"{\\r\\n          node(uuid: \\"$uuid\\") {\\r\\n              uuid\\r\\n              parent{\\r\\n                  displayName\\r\\n              }\\r\\n              ...on Slide{\\r\\n                  fields {                    \\r\\n                      title\\r\\n                      text\\r\\n                      position_in_guideline\\r\\n                      images{\\r\\n                          uuid\\r\\n                          displayName\\r\\n                      }\\r\\n                    }\\r\\n                  }\\r\\n              }\\r\\n}","variables":{}}''');
       Guideline guideline = Guideline.fromJson(
           jsonDecode(utf8.decoder.convert(guidelineFromCMS.bodyBytes))['data']
               ['node']);
@@ -71,8 +70,7 @@ class GuidelinesProvider extends ContentProvider<Guideline> {
           "Content-Type": "application/json",
         },
         body:
-            '''{"query":" {\\r\\n node(uuid: \\"$uuid\\") \\r\\n {\\r\\n children(filter: {\\r\\n} \\r\\n ){\\r\\n elements {\\r\\n displayName\\r\\n uuid\\r\\n schema {\\r\\n uuid\\r\\n }\\r\\n \\r\\n }\\r\\n }\\r\\n }\\r\\n }","variables":{}}''',
-      );
+        '''{"query":"{\\r\\n          node(uuid: \\"$uuid\\", version: ${dotenv.get("CMS_DATA_VERSION")}) {\\r\\n              children(filter: {\\r\\n                  schema: {\\r\\n                      is: Slide\\r\\n                  }\\r\\n              }) {\\r\\n                  elements {\\r\\n                      uuid\\r\\n                      displayName\\r\\n                    schema{\\r\\n                        uuid\\r\\n                    }\\r\\n                  }\\r\\n              }\\r\\n          }\\r\\n}","variables":{}}''');
 
       lightItems =
           jsonDecode(utf8.decoder.convert(guidelineCategoryFromCMS.bodyBytes))[

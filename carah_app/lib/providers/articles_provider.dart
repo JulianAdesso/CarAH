@@ -50,7 +50,7 @@ class ArticlesProvider extends ContentProvider<Article> {
           "Content-Type": "application/json",
         },
         body:
-            '''{"query":"        {\\r\\n          node(uuid: \\"$uuid\\", version: ${dotenv.get('CMS_DATA_VERSION')}) \\r\\n          {\\r\\n              children(filter: {\\r\\n    }   \\r\\n            ){\\r\\n                elements {\\r\\n                    displayName\\r\\n                    uuid\\r\\n                    schema {\\r\\n                        uuid\\r\\n                    }\\r\\n                    \\r\\n                }\\r\\n            }\\r\\n          }\\r\\n        }","variables":{}}''',
+        '''{"query":"{\\r\\n          node(uuid: \\"$uuid\\", version: ${dotenv.get("CMS_DATA_VERSION")}) {\\r\\n              children(filter: {\\r\\n                  schema: {\\r\\n                      is: Article\\r\\n                  }\\r\\n              }) {\\r\\n                  elements {\\r\\n                      uuid\\r\\n                      displayName\\r\\n                    schema{\\r\\n                        uuid\\r\\n                    }\\r\\n                  }\\r\\n              }\\r\\n          }\\r\\n}","variables":{}}'''
       );
       lightItems =
           jsonDecode(utf8.decoder.convert(questionsFromCMS.bodyBytes))['data']
