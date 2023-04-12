@@ -4,6 +4,7 @@ import 'package:carah_app/model/lightContent.dart';
 import 'package:carah_app/providers/content_provider.dart';
 import 'package:carah_app/shared/constants.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -23,7 +24,7 @@ class GuidelinesProvider extends ContentProvider<Guideline> {
           "Content-Type": "application/json",
         },
         body:
-            '''{"query":" {\\r\\n node(uuid: \\"$uuid\\") {\\r\\n uuid ... on Slide {\\r\\n fields {\\r\\n text\\r\\n title\\r\\n position_in_guideline\\r\\n }\\r\\n parent {\\r\\n displayName\\r\\n }\\r\\n }\\r\\n }\\r\\n }","variables":{}}''',
+            '''{"query":" {\\r\\n node(uuid: \\"$uuid\\", version: ${dotenv.get('CMS_DATA_VERSION')}) {\\r\\n uuid ... on Slide {\\r\\n fields {\\r\\n text\\r\\n title\\r\\n position_in_guideline\\r\\n }\\r\\n parent {\\r\\n displayName\\r\\n }\\r\\n }\\r\\n }\\r\\n }","variables":{}}''',
       );
 
       Guideline guideline = Guideline.fromJson(

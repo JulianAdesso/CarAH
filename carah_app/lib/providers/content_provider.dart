@@ -7,6 +7,7 @@ import 'package:carah_app/shared/constants.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive/hive.dart';
 
 import 'package:http/http.dart' as http;
@@ -54,7 +55,7 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
             "Content-Type": "application/json",
           },
           body:
-              '''{"query":"        {\\r\\n          node(uuid: \\"$categoryUuid\\") {\\r\\n              children(filter: {\\r\\n    }\\r\\n            ){\\r\\n                elements {\\r\\n                    displayName\\r\\n                    uuid\\r\\n                    schema {uuid}\\r\\n                }\\r\\n            }\\r\\n          }\\r\\n        }","variables":{}}''',
+              '''{"query":"        {\\r\\n          node(uuid: \\"$categoryUuid\\", version: ${dotenv.get('CMS_DATA_VERSION')}) {\\r\\n              children(filter: {\\r\\n    }\\r\\n            ){\\r\\n                elements {\\r\\n                    displayName\\r\\n                    uuid\\r\\n                    schema {uuid}\\r\\n                }\\r\\n            }\\r\\n          }\\r\\n        }","variables":{}}''',
         );
         var categorySearchArticlesList =
             jsonDecode(utf8.decoder.convert(articlesFromCMS.bodyBytes))['data']
@@ -85,7 +86,7 @@ class ContentProvider<P extends Content> extends ChangeNotifier {
             "Content-Type": "application/json",
           },
           body:
-              '''{"query":"        {\\r\\n          node(uuid: \\"$categoryUuid\\") {\\r\\n              children(filter: {\\r\\n    }\\r\\n            ){\\r\\n                elements {\\r\\n                    displayName\\r\\n                    uuid\\r\\n                    schema {uuid}\\r\\n                }\\r\\n            }\\r\\n          }\\r\\n        }","variables":{}}''',
+              '''{"query":"        {\\r\\n          node(uuid: \\"$categoryUuid\\", version: ${dotenv.get('CMS_DATA_VERSION')}) {\\r\\n              children(filter: {\\r\\n    }\\r\\n            ){\\r\\n                elements {\\r\\n                    displayName\\r\\n                    uuid\\r\\n                    schema {uuid}\\r\\n                }\\r\\n            }\\r\\n          }\\r\\n        }","variables":{}}''',
         );
         var categorySearchQuestionList =
             jsonDecode(utf8.decoder.convert(articlesFromCMS.bodyBytes))['data']
