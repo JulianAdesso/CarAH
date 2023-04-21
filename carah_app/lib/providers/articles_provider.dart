@@ -1,11 +1,10 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:carah_app/model/content_image.dart';
 import 'package:carah_app/providers/content_provider.dart';
 import 'package:carah_app/providers/settings_provider.dart';
 import 'package:carah_app/shared/constants.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive/hive.dart';
 
@@ -22,7 +21,6 @@ class ArticlesProvider extends ContentProvider<Article> {
 
   Map<String, Uint8List> images = {};
   List<String> _favorites = [];
-  List<Image> showingImages = [];
 
   final _offlineBox = Hive.box('myBox');
 
@@ -125,11 +123,10 @@ class ArticlesProvider extends ContentProvider<Article> {
             .cast<Article>()
             .firstWhere((element) => element.uuid == uuid);
       }
-      if (currentArticle!.imageId != null) {
-        await getImagesByUUID(currentArticle!.imageId!);
+      if (currentArticle!.images != null) {
+        await getImagesByUUID(currentArticle!.images!);
       } else {
         images = {};
-        showingImages = [];
       }
       _favorites = _offlineBox.get('favorites') ?? _favorites;
       if (currentArticle != null && _favorites.contains(currentArticle!.uuid)) {
@@ -142,6 +139,7 @@ class ArticlesProvider extends ContentProvider<Article> {
           .any((element) => element.uuid == currentArticle!.uuid)) {
         currentArticle!.downloaded = true;
       }
+      replaceContentPlaceholdersWithImages(currentArticle!);
       notifyListeners();
     }
   }
@@ -161,34 +159,36 @@ class ArticlesProvider extends ContentProvider<Article> {
     } else {
       currentArticle = _offlineBox.get("imprint").cast<Article>();
     }
-    if (currentArticle!.imageId != null) {
-      await getImagesByUUID(currentArticle!.imageId!);
+    if (currentArticle!.images != null) {
+      await getImagesByUUID(currentArticle!.images!);
     } else {
       images = {};
     }
     notifyListeners();
   }
 
-  getImagesByUUID(List<String> uuids) async {
-    images = {};
-    showingImages = [];
+  getImagesByUUID(List<ContentImage> images) async {
+    images = [];
     if (!settingsProvider.userSettings!.dataSaveMode) {
       var connectivityResult = await (Connectivity().checkConnectivity());
-      for (var uuid in uuids) {
-        uuid = uuid.replaceAll('{uuid: ', '');
-        uuid = uuid.replaceAll('}', '');
+      for (var image in images) {
+        image.uuid = image.uuid.replaceAll('{uuid: ', '');
+        image.uuid = image.uuid.replaceAll('}', '');
         if ((connectivityResult == ConnectivityResult.mobile ||
                 connectivityResult == ConnectivityResult.wifi) &&
-            !_offlineBox.containsKey(uuid)) {
+            !_offlineBox.containsKey(image.uuid)) {
           var message = await http
-              .get(Uri.parse('$baseUrl/nodes/$uuid/binary/image'), headers: {
+              .get(Uri.parse('$baseUrl/nodes/${image.uuid}/binary/image'), headers: {
             "Content-Type": "application/json",
           });
-          images.putIfAbsent(uuid, () => message.bodyBytes);
-          showingImages.add(Image.memory(message.bodyBytes));
+          if(!images.any((img) => img.uuid == image.uuid)) {
+            image.image = message.bodyBytes;
+            images.add(image);
+          }
         } else {
-          images.putIfAbsent(uuid, () => _offlineBox.get(uuid));
-          showingImages.add(Image.memory(_offlineBox.get(uuid)));
+          if(!images.any((img) => img.uuid == image.uuid)) {
+            images.add(_offlineBox.get(image));
+          }
         }
       }
     }
@@ -263,5 +263,29 @@ class ArticlesProvider extends ContentProvider<Article> {
       }
     }
     return favoriteArticles;
+  }
+
+  void replaceContentPlaceholdersWithImages(Article article) {
+    final imgIdentifier = RegExp('{[.\\S][^<,>]*}');
+    article.content =
+        article.content.replaceAllMapped(imgIdentifier, (match) {
+          String imgTag = '';
+          //remove the brackets to extract the image name
+          String? imgName =
+          match.group(0)?.substring(1, match.group(0)!.length - 1);
+          if (article.images != null && imgName != null) {
+            //find the image to the name
+            Iterable<ContentImage> allFittingImages = article.images!
+                .where((element) => element.displayName == imgName);
+            Uint8List? imgData =
+            allFittingImages.isNotEmpty ? allFittingImages.first.image : null;
+            //encode image to base64 to show it in a html img tag
+            String? imgEncoded = imgData != null ? base64.encode(imgData) : null;
+            imgTag = imgEncoded != null
+                ? '<img src="data:image/png;base64, $imgEncoded" alt="$imgName" />'
+                : '';
+          }
+          return imgTag;
+        });
   }
 }

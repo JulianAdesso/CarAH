@@ -5,7 +5,6 @@ import 'package:carah_app/providers/articles_provider.dart';
 import 'package:carah_app/shared/categories_widget.dart';
 import 'package:carah_app/shared/subcategory_widget.dart';
 import 'package:carah_app/ui/Articles/articles_content.dart';
-import 'package:carah_app/ui/Articles/articles_gallery.dart';
 import 'package:carah_app/ui/Favorites/favorites_view.dart';
 import 'package:carah_app/ui/guidelines/guidelines_category_widget.dart';
 import 'package:carah_app/ui/home/home_page.dart';
@@ -27,8 +26,8 @@ final router = GoRouter(
         builder: (context, state) => const CategoryWidget(path: 'articles', type: 'articles_category',title: 'Article Categories', categoryUUID: '0a8e66b695f5410cac44b1a9531a7a2b')),
     GoRoute(path: '/articles/:id',
     builder: (context, state) => SubcategoryWidget<Article, ArticlesProvider>(id: state.params['id']!, path: 'article', title: 'Articles',)),
-    GoRoute(path: '/article/:id/gallery',
-        builder: (context, state) => ArticlesGallery(id: state.params['id']!, categoryId: state.queryParams['catId']!)),
+    // GoRoute(path: '/article/:id/gallery',
+    //     builder: (context, state) => ArticlesGallery(id: state.params['id']!, categoryId: state.queryParams['catId']!)),
     GoRoute(path: '/article/:id',
     builder: (context, state) => ArticlesContent(id: state.params['id']!, categoryId: state.queryParams['catId']!)),
     GoRoute(path: '/faq_categories',

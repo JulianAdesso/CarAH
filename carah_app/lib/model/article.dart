@@ -1,3 +1,4 @@
+import 'package:carah_app/model/content_image.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'content.dart';
@@ -9,13 +10,16 @@ part 'article.g.dart';
 class Article extends Content{
 
   @HiveField(6)
-  List<String> ?imageId;
+  List<ContentImage> ?images;
 
   Article({required String uuid, required String title, required String content, required String category}) : super(uuid: uuid, title: title, content: content, category: category);
 
   Article.fromJson(Map<String, dynamic> json)
-      : imageId = (json['fields']['images'] as List?)?.map((item) => item.toString()).toList(), super(uuid : json['uuid'] ?? "",
-        title : json['fields']['Display_Name'] ?? "",
-        content : json['fields']['Html_Text'] ?? "",
-        category : json['parentNode']['uuid'] ?? "");
+      : images = (json['fields']['images'] as List?) ?.map((item) => ContentImage.fromJson(item)).toList(),
+        super(
+        uuid: json['uuid'] ?? "",
+        title: json['fields']['title'] ?? "",
+        content: json['fields']['text'] ?? "",
+        category: json['parent']['displayName'] ?? "",
+      );
 }
