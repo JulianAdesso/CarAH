@@ -7,7 +7,6 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-// import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive/hive.dart';
 
 import 'package:http/http.dart' as http;
@@ -44,14 +43,12 @@ class ArticlesProvider extends ContentProvider<Article> {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi) {
-      var questionsFromCMS = await http.post(
-        Uri.parse('$baseUrl/graphql'),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body:
-        '''{"query":"{\\r\\n          node(uuid: \\"$uuid\\", version: ${dotenv.get("CMS_DATA_VERSION")}) {\\r\\n              children(filter: {\\r\\n                  schema: {\\r\\n                      is: Article\\r\\n                  }\\r\\n              }) {\\r\\n                  elements {\\r\\n                      uuid\\r\\n                      displayName\\r\\n                    schema{\\r\\n                        uuid\\r\\n                    }\\r\\n                  }\\r\\n              }\\r\\n          }\\r\\n}","variables":{}}'''
-      );
+      var questionsFromCMS = await http.post(Uri.parse('$baseUrl/graphql'),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body:
+              '''{"query":"{\\r\\n          node(uuid: \\"$uuid\\", version: ${dotenv.get("CMS_DATA_VERSION")}) {\\r\\n              children(filter: {\\r\\n                  schema: {\\r\\n                      is: Article\\r\\n                  }\\r\\n              }) {\\r\\n                  elements {\\r\\n                      uuid\\r\\n                      displayName\\r\\n                    schema{\\r\\n                        uuid\\r\\n                    }\\r\\n                  }\\r\\n              }\\r\\n          }\\r\\n}","variables":{}}''');
       lightItems =
           jsonDecode(utf8.decoder.convert(questionsFromCMS.bodyBytes))['data']
                   ['node']['children']['elements']
@@ -64,8 +61,12 @@ class ArticlesProvider extends ContentProvider<Article> {
     } else {
       items = _offlineBox.get("articles_$uuid")?.cast<Article>();
       lightItems.clear();
-      for(Article tmpItem in items) {
-        LightContent tmpLightContent = LightContent(uuid: tmpItem.uuid, title: tmpItem.title, category: tmpItem.category, content: tmpItem.content);
+      for (Article tmpItem in items) {
+        LightContent tmpLightContent = LightContent(
+            uuid: tmpItem.uuid,
+            title: tmpItem.title,
+            category: tmpItem.category,
+            content: tmpItem.content);
         lightItems.add(tmpLightContent);
       }
     }
@@ -197,7 +198,8 @@ class ArticlesProvider extends ContentProvider<Article> {
   @override
   setFavorite(String uuid, bool val) {
     if (lightItems != null && lightItems.isNotEmpty) {
-      lightItems[lightItems.indexWhere((LightContent art) => art.uuid == uuid)].saved = val;
+      lightItems[lightItems.indexWhere((LightContent art) => art.uuid == uuid)]
+          .saved = val;
     }
     if (currentArticle != null && currentArticle!.uuid == uuid) {
       currentArticle!.saved = val;
