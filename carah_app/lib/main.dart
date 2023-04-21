@@ -16,7 +16,6 @@ import 'package:provider/provider.dart';
 import 'model/faq_question.dart';
 
 void main() async {
-
   const environment = String.fromEnvironment('FLAVOR', defaultValue: 'prod');
 
   await dotenv.load(fileName: 'environments/.env.$environment');
@@ -31,15 +30,24 @@ void main() async {
     providers: [
       ChangeNotifierProvider(create: (context) => CategoryProvider()),
       ChangeNotifierProvider(create: (context) => SettingsProvider()),
-      ChangeNotifierProxyProvider2<CategoryProvider, SettingsProvider, ArticlesProvider>(
+      ChangeNotifierProxyProvider2<CategoryProvider, SettingsProvider,
+          ArticlesProvider>(
         create: (context) => ArticlesProvider(
-            categoryProvider: Provider.of<CategoryProvider>(context, listen: false),
-            settingsProvider: Provider.of<SettingsProvider>(context, listen: false)),
-        update: (_, categoryProvider, settingsProvider, articlesProvider) => articlesProvider!.update(categoryProvider, settingsProvider),
+            categoryProvider:
+                Provider.of<CategoryProvider>(context, listen: false),
+            settingsProvider:
+                Provider.of<SettingsProvider>(context, listen: false)),
+        update: (_, categoryProvider, settingsProvider, articlesProvider) =>
+            articlesProvider!.update(categoryProvider, settingsProvider),
       ),
       ChangeNotifierProvider(create: (context) => QuestionsProvider()),
       ChangeNotifierProvider(create: (context) => ContentProvider()),
-      ChangeNotifierProvider(create: (context) => GuidelinesProvider())
+      ChangeNotifierProxyProvider<SettingsProvider, GuidelinesProvider>(
+          create: (context) => GuidelinesProvider(
+              settingsProvider:
+                  Provider.of<SettingsProvider>(context, listen: false)),
+          update: (_, settingsProvider, guidelineProvider) =>
+              guidelineProvider!.update(settingsProvider))
     ],
     child: const MyApp(),
   ));
@@ -55,7 +63,9 @@ class MyApp extends StatelessWidget {
       routerConfig: router,
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(colorScheme: lightColorScheme, iconTheme: const IconThemeData(size: 30.0)),
+      theme: ThemeData(
+          colorScheme: lightColorScheme,
+          iconTheme: const IconThemeData(size: 30.0)),
       darkTheme: ThemeData(colorScheme: darkColorScheme),
       themeMode: ThemeMode.light,
     );

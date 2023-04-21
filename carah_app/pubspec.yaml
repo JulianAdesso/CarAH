@@ -48,7 +48,6 @@ dependencies:
   cupertino_icons: ^1.0.2
   hive_generator: ^2.0.0
   go_router_flow: ^6.0.0+3
-  graphql_flutter: ^5.1.0
 
 dev_dependencies:
   flutter_test:
