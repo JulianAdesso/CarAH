@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:carah_app/model/bottom_navbar_index.dart';
 import 'package:carah_app/shared/appbar_widget.dart';
 import 'package:carah_app/shared/constants.dart';
-import 'package:carah_app/shared/navigation_items.dart';
+import 'package:carah_app/model/navigation_items.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

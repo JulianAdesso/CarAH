@@ -1,6 +1,6 @@
 import 'package:carah_app/model/bottom_navbar_index.dart';
 import 'package:carah_app/shared/constants.dart';
-import 'package:carah_app/shared/navigation_items.dart';
+import 'package:carah_app/model/navigation_items.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router_flow/go_router_flow.dart';
 

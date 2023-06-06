@@ -9,7 +9,7 @@ import 'package:go_router_flow/go_router_flow.dart';
 import 'package:provider/provider.dart';
 
 import '../model/content.dart';
-import 'navigation_items.dart';
+import '../model/navigation_items.dart';
 import 'appbar_widget.dart';
 
 class SubcategoryWidget<T extends Content, P extends ContentProvider>
