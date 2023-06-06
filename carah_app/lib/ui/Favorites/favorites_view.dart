@@ -72,7 +72,8 @@ class _FavoritesViewState extends State<FavoritesView> {
                             ? Icons.favorite
                             : Icons.favorite_border,
                         color:
-                            snapshot.data![i].saved ? Colors.red : Colors.black,
+                            snapshot.data![i].saved ? Theme.of(context).colorScheme.primary
+                            : Theme.of(context).colorScheme.onPrimary,
                         size: 30,
                       ),
                       onPressed: () => {

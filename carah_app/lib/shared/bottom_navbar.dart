@@ -20,8 +20,8 @@ class BottomNavbar extends StatelessWidget {
           ? context.push(bottomNavbarItems[index].routerLink!)
           : null,
       backgroundColor: Theme.of(context).colorScheme.primary,
-      selectedItemColor: Theme.of(context).colorScheme.onPrimary,
-      unselectedItemColor: Theme.of(context).colorScheme.outline,
+      selectedItemColor: Theme.of(context).colorScheme.surfaceVariant,
+      unselectedItemColor: Theme.of(context).colorScheme.onPrimary,
     );
   }
 }

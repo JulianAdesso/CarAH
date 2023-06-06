@@ -108,8 +108,8 @@ class _ArticlesContent extends State<ArticlesContent> {
                       : Icons.favorite_border,
                   color: provider.currentArticle != null &&
                           provider.currentArticle!.saved
-                      ? Theme.of(context).colorScheme.error
-                      : Colors.white,
+                      ? Theme.of(context).colorScheme.onPrimaryContainer
+                      : Theme.of(context).colorScheme.onPrimary,
                 ),
                 onPressed: () => {
                   setState(() {

@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
               child: Card(
                   color: isEnabled(element)
                       ? Theme.of(context).colorScheme.primaryContainer
-                      : Theme.of(context).colorScheme.outline,
+                      : Theme.of(context).colorScheme.surface,
                   margin: const EdgeInsets.symmetric(vertical: 10.0),
                   child: Row(
                     children: [

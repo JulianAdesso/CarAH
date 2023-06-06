@@ -20,7 +20,7 @@ class ListItem {
 
 final List<ListItem> homeItemsList = [
   ListItem(
-      title: 'Tokoloho Articles',
+      title: 'Articles',
       description: '',
       icon: Icons.article_outlined,
       routerLink: '/articles_categories',
