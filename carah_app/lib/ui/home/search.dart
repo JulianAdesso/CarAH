@@ -51,9 +51,9 @@ class _Search extends State<Search> {
   IconData getIcon(LightContent tmpSearchIcon) {
     ListItemProvider provider = Provider.of<ListItemProvider>(context);
     if (tmpSearchIcon.contentType == ContentType.article) {
-      return provider.homepageItems.where((element) => element.position == 1).first.icon ?? Icons.question_mark;
+      return provider.homepageItems.where((element) => element.position == 1).first.icon != null ? IconData(int.parse(provider.homepageItems.where((element) => element.position == 1).first.icon!) , fontFamily: 'MaterialIcons') : Icons.question_mark;
     } else if (tmpSearchIcon.contentType == ContentType.question) {
-      return provider.homepageItems.where((element) => element.position == 2).first.icon ?? Icons.question_mark;
+      return provider.homepageItems.where((element) => element.position == 1).first.icon != null ? IconData(int.parse(provider.homepageItems.where((element) => element.position == 1).first.icon!) , fontFamily: 'MaterialIcons') : Icons.question_mark;
     } else {
       return Icons.question_mark;
     }

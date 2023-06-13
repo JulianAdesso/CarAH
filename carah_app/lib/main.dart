@@ -1,5 +1,6 @@
 import 'package:carah_app/model/article.dart';
 import 'package:carah_app/model/category.dart';
+import 'package:carah_app/model/navigation_item.dart';
 import 'package:carah_app/model/settings.dart';
 import 'package:carah_app/providers/articles_provider.dart';
 import 'package:carah_app/providers/category_provider.dart';
@@ -26,6 +27,7 @@ void main() async {
   Hive.registerAdapter(ArticleAdapter());
   Hive.registerAdapter(QuestionAdapter());
   Hive.registerAdapter(SettingsAdapter());
+  Hive.registerAdapter(ListItemAdapter());
   await Hive.openBox('myBox');
   runApp(MultiProvider(
     providers: [

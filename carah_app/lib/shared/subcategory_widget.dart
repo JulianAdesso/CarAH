@@ -148,9 +148,9 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
   IconData getIcon() {
     ListItemProvider provider = Provider.of<ListItemProvider>(context);
     if (widget.path == 'article') {
-      return provider.homepageItems.where((element) => element.position == 1).first.icon ?? Icons.question_mark;
+      return provider.homepageItems.where((element) => element.position == 1).first.icon != null ? IconData(int.parse(provider.homepageItems.where((element) => element.position == 1).first.icon!) , fontFamily: 'MaterialIcons') : Icons.question_mark;
     } else if (widget.path == 'faq') {
-      return provider.homepageItems.where((element) => element.position == 2).first.icon ?? Icons.question_mark;
+      return provider.homepageItems.where((element) => element.position == 2).first.icon != null ? IconData(int.parse(provider.homepageItems.where((element) => element.position == 2).first.icon!) , fontFamily: 'MaterialIcons') : Icons.question_mark;
     } else {
       return Icons.question_mark;
     }
