@@ -27,7 +27,7 @@ jobs:
       - name: Run tests
         run: flutter test
       - name: Build Android APK
-        run: flutter build apk
+        run: flutter build apk --no-tree-shake-icons
       - name: Build Android appbundle
         run: flutter build appbundle
       - name: Build Web
