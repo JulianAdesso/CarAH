@@ -1,10 +1,10 @@
 import 'package:carah_app/model/bottom_navbar_index.dart';
 import 'package:carah_app/model/lightContent.dart';
 import 'package:carah_app/providers/content_provider.dart';
+import 'package:carah_app/providers/list_item_provider.dart';
 import 'package:carah_app/shared/appbar_widget.dart';
 import 'package:carah_app/shared/bottom_navbar.dart';
 import 'package:carah_app/shared/loading_spinner_widget.dart';
-import 'package:carah_app/model/navigation_items.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router_flow/go_router_flow.dart';
 import 'package:provider/provider.dart';
@@ -49,10 +49,11 @@ class _Search extends State<Search> {
   }
 
   IconData getIcon(LightContent tmpSearchIcon) {
+    ListItemProvider provider = Provider.of<ListItemProvider>(context);
     if (tmpSearchIcon.contentType == ContentType.article) {
-      return homeItemsList[0].icon;
+      return provider.homepageItems.where((element) => element.position == 1).first.icon ?? Icons.question_mark;
     } else if (tmpSearchIcon.contentType == ContentType.question) {
-      return homeItemsList[1].icon;
+      return provider.homepageItems.where((element) => element.position == 2).first.icon ?? Icons.question_mark;
     } else {
       return Icons.question_mark;
     }
