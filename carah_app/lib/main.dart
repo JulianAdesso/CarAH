@@ -1,11 +1,13 @@
 import 'package:carah_app/model/article.dart';
 import 'package:carah_app/model/category.dart';
+import 'package:carah_app/model/navigation_item.dart';
 import 'package:carah_app/model/settings.dart';
 import 'package:carah_app/providers/articles_provider.dart';
 import 'package:carah_app/providers/category_provider.dart';
 import 'package:carah_app/providers/FAQ_provider.dart';
 import 'package:carah_app/providers/content_provider.dart';
 import 'package:carah_app/providers/guidelines_provider.dart';
+import 'package:carah_app/providers/list_item_provider.dart';
 import 'package:carah_app/providers/settings_provider.dart';
 import 'package:carah_app/shared/router.dart';
 import 'package:carah_app/ui/color_schemes.g.dart';
@@ -25,11 +27,13 @@ void main() async {
   Hive.registerAdapter(ArticleAdapter());
   Hive.registerAdapter(QuestionAdapter());
   Hive.registerAdapter(SettingsAdapter());
+  Hive.registerAdapter(ListItemAdapter());
   await Hive.openBox('myBox');
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => CategoryProvider()),
       ChangeNotifierProvider(create: (context) => SettingsProvider()),
+      ChangeNotifierProvider(create: (context) => ListItemProvider()),
       ChangeNotifierProxyProvider2<CategoryProvider, SettingsProvider,
           ArticlesProvider>(
         create: (context) => ArticlesProvider(

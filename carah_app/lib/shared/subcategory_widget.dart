@@ -1,6 +1,7 @@
 import 'package:carah_app/model/bottom_navbar_index.dart';
 import 'package:carah_app/model/lightContent.dart';
 import 'package:carah_app/providers/content_provider.dart';
+import 'package:carah_app/providers/list_item_provider.dart';
 import 'package:carah_app/shared/bottom_navbar.dart';
 import 'package:carah_app/shared/loading_spinner_widget.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -9,7 +10,6 @@ import 'package:go_router_flow/go_router_flow.dart';
 import 'package:provider/provider.dart';
 
 import '../model/content.dart';
-import 'navigation_items.dart';
 import 'appbar_widget.dart';
 
 class SubcategoryWidget<T extends Content, P extends ContentProvider>
@@ -146,10 +146,11 @@ class _SubcategoryWidget<T extends Content, P extends ContentProvider>
   }
 
   IconData getIcon() {
+    ListItemProvider provider = Provider.of<ListItemProvider>(context);
     if (widget.path == 'article') {
-      return homeItemsList[0].icon;
+      return provider.homepageItems.where((element) => element.position == 1).first.icon != null ? IconData(int.parse(provider.homepageItems.where((element) => element.position == 1).first.icon!) , fontFamily: 'MaterialIcons') : Icons.question_mark;
     } else if (widget.path == 'faq') {
-      return homeItemsList[1].icon;
+      return provider.homepageItems.where((element) => element.position == 2).first.icon != null ? IconData(int.parse(provider.homepageItems.where((element) => element.position == 2).first.icon!) , fontFamily: 'MaterialIcons') : Icons.question_mark;
     } else {
       return Icons.question_mark;
     }
