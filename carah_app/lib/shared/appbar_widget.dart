@@ -12,8 +12,10 @@ class AppbarWidget extends StatelessWidget with PreferredSizeWidget {
   final String title;
   final bool centerTitle;
   final Color? backgroundColor;
+  final TextStyle? textStyle;
+  final IconData icon;
 
-  const AppbarWidget({Key? key, this.actions, required this.title, this.centerTitle = false, this.backgroundColor}) : preferredSize = const Size.fromHeight(60), super(key: key);
+  const AppbarWidget({Key? key, this.actions, required this.title, this.centerTitle = false, this.backgroundColor, this.textStyle, this.icon = Icons.arrow_back}) : preferredSize = const Size.fromHeight(60), super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,9 @@ class AppbarWidget extends StatelessWidget with PreferredSizeWidget {
       // Only display BackButton, when there is still a page on the stack and not on home screen
       automaticallyImplyLeading: false,
       leading: shouldShowBackButton(context)
-          ? BackButton(
+          ? IconButton(
+              icon: Icon(icon),
+              color: textStyle?.color ?? Theme.of(context).iconTheme.color,
               //When on favorites page, always go back to home screen
               onPressed: () => title == favoritesTitle
                   ? context.pushReplacement(
@@ -31,6 +35,7 @@ class AppbarWidget extends StatelessWidget with PreferredSizeWidget {
             )
           : null,
       backgroundColor: backgroundColor ?? Theme.of(context).colorScheme.primary,
+      titleTextStyle: textStyle ?? Theme.of(context).appBarTheme.titleTextStyle,
       centerTitle: centerTitle,
       title: Text(title),
       actions: actions,
