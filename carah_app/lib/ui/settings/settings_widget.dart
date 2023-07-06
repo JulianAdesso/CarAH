@@ -4,6 +4,7 @@ import 'package:carah_app/shared/bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:go_router_flow/go_router_flow.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 
 import '../../model/settings.dart';
@@ -57,7 +58,7 @@ class _SettingsState extends State<SettingsWidget> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Text("Data Save Mode", style: Theme.of(context).textTheme.headline6),
+                                Text("Data Save Mode", style: Theme.of(context).textTheme.titleLarge),
                                 Text("Turn Data Save Mode on or off", style: Theme.of(context).textTheme.labelLarge)
                               ],
                             ),
@@ -98,13 +99,13 @@ class _SettingsState extends State<SettingsWidget> {
                             children: [
                               Container(
                                   margin: const EdgeInsets.only(right: 10),
-                                  child: Icon(Icons.fingerprint, size: Theme.of(context).iconTheme.size,)),
+                                  child: Icon(Symbols.format_paragraph, size: Theme.of(context).iconTheme.size,)),
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Text("Imprint", style: Theme.of(context).textTheme.headline6),
+                                  Text("Imprint", style: Theme.of(context).textTheme.titleLarge),
                                 ],
                               ),
                             ],

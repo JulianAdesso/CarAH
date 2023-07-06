@@ -42,6 +42,7 @@ dependencies:
   photo_view: ^0.14.0
   connectivity_plus: ^3.0.2
   flutter_dotenv: ^5.0.2
+  material_symbols_icons: ^4.2663.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
