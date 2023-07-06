@@ -64,6 +64,16 @@ class _ArticlesContent extends State<ArticlesContent> {
       return const LoadingSpinnerWidget();
     }
     return Consumer<ArticlesProvider>(builder: (context, provider, child) {
+      Image? showingImage;
+      if(provider.showingImages.isNotEmpty) {
+        var imageHeight = MediaQuery
+            .of(context)
+            .size
+            .height * 0.25;
+        double imageWidth = MediaQuery.of(context).size.width;
+        showingImage = Image(
+            image: provider.showingImages.first.image, height: imageHeight, width: imageWidth,);
+      }
       return Scaffold(
         appBar: AppbarWidget(
           title: provider.currentArticle != null
@@ -137,8 +147,8 @@ class _ArticlesContent extends State<ArticlesContent> {
                 child: provider.showingImages.isNotEmpty
                     ? Stack(
                         children: <Widget>[
-                          provider.showingImages.first,
-                          if (provider.showingImages.length > 1)
+                          if (showingImage != null)
+                            showingImage,
                             Positioned(
                               right: 15,
                               bottom: 15,
