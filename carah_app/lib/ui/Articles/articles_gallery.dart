@@ -48,10 +48,13 @@ class _ArticlesGallery extends State<ArticlesGallery> {
 
     return Consumer<ArticlesProvider>(
         builder: (context, provider, child) {
+          var textTheme = Theme.of(context).appBarTheme.titleTextStyle?.copyWith(color: Colors.white);
           return Scaffold(
             appBar: AppbarWidget(
+              icon: Icons.close,
               centerTitle: true,
               backgroundColor: Colors.black ,
+              textStyle: textTheme,
               title:  "$shownPictureNumber from ${provider.images.length}",
             ),
             body: PhotoViewGallery.builder(
