@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 
@@ -23,7 +22,7 @@ class ListItemProvider extends ChangeNotifier{
           headers: {
             "Content-Type": "application/json",
           },
-          body: '''{"query":"{\\r\\n          node(path: \\"/\\", version: ${dotenv.get("CMS_DATA_VERSION")}) {\\r\\n              children(filter: {\\r\\n                  schema: {\\r\\n                      is: HomePage_Card\\r\\n                  }\\r\\n              }) {\\r\\n                  elements{\\r\\n                    ...on HomePage_Card{\\r\\n                        uuid\\r\\n                        fields {                    \\r\\n                            Header\\r\\n                              Subheading\\r\\n                              icon\\r\\n                              isAvailableInOfflineMode\\r\\n                            isDisabled\\r\\n                            routerLink\\r\\n                        position\\r\\n                     }\\r\\n                    }\\r\\n                  }\\r\\n              }\\r\\n              }\\r\\n}","variables":{}}''');
+          body: '''{"query":"{\\r\\n          node(path: \\"/\\") {\\r\\n              children(filter: {\\r\\n                  schema: {\\r\\n                      is: HomePage_Card\\r\\n                  }\\r\\n              }) {\\r\\n                  elements{\\r\\n                    ...on HomePage_Card{\\r\\n                        uuid\\r\\n                        fields {                    \\r\\n                            Header\\r\\n                              Subheading\\r\\n                              icon\\r\\n                              isAvailableInOfflineMode\\r\\n                            isDisabled\\r\\n                            routerLink\\r\\n                        position\\r\\n                     }\\r\\n                    }\\r\\n                  }\\r\\n              }\\r\\n              }\\r\\n}","variables":{}}''');
       homepageItems =
           jsonDecode(utf8.decoder.convert(listItemsFromCMS.bodyBytes))['data']['node']['children']['elements']
               .map<ListItem>((element) {
