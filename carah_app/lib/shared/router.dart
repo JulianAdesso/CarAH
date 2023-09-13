@@ -10,6 +10,7 @@ import 'package:carah_app/ui/Favorites/favorites_view.dart';
 import 'package:carah_app/ui/guidelines/guidelines_category_widget.dart';
 import 'package:carah_app/ui/home/home_page.dart';
 import 'package:carah_app/ui/settings/imprint.dart';
+import 'package:carah_app/ui/settings/privacy_policy_widget.dart';
 import 'package:carah_app/ui/settings/settings_widget.dart';
 import 'package:go_router_flow/go_router_flow.dart';
 import 'package:carah_app/ui/home/search.dart';
@@ -47,5 +48,7 @@ final router = GoRouter(
     builder: (context, state) => const SettingsWidget()),
     GoRoute(path: '/settings/imprint',
         builder: (context, state) => const Imprint()),
+    GoRoute(path: '/settings/privacy_policy',
+        builder: (context, state) => const PrivacyPolicyWidget()),
   ],
 );

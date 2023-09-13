@@ -114,6 +114,38 @@ class _SettingsState extends State<SettingsWidget> {
                   ),
                 ),
               ),
+              GestureDetector(
+                onTap: (){
+                  context.push('/settings/privacy_policy');
+                },
+                child: Card(
+                  elevation: 1,
+                  margin: const EdgeInsets.all(2),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                  margin: const EdgeInsets.only(right: 10),
+                                  child: Icon(Symbols.policy, size: Theme.of(context).iconTheme.size,)),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text("Privacy Policy", style: Theme.of(context).textTheme.titleLarge),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ]),
+                  ),
+                ),
+              ),
             ],
           );
         });
