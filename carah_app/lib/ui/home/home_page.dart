@@ -8,6 +8,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router_flow/go_router_flow.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 
 import '../../shared/bottom_navbar.dart';
@@ -30,33 +31,42 @@ class _HomePageState extends State<HomePage> {
     setInitialConnectivity(connectivity);
     connectivityStream =
         connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
-      if (result != ConnectivityResult.none) {
-        setState(() {
-          connectivityState = true;
+          if (result != ConnectivityResult.none) {
+            setState(() {
+              connectivityState = true;
+            });
+          } else {
+            setState(() {
+              connectivityState = false;
+            });
+          }
         });
-      } else {
-        setState(() {
-          connectivityState = false;
-        });
-      }
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    if(connectivityState && Provider.of<ListItemProvider>(context).homepageItems.isEmpty){
+    if (connectivityState && Provider
+        .of<ListItemProvider>(context)
+        .homepageItems
+        .isEmpty) {
       Provider.of<ListItemProvider>(context).initHomePageItems();
     }
     return Scaffold(
         appBar: AppbarWidget(
           actions: kIsWeb
-              ? [
-                  IconButton(
-                      onPressed: () {
-                        context.push('/settings/imprint');
-                      },
-                      icon: const Icon(Icons.info_outline))
-                ]
+              ? ([
+            IconButton(
+                onPressed: () {
+                  context.push('/settings/imprint');
+                },
+                icon: const Icon(Icons.info_outline)),
+            IconButton(
+                onPressed: () {
+                  context.push('/settings/privacy_policy');
+                },
+                icon: const Icon(Symbols.policy)
+            )
+          ])
               : null,
           title: homeScreenTitle,
         ),
@@ -75,45 +85,53 @@ class _HomePageState extends State<HomePage> {
                         : null,
                     child: Card(
                         color: !element.isDisabled
-                            ? Theme.of(context).colorScheme.primaryContainer
-                            : Theme.of(context).colorScheme.outline,
+                            ? Theme
+                            .of(context)
+                            .colorScheme
+                            .primaryContainer
+                            : Theme
+                            .of(context)
+                            .colorScheme
+                            .outline,
                         margin: const EdgeInsets.symmetric(vertical: 10.0),
                         child: Row(
                           children: [
                             Flexible(
                               child: Container(
                                 margin:
-                                    const EdgeInsets.symmetric(horizontal: 5),
+                                const EdgeInsets.symmetric(horizontal: 5),
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 12.0, horizontal: 16.0),
                                   child: Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                    CrossAxisAlignment.center,
                                     children: [
                                       Expanded(
                                         flex: 1,
                                         child: Column(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.spaceBetween,
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                           children: [
                                             Padding(
                                               padding: const EdgeInsets.only(
                                                   bottom: 15.0),
                                               child: Text(
                                                 element.title,
-                                                style: Theme.of(context)
+                                                style: Theme
+                                                    .of(context)
                                                     .textTheme
                                                     .titleLarge,
                                               ),
                                             ),
                                             Text(
                                               element.description!,
-                                              style: Theme.of(context)
+                                              style: Theme
+                                                  .of(context)
                                                   .textTheme
                                                   .bodyMedium,
                                               overflow: TextOverflow.visible,
@@ -124,9 +142,12 @@ class _HomePageState extends State<HomePage> {
                                       Icon(
                                         element.icon != null
                                             ? IconData(int.parse(element.icon!),
-                                                fontFamily: 'MaterialIcons')
+                                            fontFamily: 'MaterialIcons')
                                             : null,
-                                        size: Theme.of(context).iconTheme.size,
+                                        size: Theme
+                                            .of(context)
+                                            .iconTheme
+                                            .size,
                                       ),
                                     ],
                                   ),
@@ -140,7 +161,7 @@ class _HomePageState extends State<HomePage> {
           }
         }),
         bottomNavigationBar:
-            BottomNavbar(currIndex: BottomNavbarIndex.home.index));
+        BottomNavbar(currIndex: BottomNavbarIndex.home.index));
   }
 
   @override

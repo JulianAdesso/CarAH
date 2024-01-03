@@ -44,6 +44,7 @@ dependencies:
   flutter_dotenv: ^5.0.2
   material_symbols_icons: ^4.2663.0
   easy_pdf_viewer: ^1.0.7
+  pdfx: ^2.3.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
